@@ -22,7 +22,15 @@ namespace communicator_objects {
 template <typename>
 PROTOBUF_CONSTEXPR UnrealRLInitializationInputProto::UnrealRLInitializationInputProto(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.seed_)*/ 0
+    /*decltype(_impl_.communication_version_)*/ {
+    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
+  }
+
+  , /*decltype(_impl_.package_version_)*/ {
+    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
+  }
+
+  , /*decltype(_impl_.seed_)*/ 0
 
   , /*decltype(_impl_.num_areas_)*/ 0
 
@@ -54,6 +62,8 @@ const ::uint32_t TableStruct_mlagents_5fenvs_2fcommunicator_5fobjects_2funreal_5
     ~0u,  // no _split_
     ~0u,  // no sizeof(Split)
     PROTOBUF_FIELD_OFFSET(::communicator_objects::UnrealRLInitializationInputProto, _impl_.seed_),
+    PROTOBUF_FIELD_OFFSET(::communicator_objects::UnrealRLInitializationInputProto, _impl_.communication_version_),
+    PROTOBUF_FIELD_OFFSET(::communicator_objects::UnrealRLInitializationInputProto, _impl_.package_version_),
     PROTOBUF_FIELD_OFFSET(::communicator_objects::UnrealRLInitializationInputProto, _impl_.num_areas_),
 };
 
@@ -68,15 +78,16 @@ static const ::_pb::Message* const file_default_instances[] = {
 const char descriptor_table_protodef_mlagents_5fenvs_2fcommunicator_5fobjects_2funreal_5frl_5finitialization_5finput_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
     "\nGmlagents_envs/communicator_objects/unr"
     "eal_rl_initialization_input.proto\022\024commu"
-    "nicator_objects\"C\n UnrealRLInitializatio"
-    "nInputProto\022\014\n\004seed\030\001 \001(\005\022\021\n\tnum_areas\030\002"
-    " \001(\005b\006proto3"
+    "nicator_objects\"{\n UnrealRLInitializatio"
+    "nInputProto\022\014\n\004seed\030\001 \001(\005\022\035\n\025communicati"
+    "on_version\030\002 \001(\t\022\027\n\017package_version\030\003 \001("
+    "\t\022\021\n\tnum_areas\030\004 \001(\005b\006proto3"
 };
 static ::absl::once_flag descriptor_table_mlagents_5fenvs_2fcommunicator_5fobjects_2funreal_5frl_5finitialization_5finput_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_mlagents_5fenvs_2fcommunicator_5fobjects_2funreal_5frl_5finitialization_5finput_2eproto = {
     false,
     false,
-    172,
+    228,
     descriptor_table_protodef_mlagents_5fenvs_2fcommunicator_5fobjects_2funreal_5frl_5finitialization_5finput_2eproto,
     "mlagents_envs/communicator_objects/unreal_rl_initialization_input.proto",
     &descriptor_table_mlagents_5fenvs_2fcommunicator_5fobjects_2funreal_5frl_5finitialization_5finput_2eproto_once,
@@ -121,21 +132,61 @@ UnrealRLInitializationInputProto::UnrealRLInitializationInputProto(::PROTOBUF_NA
   // @@protoc_insertion_point(arena_constructor:communicator_objects.UnrealRLInitializationInputProto)
 }
 UnrealRLInitializationInputProto::UnrealRLInitializationInputProto(const UnrealRLInitializationInputProto& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message(), _impl_(from._impl_) {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(
-      from._internal_metadata_);
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  UnrealRLInitializationInputProto* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.communication_version_) {}
+
+    , decltype(_impl_.package_version_) {}
+
+    , decltype(_impl_.seed_) {}
+
+    , decltype(_impl_.num_areas_) {}
+
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.communication_version_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.communication_version_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_communication_version().empty()) {
+    _this->_impl_.communication_version_.Set(from._internal_communication_version(), _this->GetArenaForAllocation());
+  }
+  _impl_.package_version_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.package_version_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_package_version().empty()) {
+    _this->_impl_.package_version_.Set(from._internal_package_version(), _this->GetArenaForAllocation());
+  }
+  ::memcpy(&_impl_.seed_, &from._impl_.seed_,
+    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.num_areas_) -
+    reinterpret_cast<char*>(&_impl_.seed_)) + sizeof(_impl_.num_areas_));
   // @@protoc_insertion_point(copy_constructor:communicator_objects.UnrealRLInitializationInputProto)
 }
 
 inline void UnrealRLInitializationInputProto::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_.seed_) { 0 }
+      decltype(_impl_.communication_version_) {}
+
+    , decltype(_impl_.package_version_) {}
+
+    , decltype(_impl_.seed_) { 0 }
 
     , decltype(_impl_.num_areas_) { 0 }
 
     , /*decltype(_impl_._cached_size_)*/{}
   };
+  _impl_.communication_version_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.communication_version_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.package_version_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.package_version_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 UnrealRLInitializationInputProto::~UnrealRLInitializationInputProto() {
@@ -149,6 +200,8 @@ UnrealRLInitializationInputProto::~UnrealRLInitializationInputProto() {
 
 inline void UnrealRLInitializationInputProto::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.communication_version_.Destroy();
+  _impl_.package_version_.Destroy();
 }
 
 void UnrealRLInitializationInputProto::SetCachedSize(int size) const {
@@ -161,6 +214,8 @@ void UnrealRLInitializationInputProto::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  _impl_.communication_version_.ClearToEmpty();
+  _impl_.package_version_.ClearToEmpty();
   ::memset(&_impl_.seed_, 0, static_cast<::size_t>(
       reinterpret_cast<char*>(&_impl_.num_areas_) -
       reinterpret_cast<char*>(&_impl_.seed_)) + sizeof(_impl_.num_areas_));
@@ -182,9 +237,31 @@ const char* UnrealRLInitializationInputProto::_InternalParse(const char* ptr, ::
           goto handle_unusual;
         }
         continue;
-      // int32 num_areas = 2;
+      // string communication_version = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_communication_version();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "communicator_objects.UnrealRLInitializationInputProto.communication_version"));
+        } else {
+          goto handle_unusual;
+        }
+        continue;
+      // string package_version = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_package_version();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "communicator_objects.UnrealRLInitializationInputProto.package_version"));
+        } else {
+          goto handle_unusual;
+        }
+        continue;
+      // int32 num_areas = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 32)) {
           _impl_.num_areas_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else {
@@ -227,11 +304,27 @@ failure:
         1, this->_internal_seed(), target);
   }
 
-  // int32 num_areas = 2;
+  // string communication_version = 2;
+  if (!this->_internal_communication_version().empty()) {
+    const std::string& _s = this->_internal_communication_version();
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "communicator_objects.UnrealRLInitializationInputProto.communication_version");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  // string package_version = 3;
+  if (!this->_internal_package_version().empty()) {
+    const std::string& _s = this->_internal_package_version();
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "communicator_objects.UnrealRLInitializationInputProto.package_version");
+    target = stream->WriteStringMaybeAliased(3, _s, target);
+  }
+
+  // int32 num_areas = 4;
   if (this->_internal_num_areas() != 0) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteInt32ToArray(
-        2, this->_internal_num_areas(), target);
+        4, this->_internal_num_areas(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -250,13 +343,25 @@ failure:
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  // string communication_version = 2;
+  if (!this->_internal_communication_version().empty()) {
+    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+                                    this->_internal_communication_version());
+  }
+
+  // string package_version = 3;
+  if (!this->_internal_package_version().empty()) {
+    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+                                    this->_internal_package_version());
+  }
+
   // int32 seed = 1;
   if (this->_internal_seed() != 0) {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
         this->_internal_seed());
   }
 
-  // int32 num_areas = 2;
+  // int32 num_areas = 4;
   if (this->_internal_num_areas() != 0) {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
         this->_internal_num_areas());
@@ -280,6 +385,12 @@ void UnrealRLInitializationInputProto::MergeImpl(::PROTOBUF_NAMESPACE_ID::Messag
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (!from._internal_communication_version().empty()) {
+    _this->_internal_set_communication_version(from._internal_communication_version());
+  }
+  if (!from._internal_package_version().empty()) {
+    _this->_internal_set_package_version(from._internal_package_version());
+  }
   if (from._internal_seed() != 0) {
     _this->_internal_set_seed(from._internal_seed());
   }
@@ -302,7 +413,13 @@ bool UnrealRLInitializationInputProto::IsInitialized() const {
 
 void UnrealRLInitializationInputProto::InternalSwap(UnrealRLInitializationInputProto* other) {
   using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.communication_version_, lhs_arena,
+                                       &other->_impl_.communication_version_, rhs_arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.package_version_, lhs_arena,
+                                       &other->_impl_.package_version_, rhs_arena);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(UnrealRLInitializationInputProto, _impl_.num_areas_)
       + sizeof(UnrealRLInitializationInputProto::_impl_.num_areas_)

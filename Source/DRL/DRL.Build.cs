@@ -19,7 +19,6 @@ public class DRL : ModuleRules
 				"Core",
                 "UMG",        // Add UMG for UI
                 "Json",        // JSON for handling JSON operations
-				"Communicator"
 				// ... add other public dependencies that you statically link with here ...
 			}
 		);
@@ -32,6 +31,7 @@ public class DRL : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+				"Communicator"
 				// ... add private dependencies that you statically link with here ...
 			}
 		);

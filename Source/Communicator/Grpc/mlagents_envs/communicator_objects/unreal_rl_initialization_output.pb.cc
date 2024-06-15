@@ -27,7 +27,15 @@ PROTOBUF_CONSTEXPR UnrealRLInitializationOutputProto::UnrealRLInitializationOutp
     &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
   }
 
+  , /*decltype(_impl_.communication_version_)*/ {
+    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
+  }
+
   , /*decltype(_impl_.log_path_)*/ {
+    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
+  }
+
+  , /*decltype(_impl_.package_version_)*/ {
     &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
   }
 
@@ -59,8 +67,10 @@ const ::uint32_t TableStruct_mlagents_5fenvs_2fcommunicator_5fobjects_2funreal_5
     ~0u,  // no _split_
     ~0u,  // no sizeof(Split)
     PROTOBUF_FIELD_OFFSET(::communicator_objects::UnrealRLInitializationOutputProto, _impl_.name_),
+    PROTOBUF_FIELD_OFFSET(::communicator_objects::UnrealRLInitializationOutputProto, _impl_.communication_version_),
     PROTOBUF_FIELD_OFFSET(::communicator_objects::UnrealRLInitializationOutputProto, _impl_.log_path_),
     PROTOBUF_FIELD_OFFSET(::communicator_objects::UnrealRLInitializationOutputProto, _impl_.brain_parameters_),
+    PROTOBUF_FIELD_OFFSET(::communicator_objects::UnrealRLInitializationOutputProto, _impl_.package_version_),
 };
 
 static const ::_pbi::MigrationSchema
@@ -75,11 +85,12 @@ const char descriptor_table_protodef_mlagents_5fenvs_2fcommunicator_5fobjects_2f
     "\nHmlagents_envs/communicator_objects/unr"
     "eal_rl_initialization_output.proto\022\024comm"
     "unicator_objects\0329mlagents_envs/communic"
-    "ator_objects/brain_parameters.proto\"\211\001\n!"
+    "ator_objects/brain_parameters.proto\"\301\001\n!"
     "UnrealRLInitializationOutputProto\022\014\n\004nam"
-    "e\030\001 \001(\t\022\020\n\010log_path\030\002 \001(\t\022D\n\020brain_param"
-    "eters\030\003 \003(\0132*.communicator_objects.Brain"
-    "ParametersProtob\006proto3"
+    "e\030\001 \001(\t\022\035\n\025communication_version\030\002 \001(\t\022\020"
+    "\n\010log_path\030\003 \001(\t\022D\n\020brain_parameters\030\004 \003"
+    "(\0132*.communicator_objects.BrainParameter"
+    "sProto\022\027\n\017package_version\030\005 \001(\tb\006proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_mlagents_5fenvs_2fcommunicator_5fobjects_2funreal_5frl_5finitialization_5foutput_2eproto_deps[1] =
     {
@@ -89,7 +100,7 @@ static ::absl::once_flag descriptor_table_mlagents_5fenvs_2fcommunicator_5fobjec
 const ::_pbi::DescriptorTable descriptor_table_mlagents_5fenvs_2fcommunicator_5fobjects_2funreal_5frl_5finitialization_5foutput_2eproto = {
     false,
     false,
-    303,
+    359,
     descriptor_table_protodef_mlagents_5fenvs_2fcommunicator_5fobjects_2funreal_5frl_5finitialization_5foutput_2eproto,
     "mlagents_envs/communicator_objects/unreal_rl_initialization_output.proto",
     &descriptor_table_mlagents_5fenvs_2fcommunicator_5fobjects_2funreal_5frl_5finitialization_5foutput_2eproto_once,
@@ -143,7 +154,11 @@ UnrealRLInitializationOutputProto::UnrealRLInitializationOutputProto(const Unrea
       decltype(_impl_.brain_parameters_){from._impl_.brain_parameters_}
     , decltype(_impl_.name_) {}
 
+    , decltype(_impl_.communication_version_) {}
+
     , decltype(_impl_.log_path_) {}
+
+    , decltype(_impl_.package_version_) {}
 
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -155,12 +170,26 @@ UnrealRLInitializationOutputProto::UnrealRLInitializationOutputProto(const Unrea
   if (!from._internal_name().empty()) {
     _this->_impl_.name_.Set(from._internal_name(), _this->GetArenaForAllocation());
   }
+  _impl_.communication_version_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.communication_version_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_communication_version().empty()) {
+    _this->_impl_.communication_version_.Set(from._internal_communication_version(), _this->GetArenaForAllocation());
+  }
   _impl_.log_path_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.log_path_.Set("", GetArenaForAllocation());
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_log_path().empty()) {
     _this->_impl_.log_path_.Set(from._internal_log_path(), _this->GetArenaForAllocation());
+  }
+  _impl_.package_version_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.package_version_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_package_version().empty()) {
+    _this->_impl_.package_version_.Set(from._internal_package_version(), _this->GetArenaForAllocation());
   }
   // @@protoc_insertion_point(copy_constructor:communicator_objects.UnrealRLInitializationOutputProto)
 }
@@ -171,7 +200,11 @@ inline void UnrealRLInitializationOutputProto::SharedCtor(::_pb::Arena* arena) {
       decltype(_impl_.brain_parameters_){arena}
     , decltype(_impl_.name_) {}
 
+    , decltype(_impl_.communication_version_) {}
+
     , decltype(_impl_.log_path_) {}
+
+    , decltype(_impl_.package_version_) {}
 
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -179,9 +212,17 @@ inline void UnrealRLInitializationOutputProto::SharedCtor(::_pb::Arena* arena) {
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.name_.Set("", GetArenaForAllocation());
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.communication_version_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.communication_version_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.log_path_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.log_path_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.package_version_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.package_version_.Set("", GetArenaForAllocation());
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
@@ -198,7 +239,9 @@ inline void UnrealRLInitializationOutputProto::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   _internal_mutable_brain_parameters()->~RepeatedPtrField();
   _impl_.name_.Destroy();
+  _impl_.communication_version_.Destroy();
   _impl_.log_path_.Destroy();
+  _impl_.package_version_.Destroy();
 }
 
 void UnrealRLInitializationOutputProto::SetCachedSize(int size) const {
@@ -213,7 +256,9 @@ void UnrealRLInitializationOutputProto::Clear() {
 
   _internal_mutable_brain_parameters()->Clear();
   _impl_.name_.ClearToEmpty();
+  _impl_.communication_version_.ClearToEmpty();
   _impl_.log_path_.ClearToEmpty();
+  _impl_.package_version_.ClearToEmpty();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -234,9 +279,20 @@ const char* UnrealRLInitializationOutputProto::_InternalParse(const char* ptr, :
           goto handle_unusual;
         }
         continue;
-      // string log_path = 2;
+      // string communication_version = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_communication_version();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "communicator_objects.UnrealRLInitializationOutputProto.communication_version"));
+        } else {
+          goto handle_unusual;
+        }
+        continue;
+      // string log_path = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
           auto str = _internal_mutable_log_path();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -245,16 +301,27 @@ const char* UnrealRLInitializationOutputProto::_InternalParse(const char* ptr, :
           goto handle_unusual;
         }
         continue;
-      // repeated .communicator_objects.BrainParametersProto brain_parameters = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
+      // repeated .communicator_objects.BrainParametersProto brain_parameters = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 34)) {
           ptr -= 1;
           do {
             ptr += 1;
             ptr = ctx->ParseMessage(_internal_add_brain_parameters(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<34>(ptr));
+        } else {
+          goto handle_unusual;
+        }
+        continue;
+      // string package_version = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 42)) {
+          auto str = _internal_mutable_package_version();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "communicator_objects.UnrealRLInitializationOutputProto.package_version"));
         } else {
           goto handle_unusual;
         }
@@ -296,20 +363,36 @@ failure:
     target = stream->WriteStringMaybeAliased(1, _s, target);
   }
 
-  // string log_path = 2;
+  // string communication_version = 2;
+  if (!this->_internal_communication_version().empty()) {
+    const std::string& _s = this->_internal_communication_version();
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "communicator_objects.UnrealRLInitializationOutputProto.communication_version");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  // string log_path = 3;
   if (!this->_internal_log_path().empty()) {
     const std::string& _s = this->_internal_log_path();
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
         _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "communicator_objects.UnrealRLInitializationOutputProto.log_path");
-    target = stream->WriteStringMaybeAliased(2, _s, target);
+    target = stream->WriteStringMaybeAliased(3, _s, target);
   }
 
-  // repeated .communicator_objects.BrainParametersProto brain_parameters = 3;
+  // repeated .communicator_objects.BrainParametersProto brain_parameters = 4;
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_brain_parameters_size()); i < n; i++) {
     const auto& repfield = this->_internal_brain_parameters(i);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-        InternalWriteMessage(3, repfield, repfield.GetCachedSize(), target, stream);
+        InternalWriteMessage(4, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  // string package_version = 5;
+  if (!this->_internal_package_version().empty()) {
+    const std::string& _s = this->_internal_package_version();
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "communicator_objects.UnrealRLInitializationOutputProto.package_version");
+    target = stream->WriteStringMaybeAliased(5, _s, target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -328,7 +411,7 @@ failure:
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .communicator_objects.BrainParametersProto brain_parameters = 3;
+  // repeated .communicator_objects.BrainParametersProto brain_parameters = 4;
   total_size += 1UL * this->_internal_brain_parameters_size();
   for (const auto& msg : this->_internal_brain_parameters()) {
     total_size +=
@@ -341,10 +424,22 @@ failure:
                                     this->_internal_name());
   }
 
-  // string log_path = 2;
+  // string communication_version = 2;
+  if (!this->_internal_communication_version().empty()) {
+    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+                                    this->_internal_communication_version());
+  }
+
+  // string log_path = 3;
   if (!this->_internal_log_path().empty()) {
     total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
                                     this->_internal_log_path());
+  }
+
+  // string package_version = 5;
+  if (!this->_internal_package_version().empty()) {
+    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+                                    this->_internal_package_version());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -369,8 +464,14 @@ void UnrealRLInitializationOutputProto::MergeImpl(::PROTOBUF_NAMESPACE_ID::Messa
   if (!from._internal_name().empty()) {
     _this->_internal_set_name(from._internal_name());
   }
+  if (!from._internal_communication_version().empty()) {
+    _this->_internal_set_communication_version(from._internal_communication_version());
+  }
   if (!from._internal_log_path().empty()) {
     _this->_internal_set_log_path(from._internal_log_path());
+  }
+  if (!from._internal_package_version().empty()) {
+    _this->_internal_set_package_version(from._internal_package_version());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -394,8 +495,12 @@ void UnrealRLInitializationOutputProto::InternalSwap(UnrealRLInitializationOutpu
   _internal_mutable_brain_parameters()->InternalSwap(other->_internal_mutable_brain_parameters());
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, lhs_arena,
                                        &other->_impl_.name_, rhs_arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.communication_version_, lhs_arena,
+                                       &other->_impl_.communication_version_, rhs_arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.log_path_, lhs_arena,
                                        &other->_impl_.log_path_, rhs_arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.package_version_, lhs_arena,
+                                       &other->_impl_.package_version_, rhs_arena);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata UnrealRLInitializationOutputProto::GetMetadata() const {

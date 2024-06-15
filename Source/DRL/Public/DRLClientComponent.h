@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "RpcCommunicator.h"
+#include "DRLAcademy.h"
 #include "DRLClientComponent.generated.h"
 
 
@@ -22,9 +24,6 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	int32 Port; 
-
 	void Initialize();
-	void ParseCommandLineArgs();
 		
 };

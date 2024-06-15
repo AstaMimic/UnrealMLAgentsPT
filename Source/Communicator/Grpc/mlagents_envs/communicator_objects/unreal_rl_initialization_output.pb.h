@@ -196,11 +196,13 @@ class UnrealRLInitializationOutputProto final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kBrainParametersFieldNumber = 3,
+    kBrainParametersFieldNumber = 4,
     kNameFieldNumber = 1,
-    kLogPathFieldNumber = 2,
+    kCommunicationVersionFieldNumber = 2,
+    kLogPathFieldNumber = 3,
+    kPackageVersionFieldNumber = 5,
   };
-  // repeated .communicator_objects.BrainParametersProto brain_parameters = 3;
+  // repeated .communicator_objects.BrainParametersProto brain_parameters = 4;
   int brain_parameters_size() const;
   private:
   int _internal_brain_parameters_size() const;
@@ -240,7 +242,27 @@ class UnrealRLInitializationOutputProto final :
   std::string* _internal_mutable_name();
 
   public:
-  // string log_path = 2;
+  // string communication_version = 2;
+  void clear_communication_version() ;
+  const std::string& communication_version() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_communication_version(Arg_&& arg, Args_... args);
+  std::string* mutable_communication_version();
+  PROTOBUF_NODISCARD std::string* release_communication_version();
+  void set_allocated_communication_version(std::string* ptr);
+
+  private:
+  const std::string& _internal_communication_version() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_communication_version(
+      const std::string& value);
+  std::string* _internal_mutable_communication_version();
+
+  public:
+  // string log_path = 3;
   void clear_log_path() ;
   const std::string& log_path() const;
 
@@ -260,6 +282,26 @@ class UnrealRLInitializationOutputProto final :
   std::string* _internal_mutable_log_path();
 
   public:
+  // string package_version = 5;
+  void clear_package_version() ;
+  const std::string& package_version() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_package_version(Arg_&& arg, Args_... args);
+  std::string* mutable_package_version();
+  PROTOBUF_NODISCARD std::string* release_package_version();
+  void set_allocated_package_version(std::string* ptr);
+
+  private:
+  const std::string& _internal_package_version() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_package_version(
+      const std::string& value);
+  std::string* _internal_mutable_package_version();
+
+  public:
   // @@protoc_insertion_point(class_scope:communicator_objects.UnrealRLInitializationOutputProto)
  private:
   class _Internal;
@@ -270,7 +312,9 @@ class UnrealRLInitializationOutputProto final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::communicator_objects::BrainParametersProto > brain_parameters_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr communication_version_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr log_path_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr package_version_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -340,7 +384,54 @@ inline void UnrealRLInitializationOutputProto::set_allocated_name(std::string* v
   // @@protoc_insertion_point(field_set_allocated:communicator_objects.UnrealRLInitializationOutputProto.name)
 }
 
-// string log_path = 2;
+// string communication_version = 2;
+inline void UnrealRLInitializationOutputProto::clear_communication_version() {
+  _impl_.communication_version_.ClearToEmpty();
+}
+inline const std::string& UnrealRLInitializationOutputProto::communication_version() const {
+  // @@protoc_insertion_point(field_get:communicator_objects.UnrealRLInitializationOutputProto.communication_version)
+  return _internal_communication_version();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void UnrealRLInitializationOutputProto::set_communication_version(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.communication_version_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:communicator_objects.UnrealRLInitializationOutputProto.communication_version)
+}
+inline std::string* UnrealRLInitializationOutputProto::mutable_communication_version() {
+  std::string* _s = _internal_mutable_communication_version();
+  // @@protoc_insertion_point(field_mutable:communicator_objects.UnrealRLInitializationOutputProto.communication_version)
+  return _s;
+}
+inline const std::string& UnrealRLInitializationOutputProto::_internal_communication_version() const {
+  return _impl_.communication_version_.Get();
+}
+inline void UnrealRLInitializationOutputProto::_internal_set_communication_version(const std::string& value) {
+  ;
+
+
+  _impl_.communication_version_.Set(value, GetArenaForAllocation());
+}
+inline std::string* UnrealRLInitializationOutputProto::_internal_mutable_communication_version() {
+  ;
+  return _impl_.communication_version_.Mutable( GetArenaForAllocation());
+}
+inline std::string* UnrealRLInitializationOutputProto::release_communication_version() {
+  // @@protoc_insertion_point(field_release:communicator_objects.UnrealRLInitializationOutputProto.communication_version)
+  return _impl_.communication_version_.Release();
+}
+inline void UnrealRLInitializationOutputProto::set_allocated_communication_version(std::string* value) {
+  _impl_.communication_version_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.communication_version_.IsDefault()) {
+          _impl_.communication_version_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:communicator_objects.UnrealRLInitializationOutputProto.communication_version)
+}
+
+// string log_path = 3;
 inline void UnrealRLInitializationOutputProto::clear_log_path() {
   _impl_.log_path_.ClearToEmpty();
 }
@@ -387,7 +478,7 @@ inline void UnrealRLInitializationOutputProto::set_allocated_log_path(std::strin
   // @@protoc_insertion_point(field_set_allocated:communicator_objects.UnrealRLInitializationOutputProto.log_path)
 }
 
-// repeated .communicator_objects.BrainParametersProto brain_parameters = 3;
+// repeated .communicator_objects.BrainParametersProto brain_parameters = 4;
 inline int UnrealRLInitializationOutputProto::_internal_brain_parameters_size() const {
   return _impl_.brain_parameters_.size();
 }
@@ -430,6 +521,53 @@ UnrealRLInitializationOutputProto::_internal_brain_parameters() const {
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::communicator_objects::BrainParametersProto>*
 UnrealRLInitializationOutputProto::_internal_mutable_brain_parameters() {
   return &_impl_.brain_parameters_;
+}
+
+// string package_version = 5;
+inline void UnrealRLInitializationOutputProto::clear_package_version() {
+  _impl_.package_version_.ClearToEmpty();
+}
+inline const std::string& UnrealRLInitializationOutputProto::package_version() const {
+  // @@protoc_insertion_point(field_get:communicator_objects.UnrealRLInitializationOutputProto.package_version)
+  return _internal_package_version();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void UnrealRLInitializationOutputProto::set_package_version(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.package_version_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:communicator_objects.UnrealRLInitializationOutputProto.package_version)
+}
+inline std::string* UnrealRLInitializationOutputProto::mutable_package_version() {
+  std::string* _s = _internal_mutable_package_version();
+  // @@protoc_insertion_point(field_mutable:communicator_objects.UnrealRLInitializationOutputProto.package_version)
+  return _s;
+}
+inline const std::string& UnrealRLInitializationOutputProto::_internal_package_version() const {
+  return _impl_.package_version_.Get();
+}
+inline void UnrealRLInitializationOutputProto::_internal_set_package_version(const std::string& value) {
+  ;
+
+
+  _impl_.package_version_.Set(value, GetArenaForAllocation());
+}
+inline std::string* UnrealRLInitializationOutputProto::_internal_mutable_package_version() {
+  ;
+  return _impl_.package_version_.Mutable( GetArenaForAllocation());
+}
+inline std::string* UnrealRLInitializationOutputProto::release_package_version() {
+  // @@protoc_insertion_point(field_release:communicator_objects.UnrealRLInitializationOutputProto.package_version)
+  return _impl_.package_version_.Release();
+}
+inline void UnrealRLInitializationOutputProto::set_allocated_package_version(std::string* value) {
+  _impl_.package_version_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.package_version_.IsDefault()) {
+          _impl_.package_version_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:communicator_objects.UnrealRLInitializationOutputProto.package_version)
 }
 
 #ifdef __GNUC__

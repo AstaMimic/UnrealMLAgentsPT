@@ -554,6 +554,7 @@ void BrainParametersProto::Clear() {
     ABSL_DCHECK(_impl_.action_spec_ != nullptr);
     _impl_.action_spec_->Clear();
   }
+          #pragma warning(disable: 4800)
   _impl_.is_training_ = false;
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();

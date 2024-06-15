@@ -258,7 +258,6 @@ const char* AgentInfoProto::_InternalParse(const char* ptr, ::_pbi::ParseContext
         continue;
       // bool max_step_reached = 3;
       case 3:
-        #pragma warning(disable: 4800)
         if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 24)) {
           _impl_.max_step_reached_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
