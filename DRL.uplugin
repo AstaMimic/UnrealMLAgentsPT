@@ -16,14 +16,29 @@
 	"Installed": false,
 	"Modules": [
 		{
-			"name": "DRL",
+			"name": "Policies",
 			"type": "Runtime",
-			"loadingphase": "Default"
+			"loadingphase": "PreDefault"
 		},
 		{
 			"name": "Communicator",
 			"type": "Runtime",
 			"loadingphase": "PreDefault"
+		},
+		{
+			"name": "Actuators",
+			"type": "Runtime",
+			"loadingphase": "PreDefault"
+		},
+		{
+			"name": "Sensors",
+			"type": "Runtime",
+			"loadingphase": "PreDefault"
+		},
+		{
+			"name": "DRL",
+			"type": "Runtime",
+			"loadingphase": "Default"
 		}
 	]
 }

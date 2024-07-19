@@ -3,6 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ISensor.h"
+#include "ActionSpec.h"
+#include "AgentInfo.h"
 #include "UObject/Interface.h"
 #include "UObject/NoExportTypes.h"
 #include "Delegates/DelegateCombinations.h"
@@ -91,10 +94,11 @@ public:
     virtual FRLInputReceivedHandler& OnRLInputReceived() = 0; // Add this line
 
     // Methods
+
     virtual bool Initialize(const FCommunicatorInitParameters& InitParameters, FUnrealRLInitParameters& InitParametersOut) = 0;
-    virtual void SubscribeBrain(const FString& Name, const FString& ActionSpec) = 0;
-    virtual void PutObservations(const FString& BrainKey, const FString& AgentInfo, const TArray<FString>& Sensors) = 0;
+    virtual void SubscribeBrain(const FString& Name, FActionSpec ActionSpec) = 0;
+    virtual void PutObservations(const FString& BrainKey, const FAgentInfo& Info, TArray<TScriptInterface<IISensor>>& Sensors) = 0;
     virtual void DecideBatch() = 0;
-    virtual FString GetActions(const FString& Key, int32 AgentId) = 0;
+    virtual const FActionBuffers GetActions(const FString& Key, int32 AgentId) = 0;
 };
 

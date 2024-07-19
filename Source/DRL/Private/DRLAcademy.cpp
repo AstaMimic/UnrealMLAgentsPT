@@ -2,11 +2,28 @@
 
 
 #include "DRLAcademy.h"
+#include "GenericPlatform/GenericPlatformMisc.h"
 
 UDRLAcademy* UDRLAcademy::Instance = nullptr;
 
 UDRLAcademy::UDRLAcademy() {
     FCoreDelegates::OnExit.AddUObject(this, &UDRLAcademy::Dispose);
+    StepRecursionChecker->Initialize("EnvironmentStep");
+}
+
+// Make the Academy Tick
+bool UDRLAcademy::IsTickable() const {
+    return true;
+}
+
+void UDRLAcademy::Tick(float DeltaTime) {
+    UE_LOG(LogTemp, Log, TEXT("Agent Tick - DeltaTime: %f"), DeltaTime);
+    EnvironmentStep();
+}
+
+TStatId UDRLAcademy::GetStatId() const
+{
+    RETURN_QUICK_DECLARE_CYCLE_STAT(ThisClassName, STATGROUP_Tickables);
 }
 
 UDRLAcademy* UDRLAcademy::GetInstance()
@@ -15,12 +32,12 @@ UDRLAcademy* UDRLAcademy::GetInstance()
     {
         Instance = NewObject<UDRLAcademy>();
         Instance->AddToRoot(); 
-        Instance->Initialize();
+        Instance->LazyInitialize();
     }
     return Instance;
 }
 
-void UDRLAcademy::Initialize() {
+void UDRLAcademy::LazyInitialize() {
     if (!bInitialized) {
         InitializeEnvironment();
         bInitialized = true;
@@ -42,6 +59,9 @@ void UDRLAcademy::ParseCommandLineArgs() {
 }
 
 void UDRLAcademy::InitializeEnvironment() {
+    UE_LOG(LogTemp, Log, TEXT("Initialize Environement"));
+
+    bEnableStepping = true;
     ParseCommandLineArgs();
 
 	RpcCommunicator = NewObject<URpcCommunicator>();
@@ -82,16 +102,91 @@ void UDRLAcademy::InitializeEnvironment() {
         RpcCommunicator->OnQuitCommandReceived().AddDynamic(this, &UDRLAcademy::OnQuitCommandReceived);
         RpcCommunicator->OnResetCommandReceived().AddDynamic(this, &UDRLAcademy::OnResetCommand);
     }
+
+	// If a communicator is enabled/provided, then we assume we are in
+	// training mode. In the absence of a communicator, we assume we are
+	// in inference mode.
+
+	ResetActions();
+}
+
+void UDRLAcademy::EnvironmentStep() {
+
+    // TODO: Recursion check
+
+    if (!bHadFirstReset)
+    {
+        ForcedFullReset();
+    }
+
+    if (OnAgentPreStep.IsBound())
+    {
+        OnAgentPreStep.Broadcast(StepCount);
+    }
+
+    StepCount += 1;
+    TotalStepCount += 1;
+
+    if (OnAgentIncrementStep.IsBound())
+    {
+        OnAgentIncrementStep.Broadcast();
+    }
+
+	if (OnAgentSendState.IsBound())
+	{
+		OnAgentSendState.Broadcast();
+	}
+
+	if (OnDecideAction.IsBound())
+	{
+		OnDecideAction.Broadcast();
+	}
+
+	if (OnAgentAct.IsBound())
+	{
+		OnAgentAct.Broadcast();
+	}
+
 }
 
 void UDRLAcademy::OnQuitCommandReceived() {
-
+    FGenericPlatformMisc::RequestExit(false);
 }
 
 void UDRLAcademy::OnResetCommand() {
-
+    ForcedFullReset();
 }
 
 void UDRLAcademy::Dispose() {
+    OnDecideAction.Clear();
+    OnDestroyAction.Clear();
+    OnAgentPreStep.Clear();
+    OnAgentSendState.Clear();
+    OnAgentAct.Clear();
+    OnAgentForceReset.Clear();
+    OnEnvironmentReset.Clear();
+}
 
+void UDRLAcademy::ForcedFullReset() {
+    EnvironmentReset();
+    if (OnAgentForceReset.IsBound()) {
+        OnAgentForceReset.Broadcast();
+    }
+    bHadFirstReset = true;
+}
+
+void UDRLAcademy::EnvironmentReset() {
+    StepCount = 0;
+    EpisodeCount++;
+    if (OnEnvironmentReset.IsBound()) {
+        OnEnvironmentReset.Broadcast();
+    }
+}
+
+void UDRLAcademy::ResetActions() {
+    
+}
+
+bool UDRLAcademy::IsCommunicatorOn() {
+    return RpcCommunicator != nullptr;
 }

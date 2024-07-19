@@ -14,14 +14,25 @@ public class Communicator: ModuleRules
 		CommunicatorPlatformInstance = GetCommunicatorPlatformInstance(Target);
 		bEnableExceptions = true;
 
+		PrivateIncludePathModuleNames.AddRange(
+			new string[] 
+			{
+				"DRL",
+				"Policies",
+				"Sensors"
+			}
+		);
+
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
 				"Core",
 				"CoreUObject",
 				"Engine",
+				"Actuators"
 			}
 		);
+
 		AddEngineThirdPartyPrivateStaticDependencies(Target, "OpenSSL");
 		AddEngineThirdPartyPrivateStaticDependencies(Target, "zlib");
 

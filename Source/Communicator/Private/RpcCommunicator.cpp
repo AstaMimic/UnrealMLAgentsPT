@@ -199,23 +199,320 @@ FRLInputReceivedHandler& URpcCommunicator::OnRLInputReceived()
     return RLInputReceived;
 }
 
-void URpcCommunicator::SubscribeBrain(const FString& Name, const FString& ActionSpec)
+void URpcCommunicator::SubscribeBrain(const FString& Name, FActionSpec ActionSpec)
 {
-    // Implement the logic for subscribing a brain here
+    if (BehaviorNames.Contains(Name)) {
+        return;
+    }
+    BehaviorNames.Add(Name);
+    CurrentUnrealRlOutput->mutable_agentinfos()->insert(
+        std::pair(std::string(TCHAR_TO_UTF8(*Name)), communicator_objects::UnrealRLOutputProto_ListAgentInfoProto())
+    );
+    CacheActionSpec(Name, ActionSpec);
 }
 
-void URpcCommunicator::PutObservations(const FString& BrainKey, const FString& AgentInfo, const TArray<FString>& Sensors)
+void URpcCommunicator::CacheActionSpec(const FString& Name, FActionSpec ActionSpec) {
+    if (SentBrainKeys.Contains(Name)) {
+        return;
+    }
+    UnsentBrainKeys[Name] = ActionSpec;
+}
+
+void URpcCommunicator::PutObservations(const FString& BehaviorName, const FAgentInfo& Info, TArray<TScriptInterface<IISensor>>& Sensors)
 {
-    // Implement the logic for putting observations here
+    communicator_objects::AgentInfoProto AgentInfoProto = ToAgentInfoProto(Info);
+    for (auto& sensor : Sensors) {
+        communicator_objects::ObservationProto ObsProto = GetObservationProto(sensor, ObsWriter);
+        *AgentInfoProto.mutable_observations()->Add() = ObsProto;
+    }
+    
+    auto& agentInfosMap = *CurrentUnrealRlOutput->mutable_agentinfos();
+    *agentInfosMap[TCHAR_TO_UTF8(*BehaviorName)].add_value() = AgentInfoProto;
+
+    bNeedCommunicateThisStep = true;
+    if (!OrderedAgentsRequestingDecisions.Contains(BehaviorName)) {
+        TArray<int> IntArray;
+        OrderedAgentsRequestingDecisions[BehaviorName] = IntArray;
+    }
+    if (!Info.bDone) {
+        OrderedAgentsRequestingDecisions[BehaviorName].Add(Info.EpisodeId);
+    }
+    if (!LastActionsReceived.Contains(BehaviorName)) {
+		TMap<int32, FActionBuffers> DictActionReceived;
+        LastActionsReceived[BehaviorName] = DictActionReceived;
+    }
+    LastActionsReceived[BehaviorName][Info.EpisodeId] = FActionBuffers::Empty;
+    if (Info.bDone) {
+        LastActionsReceived[BehaviorName].Remove(Info.EpisodeId);
+    }
 }
 
 void URpcCommunicator::DecideBatch()
 {
-    // Implement the logic for deciding a batch here
+    if (bNeedCommunicateThisStep) {
+        return;
+    }
+    bNeedCommunicateThisStep = false;
+    SendBatchedMessageHelper();
 }
 
-FString URpcCommunicator::GetActions(const FString& Key, int32 AgentId)
+const FActionBuffers URpcCommunicator::GetActions(const FString& Key, int32 AgentId)
 {
-    // Implement the logic for getting actions here
-    return FString();
+    return FActionBuffers::Empty;
+}
+
+
+void URpcCommunicator::SendBatchedMessageHelper()
+{
+	communicator_objects::UnrealOutputProto message;
+	message.set_allocated_rl_output(CurrentUnrealRlOutput);
+
+	communicator_objects::UnrealRLInitializationOutputProto* tempUnityRlInitializationOutput = GetTempUnrealRlInitializationOutput();
+	if (tempUnityRlInitializationOutput != nullptr)
+	{
+		message.set_allocated_rl_initialization_output(tempUnityRlInitializationOutput);
+	}
+
+	communicator_objects::UnrealInputProto* input = Exchange(&message);
+	UpdateSentActionSpec(*tempUnityRlInitializationOutput);
+
+//	foreach (var k in m_CurrentUnityRlOutput.AgentInfos.Keys)
+//	{
+//		m_CurrentUnityRlOutput.AgentInfos[k].Value.Clear();
+//	}
+
+	const auto& rlInput = input->rl_input();
+
+	if (rlInput.agent_actions().empty())
+	{
+		return;
+	}
+
+	SendCommandEvent(rlInput.command());
+
+	for (const auto& brainName : rlInput.agent_actions())
+	{
+        const FString& Key = brainName.first.c_str();
+		if (OrderedAgentsRequestingDecisions.Find(Key)->IsEmpty())
+		{
+			continue;
+		}
+
+		if (brainName.second.value().empty())
+		{
+			continue;
+		}
+
+		const auto& agentActions = ToAgentActionList(brainName.second);
+        int numAgents = OrderedAgentsRequestingDecisions.Find(brainName.first.c_str())->Num();
+		for (int i = 0; i < numAgents; ++i)
+		{
+			const auto& agentAction = agentActions[i];
+            int agentId = (*OrderedAgentsRequestingDecisions.Find(Key))[i];
+            if (LastActionsReceived.Find(Key)->Contains(agentId)) {
+                LastActionsReceived[Key].Add(agentId, agentAction);
+            }
+		}
+	}
+
+	for (TPair<FString, TArray<int32>>& Pair : OrderedAgentsRequestingDecisions)
+	{
+		Pair.Value.Empty();
+	}
+}
+
+communicator_objects::ObservationProto URpcCommunicator::GetObservationProto(TScriptInterface<IISensor> Sensor, ObservationWriter& ObservationWriter)
+{
+
+    FObservationSpec ObsSpec = Sensor->GetObservationSpec();
+    FInplaceArray<int32> Shape = ObsSpec.GetShape();
+    int NumFloats = USensorExtensions::ObservationSize(Sensor);
+    communicator_objects::ObservationProto::FloatData FloatDataProto;
+
+	// Resize the float array
+	for (int i = 0; i < NumFloats; ++i)
+	{
+		FloatDataProto.add_data(0.0f);
+	}
+
+	// Assume observationWriter is an instance of a class that has SetTarget() method
+	ObservationWriter.SetTarget(FloatDataProto.mutable_data(), Sensor->GetObservationSpec().GetShape(), 0);
+	Sensor->Write(ObservationWriter);
+
+	communicator_objects::ObservationProto ObservationProto;
+	*ObservationProto.mutable_float_data() = FloatDataProto;
+
+    // Add the dimension properties to the observationProto 
+    FInplaceArray<EDimensionProperty> DimensionProperties = ObsSpec.GetDimensionProperties();
+    for (int i = 0; i < Shape.GetLength(); i++) {
+        ObservationProto.mutable_dimension_properties()->Add((int)DimensionProperties[i]);
+    }
+
+    for (int i = 0; i < Shape.GetLength(); i++) {
+        ObservationProto.mutable_shape()->Add(Shape[i]);
+    }
+    
+    FString SensorName = Sensor->GetName();
+    if (!SensorName.IsEmpty()) {
+        ObservationProto.set_name(TCHAR_TO_UTF8(*SensorName));
+    }
+    return ObservationProto;
+}
+
+communicator_objects::UnrealInputProto* URpcCommunicator::Exchange(const communicator_objects::UnrealOutputProto* UnrealOutput) {
+
+	if (!bIsOpen)
+	{
+        return nullptr;
+	}
+
+    try 
+    {
+
+		communicator_objects::UnrealMessageProto InputMessage;
+		if (!SendAndReceiveMessage(WrapMessage(UnrealOutput, 200), InputMessage))
+		{
+			throw std::runtime_error("Failed to receive input message");
+		}
+
+		return InputMessage.mutable_unreal_input();
+    }
+	catch (const std::exception& Ex)
+	{
+		// Fall-through for other error types
+		UE_LOG(LogTemp, Error, TEXT("Communication Exception: %s. Disconnecting from trainer."), *FString(Ex.what()));
+	}
+
+	bIsOpen = false;
+	NotifyQuitAndShutDownChannel();
+    return nullptr;
+}
+
+
+communicator_objects::UnrealRLInitializationOutputProto* URpcCommunicator::GetTempUnrealRlInitializationOutput() {
+    communicator_objects::UnrealRLInitializationOutputProto* Output = nullptr;
+    for (const auto& Elem : UnsentBrainKeys) {
+
+        FString BehaviorName = Elem.Key;
+        const FActionSpec& ActionSpec = Elem.Value;
+
+        if (CurrentUnrealRlOutput->agentinfos().contains(TCHAR_TO_UTF8(*BehaviorName))) {
+
+            if (CurrentUnrealRlOutput->agentinfos().at(TCHAR_TO_UTF8(*BehaviorName)).value_size() > 0) {
+                if (Output == nullptr) {
+                    Output = new communicator_objects::UnrealRLInitializationOutputProto();
+                }
+                Output->mutable_brain_parameters()->Add(ToBrainParametersProto(ActionSpec, BehaviorName, true));
+            }
+        }
+    }
+
+    return Output;
+}
+
+communicator_objects::BrainParametersProto URpcCommunicator::ToBrainParametersProto(const FActionSpec& ActionSpec, FString Name, bool bIsTraining) {
+    communicator_objects::BrainParametersProto BrainParametersProto;
+    BrainParametersProto.set_brain_name(TCHAR_TO_UTF8(*Name));
+    BrainParametersProto.set_is_training(bIsTraining);
+    *BrainParametersProto.mutable_action_spec() = ToActionSpecProto(ActionSpec);
+    return BrainParametersProto;
+}
+
+communicator_objects::ActionSpecProto URpcCommunicator::ToActionSpecProto(const FActionSpec& ActionSpec) {
+    communicator_objects::ActionSpecProto ActionSpecProto;
+    ActionSpecProto.set_num_continuous_actions(ActionSpec.NumContinuousActions);
+    ActionSpecProto.set_num_discrete_actions(ActionSpec.NumDiscreteActions);
+    if (ActionSpec.BranchSizes.Num() != 0 ) {
+        for (auto BranchSize : ActionSpec.BranchSizes) {
+            ActionSpecProto.mutable_discrete_branch_sizes()->Add(BranchSize);
+        }
+    }
+    return ActionSpecProto;
+}
+
+void URpcCommunicator::UpdateSentActionSpec(const communicator_objects::UnrealRLInitializationOutputProto& Output) {
+
+    // Check if Output is not null
+    if (!Output.IsInitialized())
+    {
+        return;
+    }
+
+    // Iterate through BrainParameters in the output
+    for (int32 i = 0; i < Output.brain_parameters_size(); ++i)
+    {
+        const communicator_objects::BrainParametersProto& BrainProto = Output.brain_parameters(i);
+        FString BrainName = UTF8_TO_TCHAR(BrainProto.brain_name().c_str());
+
+        // Add the brain name to the sent brain keys
+        SentBrainKeys.Add(BrainName);
+
+        // Remove the brain name from the unsent brain keys
+        UnsentBrainKeys.Remove(BrainName);
+    }
+}
+
+void URpcCommunicator::SendCommandEvent(communicator_objects::CommandProto Command) {
+    switch (Command)
+    {
+    case communicator_objects::RESET: {
+        
+    }
+    case communicator_objects::QUIT: {
+        NotifyQuitAndShutDownChannel();
+        return;
+    }
+    default:
+        return;
+    }
+}
+
+TArray<FActionBuffers> URpcCommunicator::ToAgentActionList(const communicator_objects::UnrealRLInputProto_ListAgentActionProto Proto) {
+    TArray<FActionBuffers> AgentActions;
+    AgentActions.Reserve(Proto.value_size());
+
+    for (const auto& Ap : Proto.value())
+    {
+        AgentActions.Add(ToActionBuffers(Ap));
+    }
+
+    return AgentActions;
+}
+
+FActionBuffers URpcCommunicator::ToActionBuffers(const communicator_objects::AgentActionProto& Proto)
+{
+    // Convert the continuous actions from Proto
+    TArray<float> ContinuousActions;
+    for (int i = 0; i < Proto.continuous_actions_size(); ++i)
+    {
+        ContinuousActions.Add(Proto.continuous_actions(i));
+    }
+
+    // Convert the discrete actions from Proto
+    TArray<int32> DiscreteActions;
+    for (int i = 0; i < Proto.discrete_actions_size(); ++i)
+    {
+        DiscreteActions.Add(Proto.discrete_actions(i));
+    }
+
+    return FActionBuffers(ContinuousActions, DiscreteActions);
+}
+
+
+communicator_objects::AgentInfoProto URpcCommunicator::ToAgentInfoProto(const FAgentInfo& Info) {
+	communicator_objects::AgentInfoProto AgentInfoProto;
+	AgentInfoProto.set_reward(Info.Reward);
+	AgentInfoProto.set_group_reward(Info.GroupReward);
+	AgentInfoProto.set_max_step_reached(Info.bMaxStepReached);
+	AgentInfoProto.set_done(Info.bDone);
+	AgentInfoProto.set_id(Info.EpisodeId);
+	AgentInfoProto.set_group_id(Info.GroupId);
+	
+	if (Info.DiscreteActionMasks.Num() != 0){
+		for (bool MaskValue : Info.DiscreteActionMasks)
+		{
+			AgentInfoProto.mutable_action_mask()->Add(MaskValue);
+		}
+	}
+	return AgentInfoProto;
 }

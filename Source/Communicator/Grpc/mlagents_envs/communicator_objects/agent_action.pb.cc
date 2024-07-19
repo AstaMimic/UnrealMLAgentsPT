@@ -22,9 +22,7 @@ namespace communicator_objects {
 template <typename>
 PROTOBUF_CONSTEXPR AgentActionProto::AgentActionProto(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.vector_actions_deprecated_)*/ {}
-
-  , /*decltype(_impl_.continuous_actions_)*/ {}
+    /*decltype(_impl_.continuous_actions_)*/ {}
 
   , /*decltype(_impl_.discrete_actions_)*/ {}
   ,/* _impl_._discrete_actions_cached_byte_size_ = */ { 0 }
@@ -58,7 +56,6 @@ const ::uint32_t TableStruct_mlagents_5fenvs_2fcommunicator_5fobjects_2fagent_5f
     ~0u,  // no _inlined_string_donated_
     ~0u,  // no _split_
     ~0u,  // no sizeof(Split)
-    PROTOBUF_FIELD_OFFSET(::communicator_objects::AgentActionProto, _impl_.vector_actions_deprecated_),
     PROTOBUF_FIELD_OFFSET(::communicator_objects::AgentActionProto, _impl_.value_),
     PROTOBUF_FIELD_OFFSET(::communicator_objects::AgentActionProto, _impl_.continuous_actions_),
     PROTOBUF_FIELD_OFFSET(::communicator_objects::AgentActionProto, _impl_.discrete_actions_),
@@ -74,17 +71,16 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 const char descriptor_table_protodef_mlagents_5fenvs_2fcommunicator_5fobjects_2fagent_5faction_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
     "\n5mlagents_envs/communicator_objects/age"
-    "nt_action.proto\022\024communicator_objects\"z\n"
-    "\020AgentActionProto\022!\n\031vector_actions_depr"
-    "ecated\030\001 \003(\002\022\r\n\005value\030\002 \001(\002\022\032\n\022continuou"
-    "s_actions\030\003 \003(\002\022\030\n\020discrete_actions\030\004 \003("
-    "\005b\006proto3"
+    "nt_action.proto\022\024communicator_objects\"W\n"
+    "\020AgentActionProto\022\r\n\005value\030\001 \001(\002\022\032\n\022cont"
+    "inuous_actions\030\002 \003(\002\022\030\n\020discrete_actions"
+    "\030\003 \003(\005b\006proto3"
 };
 static ::absl::once_flag descriptor_table_mlagents_5fenvs_2fcommunicator_5fobjects_2fagent_5faction_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_mlagents_5fenvs_2fcommunicator_5fobjects_2fagent_5faction_2eproto = {
     false,
     false,
-    209,
+    174,
     descriptor_table_protodef_mlagents_5fenvs_2fcommunicator_5fobjects_2fagent_5faction_2eproto,
     "mlagents_envs/communicator_objects/agent_action.proto",
     &descriptor_table_mlagents_5fenvs_2fcommunicator_5fobjects_2fagent_5faction_2eproto_once,
@@ -132,9 +128,7 @@ AgentActionProto::AgentActionProto(const AgentActionProto& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   AgentActionProto* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.vector_actions_deprecated_) { from._impl_.vector_actions_deprecated_ }
-
-    , decltype(_impl_.continuous_actions_) { from._impl_.continuous_actions_ }
+      decltype(_impl_.continuous_actions_) { from._impl_.continuous_actions_ }
 
     , decltype(_impl_.discrete_actions_) { from._impl_.discrete_actions_ }
     ,/* _impl_._discrete_actions_cached_byte_size_ = */ { 0 }
@@ -151,9 +145,7 @@ AgentActionProto::AgentActionProto(const AgentActionProto& from)
 inline void AgentActionProto::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_.vector_actions_deprecated_) { arena }
-
-    , decltype(_impl_.continuous_actions_) { arena }
+      decltype(_impl_.continuous_actions_) { arena }
 
     , decltype(_impl_.discrete_actions_) { arena }
     ,/* _impl_._discrete_actions_cached_byte_size_ = */ { 0 }
@@ -175,7 +167,6 @@ AgentActionProto::~AgentActionProto() {
 
 inline void AgentActionProto::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.vector_actions_deprecated_.~RepeatedField();
   _impl_.continuous_actions_.~RepeatedField();
   _impl_.discrete_actions_.~RepeatedField();
 }
@@ -190,7 +181,6 @@ void AgentActionProto::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _internal_mutable_vector_actions_deprecated()->Clear();
   _internal_mutable_continuous_actions()->Clear();
   _internal_mutable_discrete_actions()->Clear();
   _impl_.value_ = 0;
@@ -203,45 +193,33 @@ const char* AgentActionProto::_InternalParse(const char* ptr, ::_pbi::ParseConte
     ::uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // repeated float vector_actions_deprecated = 1;
+      // float value = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedFloatParser(_internal_mutable_vector_actions_deprecated(), ptr, ctx);
-          CHK_(ptr);
-        } else if (static_cast<::uint8_t>(tag) == 13) {
-          _internal_add_vector_actions_deprecated(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr));
-          ptr += sizeof(float);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // float value = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 21)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 13)) {
           _impl_.value_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else {
           goto handle_unusual;
         }
         continue;
-      // repeated float continuous_actions = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
+      // repeated float continuous_actions = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedFloatParser(_internal_mutable_continuous_actions(), ptr, ctx);
           CHK_(ptr);
-        } else if (static_cast<::uint8_t>(tag) == 29) {
+        } else if (static_cast<::uint8_t>(tag) == 21) {
           _internal_add_continuous_actions(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr));
           ptr += sizeof(float);
         } else {
           goto handle_unusual;
         }
         continue;
-      // repeated int32 discrete_actions = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 34)) {
+      // repeated int32 discrete_actions = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_discrete_actions(), ptr, ctx);
           CHK_(ptr);
-        } else if (static_cast<::uint8_t>(tag) == 32) {
+        } else if (static_cast<::uint8_t>(tag) == 24) {
           _internal_add_discrete_actions(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
           CHK_(ptr);
         } else {
@@ -277,12 +255,7 @@ failure:
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated float vector_actions_deprecated = 1;
-  if (this->_internal_vector_actions_deprecated_size() > 0) {
-    target = stream->WriteFixedPacked(1, _internal_vector_actions_deprecated(), target);
-  }
-
-  // float value = 2;
+  // float value = 1;
   static_assert(sizeof(::uint32_t) == sizeof(float), "Code assumes ::uint32_t and float are the same size.");
   float tmp_value = this->_internal_value();
   ::uint32_t raw_value;
@@ -290,19 +263,19 @@ failure:
   if (raw_value != 0) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
-        2, this->_internal_value(), target);
+        1, this->_internal_value(), target);
   }
 
-  // repeated float continuous_actions = 3;
+  // repeated float continuous_actions = 2;
   if (this->_internal_continuous_actions_size() > 0) {
-    target = stream->WriteFixedPacked(3, _internal_continuous_actions(), target);
+    target = stream->WriteFixedPacked(2, _internal_continuous_actions(), target);
   }
 
-  // repeated int32 discrete_actions = 4;
+  // repeated int32 discrete_actions = 3;
   {
     int byte_size = _impl_._discrete_actions_cached_byte_size_.Get();
     if (byte_size > 0) {
-      target = stream->WriteInt32Packed(4, _internal_discrete_actions(),
+      target = stream->WriteInt32Packed(3, _internal_discrete_actions(),
                                                  byte_size, target);
     }
   }
@@ -323,20 +296,7 @@ failure:
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated float vector_actions_deprecated = 1;
-  {
-    std::size_t data_size = std::size_t{4} *
-        ::_pbi::FromIntSize(this->_internal_vector_actions_deprecated_size())
-    ;
-    std::size_t tag_size = data_size == 0
-        ? 0
-        : 1 + ::_pbi::WireFormatLite::Int32Size(
-                            static_cast<int32_t>(data_size))
-    ;
-    total_size += tag_size + data_size;
-  }
-
-  // repeated float continuous_actions = 3;
+  // repeated float continuous_actions = 2;
   {
     std::size_t data_size = std::size_t{4} *
         ::_pbi::FromIntSize(this->_internal_continuous_actions_size())
@@ -349,7 +309,7 @@ failure:
     total_size += tag_size + data_size;
   }
 
-  // repeated int32 discrete_actions = 4;
+  // repeated int32 discrete_actions = 3;
   {
     std::size_t data_size = ::_pbi::WireFormatLite::Int32Size(
         this->_internal_discrete_actions())
@@ -363,7 +323,7 @@ failure:
     total_size += tag_size + data_size;
   }
 
-  // float value = 2;
+  // float value = 1;
   static_assert(sizeof(::uint32_t) == sizeof(float), "Code assumes ::uint32_t and float are the same size.");
   float tmp_value = this->_internal_value();
   ::uint32_t raw_value;
@@ -390,7 +350,6 @@ void AgentActionProto::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  _this->_impl_.vector_actions_deprecated_.MergeFrom(from._impl_.vector_actions_deprecated_);
   _this->_impl_.continuous_actions_.MergeFrom(from._impl_.continuous_actions_);
   _this->_impl_.discrete_actions_.MergeFrom(from._impl_.discrete_actions_);
   static_assert(sizeof(::uint32_t) == sizeof(float), "Code assumes ::uint32_t and float are the same size.");
@@ -417,7 +376,6 @@ bool AgentActionProto::IsInitialized() const {
 void AgentActionProto::InternalSwap(AgentActionProto* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  _impl_.vector_actions_deprecated_.InternalSwap(&other->_impl_.vector_actions_deprecated_);
   _impl_.continuous_actions_.InternalSwap(&other->_impl_.continuous_actions_);
   _impl_.discrete_actions_.InternalSwap(&other->_impl_.discrete_actions_);
 

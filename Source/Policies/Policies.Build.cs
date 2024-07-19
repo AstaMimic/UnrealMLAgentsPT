@@ -1,15 +1,13 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 using UnrealBuildTool;
 using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
 
-public class DRL : ModuleRules
+public class Policies: ModuleRules
 {
-	public DRL(ReadOnlyTargetRules Target) : base(Target)
-	{
+    public Policies(ReadOnlyTargetRules Target) : base(Target)
+    {
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicIncludePaths.AddRange(
@@ -20,32 +18,22 @@ public class DRL : ModuleRules
 
 		PrivateIncludePathModuleNames.AddRange(
 			new string[]
-			{ 
-                "Policies",
-				"Communicator",
-			}
-		);
-
-		PublicDependencyModuleNames.AddRange(
-			new string[]
 			{
-				"Core",
-                "UMG",
-                "Json"
+				"DRL",
 			}
 		);
 
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
+				"Core",
 				"CoreUObject",
 				"Engine",
-				"Slate",
-				"SlateCore",
+				"DRL",
+				"Communicator",
 				"Sensors",
-				"Actuators",
+				"Actuators"
 			}
 		);
 	}
-
 }

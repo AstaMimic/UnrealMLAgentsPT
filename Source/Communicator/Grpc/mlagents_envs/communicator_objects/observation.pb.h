@@ -406,6 +406,8 @@ class ObservationProto final :
 
   enum : int {
     kShapeFieldNumber = 1,
+    kDimensionPropertiesFieldNumber = 3,
+    kNameFieldNumber = 4,
     kFloatDataFieldNumber = 2,
   };
   // repeated int32 shape = 1;
@@ -426,6 +428,46 @@ class ObservationProto final :
   void _internal_add_shape(::int32_t value);
   const ::PROTOBUF_NAMESPACE_ID::RepeatedField<::int32_t>& _internal_shape() const;
   ::PROTOBUF_NAMESPACE_ID::RepeatedField<::int32_t>* _internal_mutable_shape();
+
+  public:
+  // repeated int32 dimension_properties = 3;
+  int dimension_properties_size() const;
+  private:
+  int _internal_dimension_properties_size() const;
+
+  public:
+  void clear_dimension_properties() ;
+  ::int32_t dimension_properties(int index) const;
+  void set_dimension_properties(int index, ::int32_t value);
+  void add_dimension_properties(::int32_t value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField<::int32_t>& dimension_properties() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField<::int32_t>* mutable_dimension_properties();
+
+  private:
+  ::int32_t _internal_dimension_properties(int index) const;
+  void _internal_add_dimension_properties(::int32_t value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField<::int32_t>& _internal_dimension_properties() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField<::int32_t>* _internal_mutable_dimension_properties();
+
+  public:
+  // string name = 4;
+  void clear_name() ;
+  const std::string& name() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_name(Arg_&& arg, Args_... args);
+  std::string* mutable_name();
+  PROTOBUF_NODISCARD std::string* release_name();
+  void set_allocated_name(std::string* ptr);
+
+  private:
+  const std::string& _internal_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_name(
+      const std::string& value);
+  std::string* _internal_mutable_name();
 
   public:
   // .communicator_objects.ObservationProto.FloatData float_data = 2;
@@ -462,6 +504,9 @@ class ObservationProto final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedField<::int32_t> shape_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _shape_cached_byte_size_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedField<::int32_t> dimension_properties_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _dimension_properties_cached_byte_size_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
     union ObservationDataUnion {
       constexpr ObservationDataUnion() : _constinit_{} {}
         ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized _constinit_;
@@ -655,6 +700,97 @@ inline ::communicator_objects::ObservationProto_FloatData* ObservationProto::mut
   ::communicator_objects::ObservationProto_FloatData* _msg = _internal_mutable_float_data();
   // @@protoc_insertion_point(field_mutable:communicator_objects.ObservationProto.float_data)
   return _msg;
+}
+
+// repeated int32 dimension_properties = 3;
+inline int ObservationProto::_internal_dimension_properties_size() const {
+  return _impl_.dimension_properties_.size();
+}
+inline int ObservationProto::dimension_properties_size() const {
+  return _internal_dimension_properties_size();
+}
+inline void ObservationProto::clear_dimension_properties() {
+  _internal_mutable_dimension_properties()->Clear();
+}
+inline ::int32_t ObservationProto::dimension_properties(int index) const {
+  // @@protoc_insertion_point(field_get:communicator_objects.ObservationProto.dimension_properties)
+  return _internal_dimension_properties(index);
+}
+inline void ObservationProto::set_dimension_properties(int index, ::int32_t value) {
+  _internal_mutable_dimension_properties()->Set(index, value);
+  // @@protoc_insertion_point(field_set:communicator_objects.ObservationProto.dimension_properties)
+}
+inline void ObservationProto::add_dimension_properties(::int32_t value) {
+  _internal_add_dimension_properties(value);
+  // @@protoc_insertion_point(field_add:communicator_objects.ObservationProto.dimension_properties)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField<::int32_t>& ObservationProto::dimension_properties() const {
+  // @@protoc_insertion_point(field_list:communicator_objects.ObservationProto.dimension_properties)
+  return _internal_dimension_properties();
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField<::int32_t>* ObservationProto::mutable_dimension_properties() {
+  // @@protoc_insertion_point(field_mutable_list:communicator_objects.ObservationProto.dimension_properties)
+  return _internal_mutable_dimension_properties();
+}
+
+inline ::int32_t ObservationProto::_internal_dimension_properties(int index) const {
+  return _internal_dimension_properties().Get(index);
+}
+inline void ObservationProto::_internal_add_dimension_properties(::int32_t value) {
+  _internal_mutable_dimension_properties()->Add(value);
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField<::int32_t>& ObservationProto::_internal_dimension_properties() const {
+  return _impl_.dimension_properties_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField<::int32_t>* ObservationProto::_internal_mutable_dimension_properties() {
+  return &_impl_.dimension_properties_;
+}
+
+// string name = 4;
+inline void ObservationProto::clear_name() {
+  _impl_.name_.ClearToEmpty();
+}
+inline const std::string& ObservationProto::name() const {
+  // @@protoc_insertion_point(field_get:communicator_objects.ObservationProto.name)
+  return _internal_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ObservationProto::set_name(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.name_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:communicator_objects.ObservationProto.name)
+}
+inline std::string* ObservationProto::mutable_name() {
+  std::string* _s = _internal_mutable_name();
+  // @@protoc_insertion_point(field_mutable:communicator_objects.ObservationProto.name)
+  return _s;
+}
+inline const std::string& ObservationProto::_internal_name() const {
+  return _impl_.name_.Get();
+}
+inline void ObservationProto::_internal_set_name(const std::string& value) {
+  ;
+
+
+  _impl_.name_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ObservationProto::_internal_mutable_name() {
+  ;
+  return _impl_.name_.Mutable( GetArenaForAllocation());
+}
+inline std::string* ObservationProto::release_name() {
+  // @@protoc_insertion_point(field_release:communicator_objects.ObservationProto.name)
+  return _impl_.name_.Release();
+}
+inline void ObservationProto::set_allocated_name(std::string* value) {
+  _impl_.name_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.name_.IsDefault()) {
+          _impl_.name_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:communicator_objects.ObservationProto.name)
 }
 
 inline bool ObservationProto::has_observation_data() const {

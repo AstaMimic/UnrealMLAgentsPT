@@ -41,6 +41,13 @@ PROTOBUF_CONSTEXPR ObservationProto::ObservationProto(
     /*decltype(_impl_.shape_)*/ {}
   ,/* _impl_._shape_cached_byte_size_ = */ { 0 }
 
+  , /*decltype(_impl_.dimension_properties_)*/ {}
+  ,/* _impl_._dimension_properties_cached_byte_size_ = */ { 0 }
+
+  , /*decltype(_impl_.name_)*/ {
+    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
+  }
+
   , /*decltype(_impl_.observation_data_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}
   , /*decltype(_impl_._oneof_case_)*/{}} {}
@@ -80,6 +87,8 @@ const ::uint32_t TableStruct_mlagents_5fenvs_2fcommunicator_5fobjects_2fobservat
     ~0u,  // no sizeof(Split)
     PROTOBUF_FIELD_OFFSET(::communicator_objects::ObservationProto, _impl_.shape_),
     ::_pbi::kInvalidFieldOffsetTag,
+    PROTOBUF_FIELD_OFFSET(::communicator_objects::ObservationProto, _impl_.dimension_properties_),
+    PROTOBUF_FIELD_OFFSET(::communicator_objects::ObservationProto, _impl_.name_),
     PROTOBUF_FIELD_OFFSET(::communicator_objects::ObservationProto, _impl_.observation_data_),
 };
 
@@ -95,19 +104,20 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 const char descriptor_table_protodef_mlagents_5fenvs_2fcommunicator_5fobjects_2fobservation_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
     "\n4mlagents_envs/communicator_objects/obs"
-    "ervation.proto\022\024communicator_objects\"\230\001\n"
+    "ervation.proto\022\024communicator_objects\"\304\001\n"
     "\020ObservationProto\022\r\n\005shape\030\001 \003(\005\022F\n\nfloa"
     "t_data\030\002 \001(\01320.communicator_objects.Obse"
-    "rvationProto.FloatDataH\000\032\031\n\tFloatData\022\014\n"
-    "\004data\030\001 \003(\002B\022\n\020observation_data*4\n\024Obser"
-    "vationTypeProto\022\013\n\007DEFAULT\020\000\022\017\n\013GOAL_SIG"
-    "NAL\020\001b\006proto3"
+    "rvationProto.FloatDataH\000\022\034\n\024dimension_pr"
+    "operties\030\003 \003(\005\022\014\n\004name\030\004 \001(\t\032\031\n\tFloatDat"
+    "a\022\014\n\004data\030\001 \003(\002B\022\n\020observation_data*4\n\024O"
+    "bservationTypeProto\022\013\n\007DEFAULT\020\000\022\017\n\013GOAL"
+    "_SIGNAL\020\001b\006proto3"
 };
 static ::absl::once_flag descriptor_table_mlagents_5fenvs_2fcommunicator_5fobjects_2fobservation_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_mlagents_5fenvs_2fcommunicator_5fobjects_2fobservation_2eproto = {
     false,
     false,
-    293,
+    337,
     descriptor_table_protodef_mlagents_5fenvs_2fcommunicator_5fobjects_2fobservation_2eproto,
     "mlagents_envs/communicator_objects/observation.proto",
     &descriptor_table_mlagents_5fenvs_2fcommunicator_5fobjects_2fobservation_2eproto_once,
@@ -378,11 +388,23 @@ ObservationProto::ObservationProto(const ObservationProto& from)
       decltype(_impl_.shape_) { from._impl_.shape_ }
     ,/* _impl_._shape_cached_byte_size_ = */ { 0 }
 
+    , decltype(_impl_.dimension_properties_) { from._impl_.dimension_properties_ }
+    ,/* _impl_._dimension_properties_cached_byte_size_ = */ { 0 }
+
+    , decltype(_impl_.name_) {}
+
     , decltype(_impl_.observation_data_){}
     , /*decltype(_impl_._cached_size_)*/{}
     , /*decltype(_impl_._oneof_case_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.name_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_name().empty()) {
+    _this->_impl_.name_.Set(from._internal_name(), _this->GetArenaForAllocation());
+  }
   clear_has_observation_data();
   switch (from.observation_data_case()) {
     case kFloatData: {
@@ -403,10 +425,19 @@ inline void ObservationProto::SharedCtor(::_pb::Arena* arena) {
       decltype(_impl_.shape_) { arena }
     ,/* _impl_._shape_cached_byte_size_ = */ { 0 }
 
+    , decltype(_impl_.dimension_properties_) { arena }
+    ,/* _impl_._dimension_properties_cached_byte_size_ = */ { 0 }
+
+    , decltype(_impl_.name_) {}
+
     , decltype(_impl_.observation_data_){}
     , /*decltype(_impl_._cached_size_)*/{}
     , /*decltype(_impl_._oneof_case_)*/{}
   };
+  _impl_.name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.name_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   clear_has_observation_data();
 }
 
@@ -422,6 +453,8 @@ ObservationProto::~ObservationProto() {
 inline void ObservationProto::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.shape_.~RepeatedField();
+  _impl_.dimension_properties_.~RepeatedField();
+  _impl_.name_.Destroy();
   if (has_observation_data()) {
     clear_observation_data();
   }
@@ -455,6 +488,8 @@ void ObservationProto::Clear() {
   (void) cached_has_bits;
 
   _internal_mutable_shape()->Clear();
+  _internal_mutable_dimension_properties()->Clear();
+  _impl_.name_.ClearToEmpty();
   clear_observation_data();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -482,6 +517,29 @@ const char* ObservationProto::_InternalParse(const char* ptr, ::_pbi::ParseConte
         if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
           ptr = ctx->ParseMessage(_internal_mutable_float_data(), ptr);
           CHK_(ptr);
+        } else {
+          goto handle_unusual;
+        }
+        continue;
+      // repeated int32 dimension_properties = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_dimension_properties(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<::uint8_t>(tag) == 24) {
+          _internal_add_dimension_properties(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
+          CHK_(ptr);
+        } else {
+          goto handle_unusual;
+        }
+        continue;
+      // string name = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 34)) {
+          auto str = _internal_mutable_name();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "communicator_objects.ObservationProto.name"));
         } else {
           goto handle_unusual;
         }
@@ -531,6 +589,23 @@ failure:
         _Internal::float_data(this).GetCachedSize(), target, stream);
   }
 
+  // repeated int32 dimension_properties = 3;
+  {
+    int byte_size = _impl_._dimension_properties_cached_byte_size_.Get();
+    if (byte_size > 0) {
+      target = stream->WriteInt32Packed(3, _internal_dimension_properties(),
+                                                 byte_size, target);
+    }
+  }
+
+  // string name = 4;
+  if (!this->_internal_name().empty()) {
+    const std::string& _s = this->_internal_name();
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "communicator_objects.ObservationProto.name");
+    target = stream->WriteStringMaybeAliased(4, _s, target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -559,6 +634,26 @@ failure:
                             static_cast<int32_t>(data_size))
     ;
     total_size += tag_size + data_size;
+  }
+
+  // repeated int32 dimension_properties = 3;
+  {
+    std::size_t data_size = ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_dimension_properties())
+    ;
+    _impl_._dimension_properties_cached_byte_size_.Set(::_pbi::ToCachedSize(data_size));
+    std::size_t tag_size = data_size == 0
+        ? 0
+        : 1 + ::_pbi::WireFormatLite::Int32Size(
+                            static_cast<int32_t>(data_size))
+    ;
+    total_size += tag_size + data_size;
+  }
+
+  // string name = 4;
+  if (!this->_internal_name().empty()) {
+    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+                                    this->_internal_name());
   }
 
   switch (observation_data_case()) {
@@ -592,6 +687,10 @@ void ObservationProto::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const
   (void) cached_has_bits;
 
   _this->_impl_.shape_.MergeFrom(from._impl_.shape_);
+  _this->_impl_.dimension_properties_.MergeFrom(from._impl_.dimension_properties_);
+  if (!from._internal_name().empty()) {
+    _this->_internal_set_name(from._internal_name());
+  }
   switch (from.observation_data_case()) {
     case kFloatData: {
       _this->_internal_mutable_float_data()->::communicator_objects::ObservationProto_FloatData::MergeFrom(
@@ -618,8 +717,13 @@ bool ObservationProto::IsInitialized() const {
 
 void ObservationProto::InternalSwap(ObservationProto* other) {
   using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.shape_.InternalSwap(&other->_impl_.shape_);
+  _impl_.dimension_properties_.InternalSwap(&other->_impl_.dimension_properties_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, lhs_arena,
+                                       &other->_impl_.name_, rhs_arena);
   swap(_impl_.observation_data_, other->_impl_.observation_data_);
   swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }

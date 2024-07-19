@@ -195,32 +195,11 @@ class AgentActionProto final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kVectorActionsDeprecatedFieldNumber = 1,
-    kContinuousActionsFieldNumber = 3,
-    kDiscreteActionsFieldNumber = 4,
-    kValueFieldNumber = 2,
+    kContinuousActionsFieldNumber = 2,
+    kDiscreteActionsFieldNumber = 3,
+    kValueFieldNumber = 1,
   };
-  // repeated float vector_actions_deprecated = 1;
-  int vector_actions_deprecated_size() const;
-  private:
-  int _internal_vector_actions_deprecated_size() const;
-
-  public:
-  void clear_vector_actions_deprecated() ;
-  float vector_actions_deprecated(int index) const;
-  void set_vector_actions_deprecated(int index, float value);
-  void add_vector_actions_deprecated(float value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>& vector_actions_deprecated() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>* mutable_vector_actions_deprecated();
-
-  private:
-  float _internal_vector_actions_deprecated(int index) const;
-  void _internal_add_vector_actions_deprecated(float value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>& _internal_vector_actions_deprecated() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>* _internal_mutable_vector_actions_deprecated();
-
-  public:
-  // repeated float continuous_actions = 3;
+  // repeated float continuous_actions = 2;
   int continuous_actions_size() const;
   private:
   int _internal_continuous_actions_size() const;
@@ -240,7 +219,7 @@ class AgentActionProto final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>* _internal_mutable_continuous_actions();
 
   public:
-  // repeated int32 discrete_actions = 4;
+  // repeated int32 discrete_actions = 3;
   int discrete_actions_size() const;
   private:
   int _internal_discrete_actions_size() const;
@@ -260,7 +239,7 @@ class AgentActionProto final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField<::int32_t>* _internal_mutable_discrete_actions();
 
   public:
-  // float value = 2;
+  // float value = 1;
   void clear_value() ;
   float value() const;
   void set_value(float value);
@@ -278,7 +257,6 @@ class AgentActionProto final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedField<float> vector_actions_deprecated_;
     ::PROTOBUF_NAMESPACE_ID::RepeatedField<float> continuous_actions_;
     ::PROTOBUF_NAMESPACE_ID::RepeatedField<::int32_t> discrete_actions_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _discrete_actions_cached_byte_size_;
@@ -305,51 +283,7 @@ class AgentActionProto final :
 
 // AgentActionProto
 
-// repeated float vector_actions_deprecated = 1;
-inline int AgentActionProto::_internal_vector_actions_deprecated_size() const {
-  return _impl_.vector_actions_deprecated_.size();
-}
-inline int AgentActionProto::vector_actions_deprecated_size() const {
-  return _internal_vector_actions_deprecated_size();
-}
-inline void AgentActionProto::clear_vector_actions_deprecated() {
-  _internal_mutable_vector_actions_deprecated()->Clear();
-}
-inline float AgentActionProto::vector_actions_deprecated(int index) const {
-  // @@protoc_insertion_point(field_get:communicator_objects.AgentActionProto.vector_actions_deprecated)
-  return _internal_vector_actions_deprecated(index);
-}
-inline void AgentActionProto::set_vector_actions_deprecated(int index, float value) {
-  _internal_mutable_vector_actions_deprecated()->Set(index, value);
-  // @@protoc_insertion_point(field_set:communicator_objects.AgentActionProto.vector_actions_deprecated)
-}
-inline void AgentActionProto::add_vector_actions_deprecated(float value) {
-  _internal_add_vector_actions_deprecated(value);
-  // @@protoc_insertion_point(field_add:communicator_objects.AgentActionProto.vector_actions_deprecated)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>& AgentActionProto::vector_actions_deprecated() const {
-  // @@protoc_insertion_point(field_list:communicator_objects.AgentActionProto.vector_actions_deprecated)
-  return _internal_vector_actions_deprecated();
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>* AgentActionProto::mutable_vector_actions_deprecated() {
-  // @@protoc_insertion_point(field_mutable_list:communicator_objects.AgentActionProto.vector_actions_deprecated)
-  return _internal_mutable_vector_actions_deprecated();
-}
-
-inline float AgentActionProto::_internal_vector_actions_deprecated(int index) const {
-  return _internal_vector_actions_deprecated().Get(index);
-}
-inline void AgentActionProto::_internal_add_vector_actions_deprecated(float value) {
-  _internal_mutable_vector_actions_deprecated()->Add(value);
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>& AgentActionProto::_internal_vector_actions_deprecated() const {
-  return _impl_.vector_actions_deprecated_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>* AgentActionProto::_internal_mutable_vector_actions_deprecated() {
-  return &_impl_.vector_actions_deprecated_;
-}
-
-// float value = 2;
+// float value = 1;
 inline void AgentActionProto::clear_value() {
   _impl_.value_ = 0;
 }
@@ -369,7 +303,7 @@ inline void AgentActionProto::_internal_set_value(float value) {
   _impl_.value_ = value;
 }
 
-// repeated float continuous_actions = 3;
+// repeated float continuous_actions = 2;
 inline int AgentActionProto::_internal_continuous_actions_size() const {
   return _impl_.continuous_actions_.size();
 }
@@ -413,7 +347,7 @@ inline ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>* AgentActionProto::_interna
   return &_impl_.continuous_actions_;
 }
 
-// repeated int32 discrete_actions = 4;
+// repeated int32 discrete_actions = 3;
 inline int AgentActionProto::_internal_discrete_actions_size() const {
   return _impl_.discrete_actions_.size();
 }
