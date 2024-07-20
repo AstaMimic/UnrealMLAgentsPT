@@ -79,9 +79,9 @@ class UCommunicatorInterface : public UInterface
 };
 
 /**
- * 
+ *
  */
-class COMMUNICATOR_API ICommunicatorInterface
+class DRL_API ICommunicatorInterface
 {
 	GENERATED_BODY()
 

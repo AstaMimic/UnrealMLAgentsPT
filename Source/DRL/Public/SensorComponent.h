@@ -6,7 +6,7 @@
 #include "SensorComponent.generated.h"
 
 UCLASS(Abstract, Blueprintable, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class SENSORS_API USensorComponent : public UActorComponent
+class DRL_API USensorComponent : public UActorComponent
 {
     GENERATED_BODY()
 

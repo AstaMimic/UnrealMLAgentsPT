@@ -7,6 +7,7 @@
 #include "SensorComponent.h"
 #include "EpisodeIdCounter.h"
 #include "ActuatorComponent.h"
+#include "BehaviorParameters.h"
 #include "GameFramework/Actor.h"
 
 // Sets default values for this component's properties
@@ -105,10 +106,10 @@ void UAgent::NotifyAgentDone(EDoneReason DoneReason) {
         Brain->RequestDecision(Info, Sensors);
     }
 
-    // TODO: DemonstrationWriters necessary ? 
+    // TODO: DemonstrationWriters necessary ?
 
     ResetSensors();
-    
+
     if (DoneReason != EDoneReason::Disabled) {
         CompletedEpisodes++;
     }
@@ -158,9 +159,8 @@ void UAgent::InitializeActuators()
 
 void UAgent::InitializeSensors()
 {
-    if (!PolicyFactory)
-    {
-        return;
+    if (PolicyFactory == nullptr) {
+        PolicyFactory = GetOwner()->GetComponentByClass<UBehaviorParameters>();
     }
 
     TArray<USensorComponent*> AttachedSensorComponents;

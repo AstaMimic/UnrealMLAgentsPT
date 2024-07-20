@@ -15,7 +15,7 @@ class UISensor : public UInterface
     GENERATED_BODY()
 };
 
-class SENSORS_API IISensor
+class DRL_API IISensor
 {
     GENERATED_BODY()
 
@@ -29,7 +29,7 @@ public:
 
 
 UCLASS()
-class SENSORS_API USensorExtensions : public UObject
+class DRL_API USensorExtensions : public UObject
 {
     GENERATED_BODY()
 
@@ -49,7 +49,7 @@ public:
 
 
 UCLASS()
-class SENSORS_API USensorUtils : public UObject
+class DRL_API USensorUtils : public UObject
 {
     GENERATED_BODY()
 

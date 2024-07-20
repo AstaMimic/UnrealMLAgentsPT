@@ -24,11 +24,11 @@ enum class EBehaviorType : uint8
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class POLICIES_API UBehaviorParameters : public UActorComponent
+class DRL_API UBehaviorParameters : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UBehaviorParameters();
 

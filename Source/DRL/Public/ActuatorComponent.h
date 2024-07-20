@@ -11,7 +11,7 @@
  * have a corresponding ActuatorComponent.
  */
 UCLASS(Abstract, Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class ACTUATORS_API UActuatorComponent : public UActorComponent
+class DRL_API UActuatorComponent : public UActorComponent
 {
     GENERATED_BODY()
 

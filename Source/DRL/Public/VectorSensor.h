@@ -8,7 +8,7 @@
 
 
 UCLASS(Blueprintable)
-class SENSORS_API UVectorSensor : public UObject, public IISensor, public IBuiltInSensor
+class DRL_API UVectorSensor : public UObject, public IISensor, public IBuiltInSensor
 {
     GENERATED_BODY()
 

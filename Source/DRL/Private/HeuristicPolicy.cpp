@@ -8,7 +8,7 @@ UHeuristicPolicy::UHeuristicPolicy()
 void UHeuristicPolicy::Initialize(UActuatorManager* InActuatorManager, const FActionSpec& ActionSpec)
 {
     int32 NumContinuousActions = ActionSpec.NumContinuousActions;
-    int32 NumDiscreteActions = ActionSpec.NumDiscreteActions;
+    int32 NumDiscreteActions = ActionSpec.GetNumDiscreteActions();
     TArray<float> ContinuousActions;
     ContinuousActions.SetNumZeroed(NumContinuousActions);
     TArray<int32> DiscreteActions;

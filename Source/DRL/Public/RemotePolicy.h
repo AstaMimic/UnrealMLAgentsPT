@@ -10,7 +10,7 @@
 #include "RemotePolicy.generated.h"
 
 UCLASS()
-class POLICIES_API URemotePolicy : public UObject, public IIPolicy
+class DRL_API URemotePolicy : public UObject, public IIPolicy
 {
     GENERATED_BODY()
 

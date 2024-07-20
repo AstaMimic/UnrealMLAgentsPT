@@ -9,7 +9,7 @@
 #include "HeuristicPolicy.generated.h"
 
 UCLASS()
-class POLICIES_API UHeuristicPolicy : public UObject, public IIPolicy
+class DRL_API UHeuristicPolicy : public UObject, public IIPolicy
 {
     GENERATED_BODY()
 

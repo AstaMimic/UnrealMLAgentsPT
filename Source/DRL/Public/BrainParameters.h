@@ -5,7 +5,7 @@
 #include "BrainParameters.generated.h"
 
 UCLASS(Blueprintable)
-class POLICIES_API UBrainParameters : public UObject
+class DRL_API UBrainParameters : public UObject
 {
     GENERATED_BODY()
 

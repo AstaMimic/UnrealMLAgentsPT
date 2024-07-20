@@ -225,7 +225,7 @@ void URpcCommunicator::PutObservations(const FString& BehaviorName, const FAgent
         communicator_objects::ObservationProto ObsProto = GetObservationProto(sensor, ObsWriter);
         *AgentInfoProto.mutable_observations()->Add() = ObsProto;
     }
-    
+
     auto& agentInfosMap = *CurrentUnrealRlOutput->mutable_agentinfos();
     *agentInfosMap[TCHAR_TO_UTF8(*BehaviorName)].add_value() = AgentInfoProto;
 
@@ -276,10 +276,10 @@ void URpcCommunicator::SendBatchedMessageHelper()
 	communicator_objects::UnrealInputProto* input = Exchange(&message);
 	UpdateSentActionSpec(*tempUnityRlInitializationOutput);
 
-//	foreach (var k in m_CurrentUnityRlOutput.AgentInfos.Keys)
-//	{
-//		m_CurrentUnityRlOutput.AgentInfos[k].Value.Clear();
-//	}
+	for (auto& Elem : CurrentUnrealRlOutput->agentinfos())
+	{
+        Elem.second.value().empty();
+	}
 
 	const auto& rlInput = input->rl_input();
 
@@ -342,7 +342,7 @@ communicator_objects::ObservationProto URpcCommunicator::GetObservationProto(TSc
 	communicator_objects::ObservationProto ObservationProto;
 	*ObservationProto.mutable_float_data() = FloatDataProto;
 
-    // Add the dimension properties to the observationProto 
+    // Add the dimension properties to the observationProto
     FInplaceArray<EDimensionProperty> DimensionProperties = ObsSpec.GetDimensionProperties();
     for (int i = 0; i < Shape.GetLength(); i++) {
         ObservationProto.mutable_dimension_properties()->Add((int)DimensionProperties[i]);
@@ -351,7 +351,7 @@ communicator_objects::ObservationProto URpcCommunicator::GetObservationProto(TSc
     for (int i = 0; i < Shape.GetLength(); i++) {
         ObservationProto.mutable_shape()->Add(Shape[i]);
     }
-    
+
     FString SensorName = Sensor->GetName();
     if (!SensorName.IsEmpty()) {
         ObservationProto.set_name(TCHAR_TO_UTF8(*SensorName));
@@ -366,7 +366,7 @@ communicator_objects::UnrealInputProto* URpcCommunicator::Exchange(const communi
         return nullptr;
 	}
 
-    try 
+    try
     {
 
 		communicator_objects::UnrealMessageProto InputMessage;
@@ -421,7 +421,7 @@ communicator_objects::BrainParametersProto URpcCommunicator::ToBrainParametersPr
 communicator_objects::ActionSpecProto URpcCommunicator::ToActionSpecProto(const FActionSpec& ActionSpec) {
     communicator_objects::ActionSpecProto ActionSpecProto;
     ActionSpecProto.set_num_continuous_actions(ActionSpec.NumContinuousActions);
-    ActionSpecProto.set_num_discrete_actions(ActionSpec.NumDiscreteActions);
+    ActionSpecProto.set_num_discrete_actions(ActionSpec.GetNumDiscreteActions());
     if (ActionSpec.BranchSizes.Num() != 0 ) {
         for (auto BranchSize : ActionSpec.BranchSizes) {
             ActionSpecProto.mutable_discrete_branch_sizes()->Add(BranchSize);
@@ -456,7 +456,16 @@ void URpcCommunicator::SendCommandEvent(communicator_objects::CommandProto Comma
     switch (Command)
     {
     case communicator_objects::RESET: {
-        
+		for (auto& Elem : OrderedAgentsRequestingDecisions)
+		{
+			Elem.Value.Empty();  // Clears the TArray
+		}
+
+		// Assuming ResetCommandReceived is a delegate
+		if (ResetCommandReceived.IsBound())
+		{
+			ResetCommandReceived.Broadcast();
+		}
     }
     case communicator_objects::QUIT: {
         NotifyQuitAndShutDownChannel();
@@ -507,7 +516,7 @@ communicator_objects::AgentInfoProto URpcCommunicator::ToAgentInfoProto(const FA
 	AgentInfoProto.set_done(Info.bDone);
 	AgentInfoProto.set_id(Info.EpisodeId);
 	AgentInfoProto.set_group_id(Info.GroupId);
-	
+
 	if (Info.DiscreteActionMasks.Num() != 0){
 		for (bool MaskValue : Info.DiscreteActionMasks)
 		{

@@ -7,7 +7,7 @@
 #include "ActuatorManager.generated.h"
 
 UCLASS()
-class ACTUATORS_API UActuatorManager : public UObject
+class DRL_API UActuatorManager : public UObject
 {
     GENERATED_BODY()
 

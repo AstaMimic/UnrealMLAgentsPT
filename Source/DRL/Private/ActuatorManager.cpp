@@ -67,7 +67,7 @@ FActionSpec UActuatorManager::CombineActionSpecs(const TArray<TScriptInterface<I
     for (const auto& Actuator : Actuators)
     {
         NumContinuousActions += Actuator->GetActionSpec().NumContinuousActions;
-        NumDiscreteActions += Actuator->GetActionSpec().NumDiscreteActions;
+        NumDiscreteActions += Actuator->GetActionSpec().GetNumDiscreteActions();
     }
 
     TArray<int32> CombinedBranchSizes;
@@ -160,11 +160,11 @@ void UActuatorManager::WriteActionMask()
     int32 Offset = 0;
     for (const auto& Actuator : Actuators)
     {
-        if (Actuator->GetActionSpec().NumDiscreteActions > 0)
+        if (Actuator->GetActionSpec().GetNumDiscreteActions() > 0)
         {
             DiscreteActionMask->CurrentBranchOffset = Offset;
             Actuator->WriteDiscreteActionMask(DiscreteActionMask);
-            Offset += Actuator->GetActionSpec().NumDiscreteActions;
+            Offset += Actuator->GetActionSpec().GetNumDiscreteActions();
         }
     }
 }
@@ -177,7 +177,7 @@ void UActuatorManager::ApplyHeuristic(const FActionBuffers& ActionBuffersOut)
     for (const auto& Actuator : Actuators)
     {
         int32 NumberContinuousActions = Actuator->GetActionSpec().NumContinuousActions;
-        int32 NumberDiscreteActions = Actuator->GetActionSpec().NumDiscreteActions;
+        int32 NumberDiscreteActions = Actuator->GetActionSpec().GetNumDiscreteActions();
 
         if (NumberContinuousActions == 0 && NumberDiscreteActions == 0)
         {
@@ -217,7 +217,7 @@ void UActuatorManager::ExecuteActions()
     {
         const auto& Actuator = Actuators[i];
         int32 NumberContinuousActions = Actuator->GetActionSpec().NumContinuousActions;
-        int32 NumberDiscreteActions = Actuator->GetActionSpec().NumDiscreteActions;
+        int32 NumberDiscreteActions = Actuator->GetActionSpec().GetNumDiscreteActions();
 
         if (NumberContinuousActions == 0 && NumberDiscreteActions == 0)
         {
@@ -269,7 +269,7 @@ void UActuatorManager::AddToBufferSizes(const TScriptInterface<IActuator>& Actua
     }
 
     NumContinuousActions += ActuatorItem->GetActionSpec().NumContinuousActions;
-    NumDiscreteActions += ActuatorItem->GetActionSpec().NumDiscreteActions;
+    NumDiscreteActions += ActuatorItem->GetActionSpec().GetNumDiscreteActions();
     SumOfDiscreteBranchSizes += ActuatorItem->GetActionSpec().GetSumOfDiscreteBranchSizes();
 }
 
@@ -281,7 +281,7 @@ void UActuatorManager::SubtractFromBufferSizes(const TScriptInterface<IActuator>
     }
 
     NumContinuousActions -= ActuatorItem->GetActionSpec().NumContinuousActions;
-    NumDiscreteActions -= ActuatorItem->GetActionSpec().NumDiscreteActions;
+    NumDiscreteActions -= ActuatorItem->GetActionSpec().GetNumDiscreteActions();
     SumOfDiscreteBranchSizes -= ActuatorItem->GetActionSpec().GetSumOfDiscreteBranchSizes();
 }
 

@@ -13,10 +13,10 @@
 #include "RpcCommunicator.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
-class COMMUNICATOR_API URpcCommunicator: public UObject, public ICommunicatorInterface
+class DRL_API URpcCommunicator: public UObject, public ICommunicatorInterface
 {
     GENERATED_BODY()
 
@@ -25,7 +25,7 @@ public:
 
     virtual FQuitCommandHandler& OnQuitCommandReceived() override;
     virtual FResetCommandHandler& OnResetCommandReceived() override;
-    virtual FRLInputReceivedHandler& OnRLInputReceived() override; 
+    virtual FRLInputReceivedHandler& OnRLInputReceived() override;
 
     virtual bool Initialize(const FCommunicatorInitParameters& InitParameters, FUnrealRLInitParameters& InitParametersOut) override;
     virtual void SubscribeBrain(const FString& Name, FActionSpec ActionSpec) override;
@@ -33,9 +33,9 @@ public:
     virtual void DecideBatch() override;
     virtual const FActionBuffers GetActions(const FString& Key, int32 AgentId) override;
 
-private:	
+private:
 	bool bIsOpen;
-	
+
 	// Unreal to external Client
 	std::unique_ptr<communicator_objects::UnrealToExternalProto::Stub> Stub;
 	std::shared_ptr<grpc::Channel> Channel;

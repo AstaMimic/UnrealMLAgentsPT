@@ -51,7 +51,7 @@ public:
         ContinuousActions = FActionSegment<float>(ContinuousActionArray);
 
         TArray<int32> DiscreteActionArray;
-        DiscreteActionArray.SetNumZeroed(ActionSpec.NumDiscreteActions);
+        DiscreteActionArray.SetNumZeroed(ActionSpec.GetNumDiscreteActions());
         DiscreteActions = FActionSegment<int32>(DiscreteActionArray);
     }
 
@@ -63,7 +63,7 @@ public:
             return FActionBuffers::Empty;
         }
 
-        ensure(Actions.Num() == ActionSpec.NumContinuousActions + ActionSpec.NumDiscreteActions);
+        ensure(Actions.Num() == ActionSpec.NumContinuousActions + ActionSpec.GetNumDiscreteActions());
 
         FActionSegment<float> ContinuousActionSegment;
         FActionSegment<int32> DiscreteActionSegment;
@@ -77,10 +77,10 @@ public:
             Offset += ActionSpec.NumContinuousActions;
         }
 
-        if (ActionSpec.NumDiscreteActions > 0)
+        if (ActionSpec.GetNumDiscreteActions() > 0)
         {
             TArray<int32> DiscreteActions;
-            for (int32 i = 0; i < ActionSpec.NumDiscreteActions; ++i)
+            for (int32 i = 0; i < ActionSpec.GetNumDiscreteActions(); ++i)
             {
                 DiscreteActions.Add(static_cast<int32>(Actions[Offset + i]));
             }

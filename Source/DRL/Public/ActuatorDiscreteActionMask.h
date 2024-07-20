@@ -6,7 +6,7 @@
 #include "ActuatorDiscreteActionMask.generated.h"
 
 UCLASS()
-class ACTUATORS_API UActuatorDiscreteActionMask : public UObject, public IDiscreteActionMask
+class DRL_API UActuatorDiscreteActionMask : public UObject, public IDiscreteActionMask
 {
     GENERATED_BODY()
 

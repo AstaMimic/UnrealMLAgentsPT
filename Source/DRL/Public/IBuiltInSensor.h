@@ -24,7 +24,7 @@ class UBuiltInSensor : public UInterface
     GENERATED_BODY()
 };
 
-class SENSORS_API IBuiltInSensor
+class DRL_API IBuiltInSensor
 {
     GENERATED_BODY()
 

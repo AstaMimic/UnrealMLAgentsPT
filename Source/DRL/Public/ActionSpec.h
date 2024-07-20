@@ -11,32 +11,17 @@ struct FActionSpec
 {
     GENERATED_BODY()
 
+
 public:
+
     /** Number of continuous actions. */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Action Spec")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ActionSpec", meta = (AllowPrivateAccess = "true"))
     int32 NumContinuousActions;
 
     /** Array of branch sizes for discrete actions. */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Action Spec")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ActionSpec")
     TArray<int32> BranchSizes;
 
-    /** Get the number of discrete actions */
-    int32 GetNumDiscreteActions() const
-    {
-        return BranchSizes.Num();
-    }
-
-        /** Property for the number of discrete actions */
-    UPROPERTY(BlueprintReadOnly, Category = "Action Spec")
-    int32 NumDiscreteActions;
-
-    /** Called after the struct is serialized to ensure properties are set correctly */
-    void PostSerialize(const FArchive& Ar)
-    {
-        NumDiscreteActions = GetNumDiscreteActions();
-    }
-
-    /** Default constructor */
     FActionSpec()
         : NumContinuousActions(0)
     {
@@ -112,6 +97,11 @@ public:
         }
         return Sum;
     }
-    
+
+    /// <summary>
+    /// The number of branches for discrete actions that an Agent can take.
+    /// </summary>
+    int32 GetNumDiscreteActions() const { return BranchSizes.Num(); }
+
 };
 

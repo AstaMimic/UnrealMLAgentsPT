@@ -8,7 +8,7 @@
 
 
 USTRUCT(BlueprintType)
-struct SENSORS_API FObservationSpec
+struct DRL_API FObservationSpec
 {
     GENERATED_BODY()
 

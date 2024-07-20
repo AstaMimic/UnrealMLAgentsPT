@@ -12,7 +12,7 @@ class UIPolicy : public UInterface
     GENERATED_BODY()
 };
 
-class POLICIES_API IIPolicy
+class DRL_API IIPolicy
 {
     GENERATED_BODY()
 
