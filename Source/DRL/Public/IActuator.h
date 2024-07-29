@@ -24,12 +24,12 @@ public:
     /**
      * The specification of the actions for this IActuator.
      */
-    virtual FActionSpec GetActionSpec() const = 0;
+    virtual const FActionSpec GetActionSpec() const = 0;
 
     /**
      * Gets the name of this IActuator which will be used to sort it.
      */
-    virtual FString GetName() const = 0;
+    virtual const FString GetName() const = 0;
 
     /**
      * Resets the internal state of the actuator. This is called at the end of an Agent's episode.
@@ -43,7 +43,7 @@ public:
     virtual void OnActionReceived(const FActionBuffers& ActionBuffers) = 0;
 
     /** Modify the masks for discrete actions. */
-    virtual void WriteDiscreteActionMask(IDiscreteActionMask* ActionMask) = 0;
+    virtual void WriteDiscreteActionMask(const TScriptInterface<IDiscreteActionMask>& ActionMask) = 0;
 };
 
 /**

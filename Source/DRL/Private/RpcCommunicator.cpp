@@ -3,9 +3,11 @@
 
 #include "RpcCommunicator.h"
 
-URpcCommunicator::URpcCommunicator()
-	: bIsOpen(false)
+void URpcCommunicator::PostInitProperties()
 {
+    Super::PostInitProperties();
+    bIsOpen = false;
+    CurrentUnrealRlOutput = MakeUnique<communicator_objects::UnrealRLOutputProto>();
 }
 
 bool URpcCommunicator::Initialize(const FCommunicatorInitParameters& InitParameters, FUnrealRLInitParameters& InitParametersOut)
@@ -206,7 +208,7 @@ void URpcCommunicator::SubscribeBrain(const FString& Name, FActionSpec ActionSpe
     }
     BehaviorNames.Add(Name);
     CurrentUnrealRlOutput->mutable_agentinfos()->insert(
-        std::pair(std::string(TCHAR_TO_UTF8(*Name)), communicator_objects::UnrealRLOutputProto_ListAgentInfoProto())
+        std::make_pair(std::string(TCHAR_TO_UTF8(*Name)), communicator_objects::UnrealRLOutputProto_ListAgentInfoProto())
     );
     CacheActionSpec(Name, ActionSpec);
 }
@@ -215,7 +217,7 @@ void URpcCommunicator::CacheActionSpec(const FString& Name, FActionSpec ActionSp
     if (SentBrainKeys.Contains(Name)) {
         return;
     }
-    UnsentBrainKeys[Name] = ActionSpec;
+    UnsentBrainKeys.Emplace(Name, ActionSpec);
 }
 
 void URpcCommunicator::PutObservations(const FString& BehaviorName, const FAgentInfo& Info, TArray<TScriptInterface<IISensor>>& Sensors)
@@ -223,7 +225,7 @@ void URpcCommunicator::PutObservations(const FString& BehaviorName, const FAgent
     communicator_objects::AgentInfoProto AgentInfoProto = ToAgentInfoProto(Info);
     for (auto& sensor : Sensors) {
         communicator_objects::ObservationProto ObsProto = GetObservationProto(sensor, ObsWriter);
-        *AgentInfoProto.mutable_observations()->Add() = ObsProto;
+        *AgentInfoProto.add_observations() = ObsProto;
     }
 
     auto& agentInfosMap = *CurrentUnrealRlOutput->mutable_agentinfos();
@@ -232,16 +234,16 @@ void URpcCommunicator::PutObservations(const FString& BehaviorName, const FAgent
     bNeedCommunicateThisStep = true;
     if (!OrderedAgentsRequestingDecisions.Contains(BehaviorName)) {
         TArray<int> IntArray;
-        OrderedAgentsRequestingDecisions[BehaviorName] = IntArray;
+        OrderedAgentsRequestingDecisions.Add(BehaviorName, IntArray);
     }
     if (!Info.bDone) {
         OrderedAgentsRequestingDecisions[BehaviorName].Add(Info.EpisodeId);
     }
     if (!LastActionsReceived.Contains(BehaviorName)) {
 		TMap<int32, FActionBuffers> DictActionReceived;
-        LastActionsReceived[BehaviorName] = DictActionReceived;
+        LastActionsReceived.Add(BehaviorName, DictActionReceived);
     }
-    LastActionsReceived[BehaviorName][Info.EpisodeId] = FActionBuffers::Empty;
+    LastActionsReceived[BehaviorName].Add(Info.EpisodeId, FActionBuffers::Empty);
     if (Info.bDone) {
         LastActionsReceived[BehaviorName].Remove(Info.EpisodeId);
     }
@@ -264,33 +266,41 @@ const FActionBuffers URpcCommunicator::GetActions(const FString& Key, int32 Agen
 
 void URpcCommunicator::SendBatchedMessageHelper()
 {
-	communicator_objects::UnrealOutputProto message;
-	message.set_allocated_rl_output(CurrentUnrealRlOutput);
+	communicator_objects::UnrealOutputProto Message;
+    Message.mutable_rl_output()->CopyFrom(*CurrentUnrealRlOutput);
 
 	communicator_objects::UnrealRLInitializationOutputProto* tempUnityRlInitializationOutput = GetTempUnrealRlInitializationOutput();
 	if (tempUnityRlInitializationOutput != nullptr)
 	{
-		message.set_allocated_rl_initialization_output(tempUnityRlInitializationOutput);
+		Message.set_allocated_rl_initialization_output(tempUnityRlInitializationOutput);
 	}
 
-	communicator_objects::UnrealInputProto* input = Exchange(&message);
-	UpdateSentActionSpec(*tempUnityRlInitializationOutput);
+	communicator_objects::UnrealInputProto* Input = Exchange(&Message);
+	UpdateSentActionSpec(tempUnityRlInitializationOutput);
 
 	for (auto& Elem : CurrentUnrealRlOutput->agentinfos())
 	{
         Elem.second.value().empty();
 	}
 
-	const auto& rlInput = input->rl_input();
+    // Check if Input is null
+    if (!Input)
+    {
+        return;
+    }
 
-	if (rlInput.agent_actions().empty())
-	{
-		return;
-	}
+    // Get the RlInput field
+    const communicator_objects::UnrealRLInputProto& RlInput = Input->rl_input();
 
-	SendCommandEvent(rlInput.command());
+    // Check if AgentActions is present and not empty
+    if (RlInput.agent_actions().empty())
+    {
+        return;
+    }
 
-	for (const auto& brainName : rlInput.agent_actions())
+	SendCommandEvent(RlInput.command());
+
+	for (const auto& brainName : RlInput.agent_actions())
 	{
         const FString& Key = brainName.first.c_str();
 		if (OrderedAgentsRequestingDecisions.Find(Key)->IsEmpty())
@@ -430,18 +440,18 @@ communicator_objects::ActionSpecProto URpcCommunicator::ToActionSpecProto(const 
     return ActionSpecProto;
 }
 
-void URpcCommunicator::UpdateSentActionSpec(const communicator_objects::UnrealRLInitializationOutputProto& Output) {
+void URpcCommunicator::UpdateSentActionSpec(const communicator_objects::UnrealRLInitializationOutputProto* Output) {
 
     // Check if Output is not null
-    if (!Output.IsInitialized())
+    if (Output == nullptr)
     {
         return;
     }
 
     // Iterate through BrainParameters in the output
-    for (int32 i = 0; i < Output.brain_parameters_size(); ++i)
+    for (int32 i = 0; i < Output->brain_parameters_size(); ++i)
     {
-        const communicator_objects::BrainParametersProto& BrainProto = Output.brain_parameters(i);
+        const communicator_objects::BrainParametersProto& BrainProto = Output->brain_parameters(i);
         FString BrainName = UTF8_TO_TCHAR(BrainProto.brain_name().c_str());
 
         // Add the brain name to the sent brain keys

@@ -4,8 +4,8 @@
 #include "ActionSpec.h"
 #include "BrainParameters.generated.h"
 
-UCLASS(Blueprintable)
-class DRL_API UBrainParameters : public UObject
+USTRUCT(BlueprintType)
+struct DRL_API FBrainParameters
 {
     GENERATED_BODY()
 
@@ -29,8 +29,15 @@ public:
     UPROPERTY()
     bool bHasUpgradedBrainParametersWithActionSpec;
 
-    // Deep clones the BrainParameter object.
-    UFUNCTION(BlueprintCallable, Category = "Brain Parameters")
-    UBrainParameters* Clone() const;
-
+    // Method to clone this struct
+    FBrainParameters Clone() const
+    {
+        FBrainParameters ClonedStruct;
+        ClonedStruct.VectorObservationSize = this->VectorObservationSize;
+        ClonedStruct.NumStackedVectorObservations = this->NumStackedVectorObservations;
+        ClonedStruct.ActionSpec = this->ActionSpec;
+        ClonedStruct.VectorActionDescriptions = this->VectorActionDescriptions;
+        ClonedStruct.bHasUpgradedBrainParametersWithActionSpec = this->bHasUpgradedBrainParametersWithActionSpec;
+        return ClonedStruct;
+    }
 };

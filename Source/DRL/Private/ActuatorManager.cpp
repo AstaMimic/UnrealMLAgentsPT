@@ -59,12 +59,12 @@ void UActuatorManager::ReadyActuatorsForExecution(const TArray<TScriptInterface<
 }
 
 // Combine action specs
-FActionSpec UActuatorManager::CombineActionSpecs(const TArray<TScriptInterface<IActuator>>& Actuators)
+FActionSpec UActuatorManager::CombineActionSpecs(const TArray<TScriptInterface<IActuator>>& InActuators)
 {
     int32 NumContinuousActions = 0;
     int32 NumDiscreteActions = 0;
 
-    for (const auto& Actuator : Actuators)
+    for (const auto& Actuator : InActuators)
     {
         NumContinuousActions += Actuator->GetActionSpec().NumContinuousActions;
         NumDiscreteActions += Actuator->GetActionSpec().GetNumDiscreteActions();
@@ -79,7 +79,7 @@ FActionSpec UActuatorManager::CombineActionSpecs(const TArray<TScriptInterface<I
     {
         CombinedBranchSizes.SetNum(NumDiscreteActions);
         int32 Start = 0;
-        for (const auto& Actuator : Actuators)
+        for (const auto& Actuator : InActuators)
         {
             const TArray<int32>& BranchSizes = Actuator->GetActionSpec().BranchSizes;
             if (BranchSizes.Num() > 0)

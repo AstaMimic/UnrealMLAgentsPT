@@ -67,9 +67,15 @@ public:
     {
         check(Data != nullptr);
 
+        int TotalSize = Offset + WriteOffset + InData.Num();
+        if (Data->size() < TotalSize)
+        {
+            Data->Resize(TotalSize, 0.0f); // Ensure Data has enough capacity
+        }
+
         for (int Index = 0; Index < InData.Num(); Index++)
         {
-            (*Data)[Index + Offset + WriteOffset] = InData[Index];
+            Data->Set(Index + Offset + WriteOffset, InData[Index]);
         }
     }
 
@@ -77,28 +83,47 @@ public:
     {
         check(Data != nullptr);
 
-        (*Data)[Offset + WriteOffset + 0] = Vec.X;
-        (*Data)[Offset + WriteOffset + 1] = Vec.Y;
-        (*Data)[Offset + WriteOffset + 2] = Vec.Z;
+        int TotalSize = Offset + WriteOffset + 3;
+        if (Data->size() < TotalSize)
+        {
+            Data->Resize(TotalSize, 0.0f); // Ensure Data has enough capacity
+        }
+
+        Data->Set(Offset + WriteOffset + 0, Vec.X);
+        Data->Set(Offset + WriteOffset + 1, Vec.Y);
+        Data->Set(Offset + WriteOffset + 2, Vec.Z);
     }
 
     void Add(const FVector4& Vec, int WriteOffset = 0)
     {
         check(Data != nullptr);
 
-        (*Data)[Offset + WriteOffset + 0] = Vec.X;
-        (*Data)[Offset + WriteOffset + 1] = Vec.Y;
-        (*Data)[Offset + WriteOffset + 2] = Vec.Z;
-        (*Data)[Offset + WriteOffset + 3] = Vec.W;
+        int TotalSize = Offset + WriteOffset + 4;
+        if (Data->size() < TotalSize)
+        {
+            Data->Resize(TotalSize, 0.0f); // Ensure Data has enough capacity
+        }
+
+        Data->Set(Offset + WriteOffset + 0, Vec.X);
+        Data->Set(Offset + WriteOffset + 1, Vec.Y);
+        Data->Set(Offset + WriteOffset + 2, Vec.Z);
+        Data->Set(Offset + WriteOffset + 3, Vec.W); // Corrected to Vec.W
     }
 
     void Add(const FQuat& Quat, int WriteOffset = 0)
     {
         check(Data != nullptr);
 
-        (*Data)[Offset + WriteOffset + 0] = Quat.X;
-        (*Data)[Offset + WriteOffset + 1] = Quat.Y;
-        (*Data)[Offset + WriteOffset + 2] = Quat.Z;
-        (*Data)[Offset + WriteOffset + 3] = Quat.W;
+        int TotalSize = Offset + WriteOffset + 4;
+        if (Data->size() < TotalSize)
+        {
+            Data->Resize(TotalSize, 0.0f); // Ensure Data has enough capacity
+        }
+
+        Data->Set(Offset + WriteOffset + 0, Quat.X);
+        Data->Set(Offset + WriteOffset + 1, Quat.Y);
+        Data->Set(Offset + WriteOffset + 2, Quat.Z);
+        Data->Set(Offset + WriteOffset + 3, Quat.W);
     }
+
 };

@@ -13,7 +13,10 @@ enum class EBuiltInSensorType : uint8
     VectorSensor UMETA(DisplayName = "Vector Sensor"),
 
     // The Stacking Sensor type.
-    StackingSensor UMETA(DisplayName = "Stacking Sensor")
+    StackingSensor UMETA(DisplayName = "Stacking Sensor"),
+
+    // The Ray Sensor
+    RaySensor UMETA(DisplayName = "Ray Sensor")
 };
 
 

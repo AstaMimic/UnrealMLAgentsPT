@@ -27,7 +27,7 @@ public:
     TArray<TScriptInterface<IActuator>> CreateActuators();
     virtual TArray<TScriptInterface<IActuator>> CreateActuators_Implementation();
 
-/**
+    /**
      * The specification of the possible actions for this ActuatorComponent.
      * This must produce the same results as the corresponding IActuator's ActionSpec.
      */

@@ -127,7 +127,7 @@ class UActionReceiver : public UInterface
     GENERATED_BODY()
 };
 
-class IActionReceiver
+class DRL_API IActionReceiver
 {
     GENERATED_BODY()
 
@@ -136,5 +136,5 @@ public:
     virtual void OnActionReceived(const FActionBuffers& ActionBuffers) = 0;
 
     /** Modify the masks for discrete actions. */
-    virtual void WriteDiscreteActionMask(IDiscreteActionMask* ActionMask) = 0;
+    virtual void WriteDiscreteActionMask(const TScriptInterface<IDiscreteActionMask>& ActionMask) = 0;
 };

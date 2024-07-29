@@ -8,6 +8,7 @@
 #include "ISensor.h"
 #include "AgentInfo.h"
 #include "VectorSensor.h"
+#include "VectorActuator.h"
 #include "ActuatorManager.h"
 #include "Agent.generated.h"
 
@@ -25,8 +26,22 @@ enum class EDoneReason : uint8
 };
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class DRL_API UAgent : public UActorComponent
+/**
+ * An implementation of VectorActuator specific to Agents.
+ */
+UCLASS()
+class DRL_API UAgentVectorActuator : public UVectorActuator
+{
+    GENERATED_BODY()
+
+public:
+
+    virtual EBuiltInActuatorType GetBuiltInActuatorType() const override;
+};
+
+
+UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class DRL_API UAgent : public UActorComponent, public IActionReceiver, public IHeuristicProvider
 {
 	GENERATED_BODY()
 
@@ -50,25 +65,27 @@ public:
     void RequestAction();
     FActionBuffers GetStoredActionBuffers();
 
-    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "YourCategory")
-    void Heuristic(const FActionBuffers& ActionsOut);
-    virtual void Heuristic_Implementation(const FActionBuffers& ActionsOut);
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AgentAction")
+    void Heuristic(const FActionBuffers& ActionsOut) const override;
 
-    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "YourCategory")
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AgentObservation")
     void CollectObservations(UVectorSensor* Sensor);
-    virtual void CollectObservations_Implementation(UVectorSensor* Sensor);
 
-    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "YourCategory")
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AgentInit")
     void Initialize();
-    virtual void Initialize_Implementation();
    
-    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "YourCategory")
-    void OnActionReceived(FActionBuffers Actions);
-    virtual void OnActionReceived_Implementation(FActionBuffers Actions);
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AgentAction")
+    void OnActionReceived(const FActionBuffers& Actions) override;
 
     // TODO: Check if we need to implement WriteDiscreteActionMask. Link issue on build
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AgentAction")
+    void WriteDiscreteActionMask(const TScriptInterface<IDiscreteActionMask>& ActionMask) override;
 
     int32 MaxStep;
+
+    // Read an FActionBuffers and return Discrete actions
+    UFUNCTION(BlueprintCallable, Category = "AgentObservation")
+    int32 GetDiscreteActions(const FActionBuffers& Actions, int32 Index);
 
 
 private:
@@ -110,6 +127,12 @@ private:
     UPROPERTY()
     UBehaviorParameters* PolicyFactory;
 
+	UPROPERTY()
+    UAgentVectorActuator* VectorActuator;
+
+    UPROPERTY()
+    UVectorSensor* CollectObservationsSensor;
+
     UPROPERTY()
     UActuatorManager* ActuatorManager;
 
@@ -132,6 +155,4 @@ private:
     bool bRequestAction;
     bool bRequestDecision;
 
-    UPROPERTY()
-    UVectorSensor* CollectObservationsSensor;
 };

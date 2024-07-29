@@ -63,7 +63,7 @@ public:
 
     /** The associated BrainParameters for this behavior. */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior Parameters")
-    UBrainParameters* BrainParameters;
+    FBrainParameters BrainParameters;
 
     UFUNCTION()
     bool IsInHeuristicMode();

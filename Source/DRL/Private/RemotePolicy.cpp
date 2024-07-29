@@ -8,6 +8,7 @@ URemotePolicy::URemotePolicy()
 
 void URemotePolicy::Initialize(UActuatorManager* InActuatorManager, const FActionSpec& InActionSpec, const FString& InFullyQualifiedBehaviorName)
 {
+    FullyQualifiedBehaviorName = InFullyQualifiedBehaviorName;
     Communicator = UDRLAcademy::GetInstance()->RpcCommunicator;
     if (Communicator)
     {

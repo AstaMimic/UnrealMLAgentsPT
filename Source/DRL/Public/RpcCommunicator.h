@@ -21,7 +21,6 @@ class DRL_API URpcCommunicator: public UObject, public ICommunicatorInterface
     GENERATED_BODY()
 
 public:
-	URpcCommunicator();
 
     virtual FQuitCommandHandler& OnQuitCommandReceived() override;
     virtual FResetCommandHandler& OnResetCommandReceived() override;
@@ -33,8 +32,11 @@ public:
     virtual void DecideBatch() override;
     virtual const FActionBuffers GetActions(const FString& Key, int32 AgentId) override;
 
+    // Unreal Engine lifecycle methods
+    virtual void PostInitProperties() override;
+
 private:
-	bool bIsOpen;
+    bool bIsOpen;
 
 	// Unreal to external Client
 	std::unique_ptr<communicator_objects::UnrealToExternalProto::Stub> Stub;
@@ -52,7 +54,7 @@ private:
     void SendBatchedMessageHelper();
     communicator_objects::UnrealInputProto* Exchange(const communicator_objects::UnrealOutputProto* UnrealOutput);
     communicator_objects::UnrealRLInitializationOutputProto* GetTempUnrealRlInitializationOutput();
-    void UpdateSentActionSpec(const communicator_objects::UnrealRLInitializationOutputProto& Output);
+    void UpdateSentActionSpec(const communicator_objects::UnrealRLInitializationOutputProto* Output);
     void SendCommandEvent(communicator_objects::CommandProto Command);
 
     // Extension
@@ -72,7 +74,7 @@ private:
     ObservationWriter ObsWriter;
     // TMap<FString, USensorShapeValidator*> SensorShapeValidators;
     TMap<FString, TArray<int32>> OrderedAgentsRequestingDecisions;
-    communicator_objects::UnrealRLOutputProto* CurrentUnrealRlOutput;
+    TUniquePtr<communicator_objects::UnrealRLOutputProto> CurrentUnrealRlOutput;
     TMap<FString, TMap<int32, FActionBuffers>> LastActionsReceived;
     TSet<FString> SentBrainKeys;
     TMap<FString, FActionSpec> UnsentBrainKeys;

@@ -10,6 +10,12 @@
 #include "BehaviorParameters.h"
 #include "GameFramework/Actor.h"
 
+EBuiltInActuatorType UAgentVectorActuator::GetBuiltInActuatorType() const
+{
+    return EBuiltInActuatorType::AgentVectorActuator;
+}
+
+
 // Sets default values for this component's properties
 UAgent::UAgent()
 {
@@ -146,10 +152,20 @@ void UAgent::InitializeActuators()
     {
         GetOwner()->GetComponents<UActuatorComponent>(AttachedActuators);
     }
+
+
+    // m_VectorActuator = new AgentVectorActuator(this, this, param.ActionSpec);
+	FActionSpec ActionSpec = PolicyFactory->BrainParameters.ActionSpec;
+	VectorActuator = NewObject<UAgentVectorActuator>(this);
+	if (VectorActuator)
+	{
+		VectorActuator->Initialize(this, this, ActionSpec);
+	}
+
     ActuatorManager = NewObject<UActuatorManager>();
     ActuatorManager->Initialize(AttachedActuators.Num() + 1);
 
-    // m_VectorActuator = new AgentVectorActuator(this, this, param.ActionSpec);
+    ActuatorManager->Add(VectorActuator);
 
     for (UActuatorComponent* Component : AttachedActuators)
     {
@@ -322,7 +338,7 @@ void UAgent::SendInfo()
         SendInfoToBrain();
         Reward = 0.0;
         GroupReward = 0.0;
-        bRequestAction = false;
+        bRequestDecision = false;
     }
 }
 
@@ -363,11 +379,18 @@ void UAgent::DecideAction()
     ActuatorManager->UpdateActions(Actions);
 }
 
+int32 UAgent::GetDiscreteActions(const FActionBuffers& Actions, int32 Index) {
+    return Actions.DiscreteActions[Index];
+}
+
 template <typename T>
 void UAgent::GetAllChildComponents(TArray<T*>& OutChildComponents)
 {
     // Ensure the output array is empty
     OutChildComponents.Empty();
+    
+    // Get direct components of that type
+    GetOwner()->GetComponents<T>(OutChildComponents);
 
     // Get all child actors of the parent actor
     TArray<AActor*> ChildActors;
@@ -385,7 +408,9 @@ void UAgent::GetAllChildComponents(TArray<T*>& OutChildComponents)
     }
 }
 
-void UAgent::Heuristic_Implementation(const FActionBuffers& ActionsOUt) {}
+void UAgent::Heuristic_Implementation(const FActionBuffers& ActionsOUt) const {}
 void UAgent::CollectObservations_Implementation(UVectorSensor* Sensor) {}
 void UAgent::Initialize_Implementation() {}
-void UAgent::OnActionReceived_Implementation(const FActionBuffers Actions) {}
+void UAgent::OnActionReceived_Implementation(const FActionBuffers& Actions) {}
+void UAgent::WriteDiscreteActionMask_Implementation(const TScriptInterface<IDiscreteActionMask>& ActionMask) {}
+

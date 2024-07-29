@@ -83,7 +83,7 @@ private:
     void ReadyActuatorsForExecution(const TArray<TScriptInterface<IActuator>>& InActuators, int32 InNumContinuousActions, int32 InSumOfDiscreteBranchSizes, int32 InNumDiscreteBranches);
     static FActionSpec CombineActionSpecs(const TArray<TScriptInterface<IActuator>>& Actuators);
     void ValidateActuators();
-    void SortActuators(TArray<TScriptInterface<IActuator>>& Actuators);
+    void SortActuators(TArray<TScriptInterface<IActuator>>& InActuators);
 
     template <typename T>
     static void UpdateActionArray(const FActionSegment<T>& SourceActionBuffer, FActionSegment<T>& Destination);
