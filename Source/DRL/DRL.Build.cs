@@ -217,3 +217,14 @@ public class CommunicatorPlatform_Linux : CommunicatorPlatform
 	public override string LibraryPostfixName { get { return ".a"; } }
 }
 
+public class CommunicatorPlatform_Mac : CommunicatorPlatform
+{
+	public override string ConfigurationDir(UnrealTargetConfiguration Configuration)
+	{
+		return "";
+	}
+	public override string LibrariesPath { get { return "mac/"; } }
+	public override List<string> Architectures() { return new List<string> { "" }; }
+	public override string LibraryPrefixName { get { return "lib"; } }
+	public override string LibraryPostfixName { get { return ".a"; } }
+}
