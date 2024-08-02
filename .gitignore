@@ -82,3 +82,5 @@ Content/InfinityBladeEffects/*
 # Remove ThirdParty grpc, protobuf, re2, abseii libs
 Source/ThirdParty/*
 !Source/ThirdParty/.keep
+
+.DS_Store
