@@ -57,12 +57,25 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
     
+    UFUNCTION(BlueprintCallable, Category = "Reward")
     void SetReward(float NewReward);
+
+    UFUNCTION(BlueprintCallable, Category = "Reward")
     void AddReward(float NewReward);
+
+    UFUNCTION(BlueprintCallable, Category = "Episode")
     void EndEpisode();
+
+    UFUNCTION(BlueprintCallable, Category = "Episode")
     void EpisodeInterrupted();
+
+    UFUNCTION(BlueprintCallable, Category = "AgentAction")
     void RequestDecision();
+
+    UFUNCTION(BlueprintCallable, Category = "AgentAction")
     void RequestAction();
+
+    UFUNCTION(BlueprintCallable, Category = "AgentAction")
     FActionBuffers GetStoredActionBuffers();
 
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AgentAction")
@@ -77,15 +90,15 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AgentAction")
     void OnActionReceived(const FActionBuffers& Actions) override;
 
-    // TODO: Check if we need to implement WriteDiscreteActionMask. Link issue on build
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AgentAction")
     void WriteDiscreteActionMask(const TScriptInterface<IDiscreteActionMask>& ActionMask) override;
-
-    int32 MaxStep;
 
     // Read an FActionBuffers and return Discrete actions
     UFUNCTION(BlueprintCallable, Category = "AgentObservation")
     int32 GetDiscreteActions(const FActionBuffers& Actions, int32 Index);
+
+    UPROPERTY()
+    int32 MaxStep;
 
 
 private:

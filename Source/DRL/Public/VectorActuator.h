@@ -34,7 +34,7 @@ public:
 
 private:
     IActionReceiver* ActionReceiver;
-    IHeuristicProvider* HeuristicProvider;
+    IHeuristicProvider* HeuristicProvider;  
     FActionBuffers ActionBuffers;
     FActionSpec ActionSpec;
     FString Name;
