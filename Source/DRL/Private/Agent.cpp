@@ -408,9 +408,8 @@ void UAgent::GetAllChildComponents(TArray<T*>& OutChildComponents)
     }
 }
 
-void UAgent::Heuristic_Implementation(const FActionBuffers& ActionsOUt) const {}
+void UAgent::Heuristic(FActionBuffers& ActionsOut) {}
 void UAgent::CollectObservations_Implementation(UVectorSensor* Sensor) {}
 void UAgent::Initialize_Implementation() {}
 void UAgent::OnActionReceived_Implementation(const FActionBuffers& Actions) {}
 void UAgent::WriteDiscreteActionMask_Implementation(const TScriptInterface<IDiscreteActionMask>& ActionMask) {}
-

@@ -19,6 +19,5 @@ class IHeuristicProvider
     GENERATED_BODY()
 
 public:
-    virtual void Heuristic(const FActionBuffers& ActionBuffersOut) const = 0;
+    virtual void Heuristic(FActionBuffers& ActionBuffersOut) = 0;
 };
-

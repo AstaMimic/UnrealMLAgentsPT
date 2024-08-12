@@ -37,7 +37,7 @@ public:
      */
     virtual void ResetData() = 0;
 
-    virtual void Heuristic(const FActionBuffers& ActionBuffersOut) = 0;
+    virtual void Heuristic(FActionBuffers& ActionBuffersOut) = 0;
 
     /** Method called to execute actions based on the ActionBuffers contents. */
     virtual void OnActionReceived(const FActionBuffers& ActionBuffers) = 0;

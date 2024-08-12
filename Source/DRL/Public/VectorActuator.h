@@ -22,7 +22,7 @@ public:
     // IActuator Interface
     virtual void ResetData() override;
     virtual void OnActionReceived(const FActionBuffers& ActionBuffers) override;
-    virtual void Heuristic(const FActionBuffers& ActionBuffersOut) override;
+    virtual void Heuristic(FActionBuffers& ActionBuffersOut) override;
     virtual void WriteDiscreteActionMask(const TScriptInterface<IDiscreteActionMask>& ActionMask) override;
 
     // IBuiltInActuator Interface

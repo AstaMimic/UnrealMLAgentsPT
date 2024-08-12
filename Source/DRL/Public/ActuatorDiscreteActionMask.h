@@ -39,7 +39,7 @@ public:
     {
         if (CurrentMask.Num() > 0)
         {
-            FMemory::Memset(CurrentMask.GetData(), 0, CurrentMask.Num() * sizeof(bool));
+            CurrentMask.Init(false, CurrentMask.Num());
         }
     }
 

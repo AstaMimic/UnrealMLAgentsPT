@@ -46,7 +46,7 @@ void UVectorActuator::OnActionReceived(const FActionBuffers& InActionBuffers)
     }
 }
 
-void UVectorActuator::Heuristic(const FActionBuffers& ActionBuffersOut)
+void UVectorActuator::Heuristic(FActionBuffers& ActionBuffersOut)
 {
     if (HeuristicProvider)
     {

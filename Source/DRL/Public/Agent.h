@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -78,9 +76,6 @@ public:
     UFUNCTION(BlueprintCallable, Category = "AgentAction")
     FActionBuffers GetStoredActionBuffers();
 
-    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AgentAction")
-    void Heuristic(const FActionBuffers& ActionsOut) const override;
-
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AgentObservation")
     void CollectObservations(UVectorSensor* Sensor);
 
@@ -96,6 +91,8 @@ public:
     // Read an FActionBuffers and return Discrete actions
     UFUNCTION(BlueprintCallable, Category = "AgentObservation")
     int32 GetDiscreteActions(const FActionBuffers& Actions, int32 Index);
+
+    virtual void Heuristic(FActionBuffers& ActionsOut) override;
 
     UPROPERTY()
     int32 MaxStep;

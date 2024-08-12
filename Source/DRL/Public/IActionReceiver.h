@@ -116,8 +116,6 @@ public:
     }
 };
 
-const FActionBuffers FActionBuffers::Empty = FActionBuffers(FActionSegment <float>::Empty, FActionSegment<int>::Empty);
-
 /**
  * An interface that describes an object that can receive actions from a Reinforcement Learning network.
  */
