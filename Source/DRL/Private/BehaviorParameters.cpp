@@ -40,7 +40,7 @@ bool UBehaviorParameters::IsInHeuristicMode()
     return false;
 }
 
-IIPolicy* UBehaviorParameters::GeneratePolicy(const FActionSpec& ActionSpec, UActuatorManager* ActuatorManager)
+TScriptInterface<IIPolicy> UBehaviorParameters::GeneratePolicy(const FActionSpec& ActionSpec, UActuatorManager* ActuatorManager)
 {
     switch (BehaviorType)
     {

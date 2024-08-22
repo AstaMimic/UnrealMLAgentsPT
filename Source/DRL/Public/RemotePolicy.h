@@ -17,7 +17,11 @@ class DRL_API URemotePolicy : public UObject, public IIPolicy
 private:
     int32 AgentId;
     FString FullyQualifiedBehaviorName;
+
+    UPROPERTY()
     FActionSpec ActionSpec;
+
+    UPROPERTY()
     FActionBuffers LastActionBuffer;
 
     UPROPERTY()

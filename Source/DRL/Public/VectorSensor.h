@@ -39,7 +39,9 @@ private:
     void Clear();
     void AddFloatObs(float Obs);
 
+    UPROPERTY()
     TArray<float> Observations;
+
     FString Name;
     FObservationSpec ObservationSpec;
 };

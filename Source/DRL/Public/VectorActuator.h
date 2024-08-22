@@ -16,8 +16,15 @@ public:
     UVectorActuator();
 
     // Overloaded constructors
-    void Initialize(IActionReceiver* InActionReceiver, const FActionSpec& InActionSpec, const FString& InName = "VectorActuator");
-    void Initialize(IActionReceiver* InActionReceiver, IHeuristicProvider* InHeuristicProvider, const FActionSpec& InActionSpec, const FString& InName = "VectorActuator");
+    // Initialization method
+    void Initialize(TScriptInterface<IActionReceiver> InActionReceiver,
+                    TScriptInterface<IHeuristicProvider> InHeuristicProvider,
+                    const FActionSpec& InActionSpec,
+                    const FString& InName = "VectorActuator");
+
+    void Initialize(TScriptInterface<IActionReceiver> InActionReceiver,
+                    const FActionSpec& InActionSpec,
+                    const FString& InName = "VectorActuator");
 
     // IActuator Interface
     virtual void ResetData() override;
@@ -33,9 +40,18 @@ public:
     const FString GetName() const { return Name; }
 
 private:
-    IActionReceiver* ActionReceiver;
-    IHeuristicProvider* HeuristicProvider;  
+
+    UPROPERTY()
+    TScriptInterface<IActionReceiver> ActionReceiver;
+
+    UPROPERTY()
+    TScriptInterface<IHeuristicProvider> HeuristicProvider;  
+
+    UPROPERTY()
     FActionBuffers ActionBuffers;
+    
+    UPROPERTY()
     FActionSpec ActionSpec;
+
     FString Name;
 };

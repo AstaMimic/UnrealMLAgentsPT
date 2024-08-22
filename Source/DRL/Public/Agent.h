@@ -149,8 +149,11 @@ private:
     UPROPERTY()
     TArray<TScriptInterface<IISensor>> Sensors;
 
+    UPROPERTY()
     FAgentInfo Info;
-	IIPolicy* Brain;
+
+    UPROPERTY()
+	TScriptInterface<IIPolicy> Brain;
 
     int32 GroupId;
     int32 StepCount;

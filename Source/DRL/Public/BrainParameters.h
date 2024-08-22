@@ -26,7 +26,6 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Brain Parameters")
     TArray<FString> VectorActionDescriptions;
 
-    UPROPERTY()
     bool bHasUpgradedBrainParametersWithActionSpec;
 
     // Method to clone this struct

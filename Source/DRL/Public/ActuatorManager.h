@@ -56,13 +56,20 @@ public:
 
 private:
     // Actuators managed by this object.
+    UPROPERTY()
     TArray<TScriptInterface<IActuator>> Actuators;
 
     // An implementation of IDiscreteActionMask that allows for writing to it based on an offset.
+    UPROPERTY()
     UActuatorDiscreteActionMask* DiscreteActionMask;
 
     // Combined action specification.
+    UPROPERTY()
     FActionSpec CombinedActionSpec;
+
+    // The currently stored ActionBuffers object for the IActuator managed by this class.
+    UPROPERTY()
+    FActionBuffers StoredActions;
 
     // Flag used to check if our actuators are ready for execution.
     bool bReadyForExecution;
@@ -75,9 +82,6 @@ private:
 
     // The number of continuous actions for all of the IActuator in this manager.
     int32 NumContinuousActions;
-
-    // The currently stored ActionBuffers object for the IActuator managed by this class.
-    FActionBuffers StoredActions;
 
     // Helper methods
     void ReadyActuatorsForExecution(const TArray<TScriptInterface<IActuator>>& InActuators, int32 InNumContinuousActions, int32 InSumOfDiscreteBranchSizes, int32 InNumDiscreteBranches);

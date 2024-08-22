@@ -71,7 +71,7 @@ public:
 private:
     void UpdateAgentPolicy();
     UHeuristicPolicy* InitializeHeuristicPolicy(const FActionSpec& ActionSpec, UActuatorManager* ActuatorManager);
-    IIPolicy* GeneratePolicy(const FActionSpec& ActionSpec, UActuatorManager* ActuatorManager);
+    TScriptInterface<IIPolicy> GeneratePolicy(const FActionSpec& ActionSpec, UActuatorManager* ActuatorManager);
     FString GetFullyQualifiedBehaviorName();
 
     // Grant Access to UAgent

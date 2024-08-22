@@ -72,7 +72,6 @@ private:
     bool bNeedCommunicateThisStep;
 
     ObservationWriter ObsWriter;
-    // TMap<FString, USensorShapeValidator*> SensorShapeValidators;
     TMap<FString, TArray<int32>> OrderedAgentsRequestingDecisions;
     TUniquePtr<communicator_objects::UnrealRLOutputProto> CurrentUnrealRlOutput;
     TMap<FString, TMap<int32, FActionBuffers>> LastActionsReceived;

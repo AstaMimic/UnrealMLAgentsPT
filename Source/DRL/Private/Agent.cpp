@@ -133,7 +133,7 @@ void UAgent::ReloadPolicy() {
     if (!bInitialized) {
         return;
     }
-    Brain = PolicyFactory->GeneratePolicy(ActuatorManager->GetCombinedActionSpec(), ActuatorManager);
+    Brain = TScriptInterface<IIPolicy>(PolicyFactory->GeneratePolicy(ActuatorManager->GetCombinedActionSpec(), ActuatorManager));
 }
 
 void UAgent::OnEpisodeBegin()

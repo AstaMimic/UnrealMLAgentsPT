@@ -13,10 +13,6 @@ class DRL_API UActuatorDiscreteActionMask : public UObject, public IDiscreteActi
 public:
     int32 CurrentBranchOffset;
 
-    UActuatorDiscreteActionMask()
-    {
-    }
-
 	void Initialize(const TArray<TScriptInterface<IActuator>>& InActuators, int32 InSumOfDiscreteBranchSizes, int32 InNumDiscreteBranches, const TArray<int32>& InBranchSizes = TArray<int32>())
 	{
 		Actuators = InActuators;
@@ -44,7 +40,10 @@ public:
     }
 
 private:
+
+    UPROPERTY()
     TArray<TScriptInterface<IActuator>> Actuators;
+
     TArray<int32> StartingActionIndices;
     TArray<int32> BranchSizes;
     TArray<bool> CurrentMask;

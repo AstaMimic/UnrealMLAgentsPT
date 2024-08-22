@@ -17,12 +17,17 @@ private:
     UPROPERTY()
     UActuatorManager* ActuatorManager;
 
+    UPROPERTY()
     FActionBuffers ActionBuffers;
+
+    UPROPERTY()
+    TArray<FString> NullList;
+
+    ObservationWriter ObservationWriter;
+
     bool bDone;
     bool bDecisionRequested;
 
-    ObservationWriter ObservationWriter;
-    TArray<FString> NullList;
 
 public:
     UHeuristicPolicy();

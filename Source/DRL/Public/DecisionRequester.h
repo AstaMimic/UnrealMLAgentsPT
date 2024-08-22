@@ -30,7 +30,9 @@ public:
     bool bTakeActionsBetweenDecisions = true;
 
 private:
+    UPROPERTY()
     UAgent* Agent;
+
     void MakeRequests(int AcademyStepCount);
 
     UFUNCTION()
