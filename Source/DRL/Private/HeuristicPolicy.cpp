@@ -1,19 +1,17 @@
 #include "HeuristicPolicy.h"
 
-UHeuristicPolicy::UHeuristicPolicy()
-    : ActuatorManager(nullptr), bDone(false), bDecisionRequested(false)
-{
-}
 
 void UHeuristicPolicy::Initialize(UActuatorManager* InActuatorManager, const FActionSpec& ActionSpec)
 {
     ActuatorManager = InActuatorManager;
     int32 NumContinuousActions = ActionSpec.NumContinuousActions;
     int32 NumDiscreteActions = ActionSpec.GetNumDiscreteActions();
-    TArray<float> ContinuousActions;
-    ContinuousActions.SetNumZeroed(NumContinuousActions);
-    TArray<int32> DiscreteActions;
-    DiscreteActions.SetNumZeroed(NumDiscreteActions);
+
+    TSharedPtr<TArray<float>> ContinuousActions = MakeShared<TArray<float>>();
+    ContinuousActions->SetNumZeroed(NumContinuousActions);
+
+    TSharedPtr<TArray<int32>> DiscreteActions = MakeShared<TArray<int32>>();
+    DiscreteActions->SetNumZeroed(NumDiscreteActions);
 
     FActionSegment<float> ContinuousDecision(ContinuousActions, 0, NumContinuousActions);
     FActionSegment<int32> DiscreteDecision(DiscreteActions, 0, NumDiscreteActions);

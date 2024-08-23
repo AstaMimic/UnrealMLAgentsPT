@@ -21,73 +21,27 @@ public:
     FActionSegment<float> ContinuousActions;
 
     /** Holds the Discrete ActionSegment to be used by an IActionReceiver. */
-    FActionSegment<int> DiscreteActions;
+    FActionSegment<int32> DiscreteActions;
 
     /** An empty action buffer. */
-    static const FActionBuffers Empty;
+    static FActionBuffers Empty;
 
+    /** Construct an ActionBuffers instance with the continuous and discrete actions that will be used. */
     FActionBuffers()
-        : ContinuousActions(), DiscreteActions()
+        : ContinuousActions(nullptr), DiscreteActions(nullptr)
     {
     }
 
     /** Construct an ActionBuffers instance with the continuous and discrete actions that will be used. */
-    FActionBuffers(const FActionSegment<float>& InContinuousActions, const FActionSegment<int>& InDiscreteActions)
+    FActionBuffers(FActionSegment<float> InContinuousActions, FActionSegment<int32> InDiscreteActions)
         : ContinuousActions(InContinuousActions), DiscreteActions(InDiscreteActions)
     {
     }
 
     /** Construct an ActionBuffers instance with the continuous and discrete actions that will be used. */
-    FActionBuffers(const TArray<float>& InContinuousActions, const TArray<int32>& InDiscreteActions)
-        : ContinuousActions(InContinuousActions), DiscreteActions(InDiscreteActions)
+    FActionBuffers(TSharedPtr<TArray<float>> InContinuousActions, TSharedPtr<TArray<int32>> InDiscreteActions)
+        : FActionBuffers(FActionSegment<float>(InContinuousActions), FActionSegment<int32>(InDiscreteActions))
     {
-    }
-
-    /** Construct an ActionBuffers instance with ActionSpec. All values are initialized to zeros. */
-    FActionBuffers(const FActionSpec& ActionSpec)
-    {
-        TArray<float> ContinuousActionArray;
-        ContinuousActionArray.SetNumZeroed(ActionSpec.NumContinuousActions);
-        ContinuousActions = FActionSegment<float>(ContinuousActionArray);
-
-        TArray<int32> DiscreteActionArray;
-        DiscreteActionArray.SetNumZeroed(ActionSpec.GetNumDiscreteActions());
-        DiscreteActions = FActionSegment<int32>(DiscreteActionArray);
-    }
-
-    /** Create an ActionBuffers instance with ActionSpec and all actions stored as a float array. */
-    static FActionBuffers FromActionSpec(const FActionSpec& ActionSpec, const TArray<float>& Actions)
-    {
-        if (Actions.Num() == 0)
-        {
-            return FActionBuffers::Empty;
-        }
-
-        ensure(Actions.Num() == ActionSpec.NumContinuousActions + ActionSpec.GetNumDiscreteActions());
-
-        FActionSegment<float> ContinuousActionSegment;
-        FActionSegment<int32> DiscreteActionSegment;
-        int32 Offset = 0;
-
-        if (ActionSpec.NumContinuousActions > 0)
-        {
-            TArray<float> ContinuousActionArray;
-            ContinuousActionArray.Append(Actions.GetData(), ActionSpec.NumContinuousActions);
-            ContinuousActionSegment = FActionSegment<float>(ContinuousActionArray);
-            Offset += ActionSpec.NumContinuousActions;
-        }
-
-        if (ActionSpec.GetNumDiscreteActions() > 0)
-        {
-            TArray<int32> DiscreteActions;
-            for (int32 i = 0; i < ActionSpec.GetNumDiscreteActions(); ++i)
-            {
-                DiscreteActions.Add(static_cast<int32>(Actions[Offset + i]));
-            }
-            DiscreteActionSegment = FActionSegment<int32>(DiscreteActions);
-        }
-
-        return FActionBuffers(ContinuousActionSegment, DiscreteActionSegment);
     }
 
     /** Clear the ContinuousActions and DiscreteActions segments to be all zeros. */

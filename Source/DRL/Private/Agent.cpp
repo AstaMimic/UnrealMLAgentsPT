@@ -16,13 +16,6 @@ EBuiltInActuatorType UAgentVectorActuator::GetBuiltInActuatorType() const
 }
 
 
-// Sets default values for this component's properties
-UAgent::UAgent()
-{
-	PrimaryComponentTick.bCanEverTick = true;
-}
-
-
 // Called when the game starts
 void UAgent::BeginPlay()
 {
@@ -70,12 +63,12 @@ void UAgent::LazyInitialize()
     InitializeSensors();
 
     // Initialize continuous actions with zeros
-    TArray<float> ContinuousActionArray;
-    ContinuousActionArray.Init(0.0f, ActuatorManager->GetNumContinuousActions());
+    TSharedPtr<TArray<int32>> DiscreteActionArray = MakeShared<TArray<int32>>();
+    DiscreteActionArray->Init(0, ActuatorManager->GetNumDiscreteActions());
 
     // Initialize discrete actions with zeros
-    TArray<int32> DiscreteActionArray;
-    DiscreteActionArray.Init(0, ActuatorManager->GetNumDiscreteActions());
+	TSharedPtr<TArray<float>> ContinuousActionArray = MakeShared<TArray<float>>();
+    ContinuousActionArray->Init(0.0f, ActuatorManager->GetNumContinuousActions());
 
     // Set storedActions in AgentInfo
     Info.StoredActions = FActionBuffers(
@@ -153,8 +146,6 @@ void UAgent::InitializeActuators()
         GetOwner()->GetComponents<UActuatorComponent>(AttachedActuators);
     }
 
-
-    // m_VectorActuator = new AgentVectorActuator(this, this, param.ActionSpec);
 	FActionSpec ActionSpec = PolicyFactory->BrainParameters.ActionSpec;
 	VectorActuator = NewObject<UAgentVectorActuator>(this);
 	if (VectorActuator)
@@ -164,7 +155,6 @@ void UAgent::InitializeActuators()
 
     ActuatorManager = NewObject<UActuatorManager>();
     ActuatorManager->Initialize(AttachedActuators.Num() + 1);
-
     ActuatorManager->Add(VectorActuator);
 
     for (UActuatorComponent* Component : AttachedActuators)
@@ -205,7 +195,6 @@ void UAgent::CleanupSensors() {
     {
         if (Sensors[i])
         {
-            // Assuming ISensor has a Dispose method to clean up resources
             Sensors[i] = nullptr;
         }
     }
@@ -360,7 +349,7 @@ void UAgent::AgentStep()
 
 void UAgent::DecideAction()
 {
-    if (ActuatorManager->GetStoredActions().ContinuousActions.Array.Num() == 0)
+    if (ActuatorManager->GetStoredActions().ContinuousActions.Array == nullptr)
     {
         ResetData();
     }
@@ -388,7 +377,7 @@ void UAgent::GetAllChildComponents(TArray<T*>& OutChildComponents)
 {
     // Ensure the output array is empty
     OutChildComponents.Empty();
-    
+
     // Get direct components of that type
     GetOwner()->GetComponents<T>(OutChildComponents);
 

@@ -501,17 +501,17 @@ TArray<FActionBuffers> URpcCommunicator::ToAgentActionList(const communicator_ob
 FActionBuffers URpcCommunicator::ToActionBuffers(const communicator_objects::AgentActionProto& Proto)
 {
     // Convert the continuous actions from Proto
-    TArray<float> ContinuousActions;
+    TSharedPtr<TArray<float>> ContinuousActions = MakeShared<TArray<float>>();
     for (int i = 0; i < Proto.continuous_actions_size(); ++i)
     {
-        ContinuousActions.Add(Proto.continuous_actions(i));
+        ContinuousActions->Add(Proto.continuous_actions(i));
     }
 
     // Convert the discrete actions from Proto
-    TArray<int32> DiscreteActions;
+    TSharedPtr<TArray<int32>> DiscreteActions = MakeShared<TArray<int32>>();
     for (int i = 0; i < Proto.discrete_actions_size(); ++i)
     {
-        DiscreteActions.Add(Proto.discrete_actions(i));
+        DiscreteActions->Add(Proto.discrete_actions(i));
     }
 
     return FActionBuffers(ContinuousActions, DiscreteActions);

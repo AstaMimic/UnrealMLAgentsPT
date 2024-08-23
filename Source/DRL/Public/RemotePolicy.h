@@ -28,7 +28,6 @@ private:
     URpcCommunicator* Communicator;
 
 public:
-    URemotePolicy();
 
     void Initialize(UActuatorManager* InActuatorManager, const FActionSpec& InActionSpec, const FString& InFullyQualifiedBehaviorName);
 	virtual void RequestDecision(const FAgentInfo& Info, TArray<TScriptInterface<IISensor>>& Sensors) override;

@@ -1,10 +1,5 @@
 #include "ActuatorManager.h"
 
-// Constructor
-UActuatorManager::UActuatorManager()
-    : bReadyForExecution(false), SumOfDiscreteBranchSizes(0), NumDiscreteActions(0), NumContinuousActions(0)
-{
-}
 
 // Initialize with a preset capacity
 void UActuatorManager::Initialize(int32 Capacity)
@@ -38,12 +33,11 @@ void UActuatorManager::ReadyActuatorsForExecution(const TArray<TScriptInterface<
     // Sort the Actuators by name to ensure determinism
     SortActuators(Actuators);
 
-    TArray<float> ContinuousActionArray;
-    ContinuousActionArray.Init(0.0f, InNumContinuousActions);
+	TSharedPtr<TArray<int32>> DiscreteActionArray = MakeShared<TArray<int32>>();
+	DiscreteActionArray->Init(0, InNumDiscreteBranches);
 
-    // Initialize discrete actions with zeros
-    TArray<int32> DiscreteActionArray;
-    DiscreteActionArray.Init(0, InNumDiscreteBranches);
+	TSharedPtr<TArray<float>> ContinuousActionArray = MakeShared<TArray<float>>();
+	ContinuousActionArray->Init(0.0f, InNumContinuousActions);
 
 	FActionSegment<int32> DiscreteActions = (InNumDiscreteBranches == 0) ? FActionSegment<int32>::Empty :
 		FActionSegment<int32>(DiscreteActionArray);
@@ -108,7 +102,6 @@ void UActuatorManager::UpdateActions(const FActionBuffers& Actions)
     UpdateActionArray<int32>(Actions.DiscreteActions, StoredActions.DiscreteActions);
 }
 
-// Template method to update action arrays
 template <typename T>
 void UActuatorManager::UpdateActionArray(const FActionSegment<T>& SourceActionBuffer, FActionSegment<T>& Destination)
 {
@@ -126,9 +119,15 @@ void UActuatorManager::UpdateActionArray(const FActionSegment<T>& SourceActionBu
                 Destination.Length);
         }
 
-        FMemory::Memcpy(Destination.Array.GetData() + Destination.Offset,
-            SourceActionBuffer.Array.GetData() + SourceActionBuffer.Offset,
-            SourceActionBuffer.Length * sizeof(T));
+        // Ensure both source and destination arrays are valid
+        check(SourceActionBuffer.Array.IsValid() && Destination.Array.IsValid());
+
+        // Perform memory copy
+        FMemory::Memcpy(
+            Destination.Array->GetData() + Destination.Offset,
+            SourceActionBuffer.Array->GetData() + SourceActionBuffer.Offset,
+            SourceActionBuffer.Length * sizeof(T)
+        );
     }
 }
 

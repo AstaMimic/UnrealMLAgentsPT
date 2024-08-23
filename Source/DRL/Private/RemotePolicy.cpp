@@ -1,10 +1,6 @@
 #include "RemotePolicy.h"
 #include "DRLAcademy.h"
 
-URemotePolicy::URemotePolicy()
-    : AgentId(0), Communicator(nullptr)
-{
-}
 
 void URemotePolicy::Initialize(UActuatorManager* InActuatorManager, const FActionSpec& InActionSpec, const FString& InFullyQualifiedBehaviorName)
 {
@@ -12,7 +8,7 @@ void URemotePolicy::Initialize(UActuatorManager* InActuatorManager, const FActio
     Communicator = UDRLAcademy::GetInstance()->RpcCommunicator;
     if (Communicator)
     {
-       Communicator->SubscribeBrain(FullyQualifiedBehaviorName, ActionSpec);
+        Communicator->SubscribeBrain(FullyQualifiedBehaviorName, ActionSpec);
     }
     ActionSpec = InActionSpec;
 }

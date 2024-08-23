@@ -1,9 +1,5 @@
 #include "VectorActuator.h"
 
-UVectorActuator::UVectorActuator()
-    : ActionReceiver(nullptr), HeuristicProvider(nullptr)
-{
-}
 
 void UVectorActuator::Initialize(TScriptInterface<IActionReceiver> InActionReceiver, const FActionSpec& InActionSpec, const FString& InName)
 {

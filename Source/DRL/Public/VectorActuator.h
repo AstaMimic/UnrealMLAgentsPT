@@ -12,8 +12,6 @@ class DRL_API UVectorActuator : public UObject, public IActuator, public IBuiltI
     GENERATED_BODY()
 
 public:
-    // Constructor
-    UVectorActuator();
 
     // Overloaded constructors
     // Initialization method

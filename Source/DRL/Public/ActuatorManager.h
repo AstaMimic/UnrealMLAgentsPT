@@ -12,8 +12,6 @@ class DRL_API UActuatorManager : public UObject
     GENERATED_BODY()
 
 public:
-    // Constructor
-    UActuatorManager();
 
     // Initialization with a preset capacity
     void Initialize(int32 Capacity = 0);

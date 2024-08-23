@@ -43,18 +43,14 @@ class DRL_API UAgent : public UActorComponent, public IActionReceiver, public IH
 {
 	GENERATED_BODY()
 
-public:	
-	// Sets default values for this component's properties
-	UAgent();
-
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-    
+
     UFUNCTION(BlueprintCallable, Category = "Reward")
     void SetReward(float NewReward);
 
@@ -81,7 +77,7 @@ public:
 
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AgentInit")
     void Initialize();
-   
+
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AgentAction")
     void OnActionReceived(const FActionBuffers& Actions) override;
 
@@ -127,7 +123,7 @@ private:
 
     UFUNCTION()
     void DecideAction();
-    
+
     UFUNCTION()
     void AgentStep();
 

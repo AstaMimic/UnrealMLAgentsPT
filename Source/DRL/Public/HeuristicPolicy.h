@@ -30,7 +30,6 @@ private:
 
 
 public:
-    UHeuristicPolicy();
 
     void Initialize(UActuatorManager* InActuatorManager, const FActionSpec& ActionSpec);
 

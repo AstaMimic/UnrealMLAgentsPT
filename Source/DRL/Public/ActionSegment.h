@@ -9,30 +9,30 @@ struct FActionSegment
 public:
     int32 Offset;
     int32 Length;
-    TArray<T> Array;
+    TSharedPtr<TArray<T>> Array;
 
-    /** An empty action segment. */
-    static const FActionSegment<T> Empty;
+    // Static member for an empty ActionSegment
+    static FActionSegment<T> Empty;
 
-    // Default constructor
-    FActionSegment()
-        : Offset(0), Length(0)
+    // Constructor with just an array
+    FActionSegment(TSharedPtr<TArray<T>> InArray)
+        : FActionSegment(InArray.IsValid() ? InArray : FActionSegment<T>::GetEmptyArray(), 0, InArray.IsValid() ? InArray->Num() : 0)
     {
     }
 
     // Constructor with array, offset, and length
-    FActionSegment(const TArray<T>& InArray, int32 InOffset, int32 InLength)
-        : Offset(InOffset), Length(InLength), Array(InArray)
+    FActionSegment(TSharedPtr<TArray<T>> InArray, int32 InOffset, int32 InLength)
+        : Offset(InOffset), Length(InLength), Array(InArray.IsValid() ? InArray : GetEmptyArray())
     {
-        CheckParameters(InArray, InOffset, InLength);
+        CheckParameters(*Array, InOffset, InLength);
     }
 
-    /** Constructor with just an array */
-    FActionSegment(const TArray<T>& InArray)
-        : Offset(0), Length(InArray.Num()), Array(InArray)
+    // Static function to return an empty array
+    static TSharedPtr<TArray<T>> GetEmptyArray()
     {
+        static TSharedPtr<TArray<T>> EmptyArray = MakeShared<TArray<T>>();
+        return EmptyArray;
     }
-
 
     // Check the parameters for validity
     static void CheckParameters(const TArray<T>& InArray, int32 InOffset, int32 InLength)
@@ -51,7 +51,7 @@ public:
             UE_LOG(LogTemp, Error, TEXT("Index out of bounds, expected a number between 0 and %d"), Length - 1);
             return T(); // Return a default value or handle the error as needed
         }
-        return Array[Offset + Index];
+        return (*Array)[Offset + Index];
     }
 
     T& operator[](int32 Index)
@@ -62,15 +62,24 @@ public:
             static T DefaultValue = T(); // Return a default value reference or handle the error as needed
             return DefaultValue;
         }
-        return Array[Offset + Index];
+        return (*Array)[Offset + Index];
     }
 
-    // Clear the segment
     void Clear()
     {
-        for (int32 i = 0; i < Length; ++i)
+        if (Array.IsValid())
         {
-            Array[Offset + i] = T();
+            TArray<T>& ArrayRef = *Array;  // Dereference the pointer to access the array
+
+            // Ensure we don't go out of bounds
+            if (Offset + Length <= ArrayRef.Num())
+            {
+                for (int32 i = Offset; i < Offset + Length; ++i)
+                {
+                    ArrayRef[i] = T();  // Default-initialize each element (for POD types like int, float) 
+                                        // or call the default constructor for classes/structs
+                }
+            }
         }
     }
 
@@ -83,18 +92,7 @@ public:
     // Equality operator
     bool operator==(const FActionSegment& Other) const
     {
-        if (Offset != Other.Offset || Length != Other.Length)
-        {
-            return false;
-        }
-        for (int32 i = 0; i < Length; ++i)
-        {
-            if (Array[Offset + i] != Other.Array[Other.Offset + i])
-            {
-                return false;
-            }
-        }
-        return true;
+        return Offset == Other.Offset && Length == Other.Length && Array == Other.Array;
     }
 
     // Inequality operator
@@ -103,7 +101,3 @@ public:
         return !(*this == Other);
     }
 };
-
-template<typename T>
-const FActionSegment<T> FActionSegment<T>::Empty = FActionSegment<T>(TArray<T>(), 0, 0);
-
