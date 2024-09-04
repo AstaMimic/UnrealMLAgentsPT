@@ -59,10 +59,10 @@ void UDecisionRequester::MakeRequests(int AcademyStepCount)
 
 bool UDecisionRequester::ShouldRequestDecision(int AcademyStepCount) const
 {
-    return AcademyStepCount % DecisionPeriod == DecisionStep;
+    return (AcademyStepCount % DecisionPeriod == DecisionStep) && !bStopRequestDecision;
 }
 
 bool UDecisionRequester::ShouldRequestAction() const
 {
-    return bTakeActionsBetweenDecisions;
+    return bTakeActionsBetweenDecisions && !bStopRequestDecision;
 }

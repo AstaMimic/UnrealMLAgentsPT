@@ -93,6 +93,8 @@ public:
     UPROPERTY()
     int32 MaxStep;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AgentObservation")
+    bool bStopUpdateObservation;
 
 private:
     friend class UBehaviorParameters;

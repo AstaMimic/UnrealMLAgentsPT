@@ -77,30 +77,30 @@ void UVectorSensor::AddFloatObs(float Obs)
     Observations.Add(Obs);
 }
 
-void UVectorSensor::AddObservation(float Observation)
+void UVectorSensor::AddFloatObservation(float Observation)
 {
     AddFloatObs(Observation);
 }
 
-void UVectorSensor::AddObservation(int32 Observation)
+void UVectorSensor::AddIntObservation(int32 Observation)
 {
     AddFloatObs(static_cast<float>(Observation));
 }
 
-void UVectorSensor::AddObservation(FVector Observation)
+void UVectorSensor::AddVectorObservation(FVector Observation)
 {
     AddFloatObs(Observation.X);
     AddFloatObs(Observation.Y);
     AddFloatObs(Observation.Z);
 }
 
-void UVectorSensor::AddObservation(FVector2D Observation)
+void UVectorSensor::AddVector2DObservation(FVector2D Observation)
 {
     AddFloatObs(Observation.X);
     AddFloatObs(Observation.Y);
 }
 
-void UVectorSensor::AddObservation(const TArray<float>& Observation)
+void UVectorSensor::AddFloatArrayObservation(const TArray<float>& Observation)
 {
     for (float Obs : Observation)
     {
@@ -108,7 +108,7 @@ void UVectorSensor::AddObservation(const TArray<float>& Observation)
     }
 }
 
-void UVectorSensor::AddObservation(FQuat Observation)
+void UVectorSensor::AddQuatObservation(FQuat Observation)
 {
     AddFloatObs(Observation.X);
     AddFloatObs(Observation.Y);
@@ -116,7 +116,7 @@ void UVectorSensor::AddObservation(FQuat Observation)
     AddFloatObs(Observation.W);
 }
 
-void UVectorSensor::AddObservation(bool Observation)
+void UVectorSensor::AddBoolObservation(bool Observation)
 {
     AddFloatObs(Observation ? 1.0f : 0.0f);
 }

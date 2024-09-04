@@ -29,15 +29,18 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="DecisionRequester")
     bool bTakeActionsBetweenDecisions = true;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="DecisionRequester")
+    bool bStopRequestDecision = false;
+
 private:
+
     UPROPERTY()
     UAgent* Agent;
-
-    void MakeRequests(int AcademyStepCount);
 
     UFUNCTION()
     void OnAcademyPreStep(int AcademyStepCount);
 
+    void MakeRequests(int AcademyStepCount);
     bool ShouldRequestDecision(int AcademyStepCount) const;
     bool ShouldRequestAction() const;
 };

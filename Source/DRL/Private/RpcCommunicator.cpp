@@ -251,7 +251,7 @@ void URpcCommunicator::PutObservations(const FString& BehaviorName, const FAgent
 
 void URpcCommunicator::DecideBatch()
 {
-    if (bNeedCommunicateThisStep) {
+    if (!bNeedCommunicateThisStep) {
         return;
     }
     bNeedCommunicateThisStep = false;
@@ -260,6 +260,11 @@ void URpcCommunicator::DecideBatch()
 
 const FActionBuffers URpcCommunicator::GetActions(const FString& Key, int32 AgentId)
 {
+    if (LastActionsReceived.Contains(Key)) {
+        if (LastActionsReceived[Key].Contains(AgentId)) {
+            return LastActionsReceived[Key][AgentId];
+        }
+    }
     return FActionBuffers::Empty;
 }
 
@@ -275,23 +280,23 @@ void URpcCommunicator::SendBatchedMessageHelper()
 		Message.set_allocated_rl_initialization_output(tempUnityRlInitializationOutput);
 	}
 
-	communicator_objects::UnrealInputProto* Input = Exchange(&Message);
+	communicator_objects::UnrealInputProto Input = Exchange(&Message);
 	UpdateSentActionSpec(tempUnityRlInitializationOutput);
 
 	for (auto& Elem : CurrentUnrealRlOutput->agentinfos())
 	{
         Elem.second.value().empty();
 	}
-
-    // Check if Input is null
-    if (!Input)
+    // Iterate through the agentInfos map
+    for (auto& agentInfoPair : *CurrentUnrealRlOutput->mutable_agentinfos())
     {
-        return;
+        // Clear the repeated field `value` in ListAgentInfoProto
+        agentInfoPair.second.mutable_value()->Clear();
     }
 
     // Get the RlInput field
-    const communicator_objects::UnrealRLInputProto& RlInput = Input->rl_input();
-
+    const communicator_objects::UnrealRLInputProto& RlInput = Input.rl_input();
+ 
     // Check if AgentActions is present and not empty
     if (RlInput.agent_actions().empty())
     {
@@ -369,11 +374,11 @@ communicator_objects::ObservationProto URpcCommunicator::GetObservationProto(TSc
     return ObservationProto;
 }
 
-communicator_objects::UnrealInputProto* URpcCommunicator::Exchange(const communicator_objects::UnrealOutputProto* UnrealOutput) {
+communicator_objects::UnrealInputProto URpcCommunicator::Exchange(const communicator_objects::UnrealOutputProto* UnrealOutput) {
 
 	if (!bIsOpen)
 	{
-        return nullptr;
+        return communicator_objects::UnrealInputProto();
 	}
 
     try
@@ -385,7 +390,7 @@ communicator_objects::UnrealInputProto* URpcCommunicator::Exchange(const communi
 			throw std::runtime_error("Failed to receive input message");
 		}
 
-		return InputMessage.mutable_unreal_input();
+		return InputMessage.unreal_input();
     }
 	catch (const std::exception& Ex)
 	{
@@ -395,7 +400,7 @@ communicator_objects::UnrealInputProto* URpcCommunicator::Exchange(const communi
 
 	bIsOpen = false;
 	NotifyQuitAndShutDownChannel();
-    return nullptr;
+    return communicator_objects::UnrealInputProto();
 }
 
 

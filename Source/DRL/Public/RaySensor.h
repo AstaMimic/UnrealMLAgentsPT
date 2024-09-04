@@ -8,14 +8,11 @@
 
 
 UENUM(BlueprintType)
-enum class EForwardAxis : uint8
+enum class ERayAxis : uint8
 {
-    X = 0,
-    NegativeX,
-    Y,
-    NegativeY,
-    Z,
-    NegativeZ
+    X UMETA(DisplayName = "X Axis"),
+    Y UMETA(DisplayName = "Y Axis"),
+    Z UMETA(DisplayName = "Z Axis")
 };
 
 
@@ -25,40 +22,42 @@ struct DRL_API FRayInput
     GENERATED_BODY()
 
 public:
-    // The starting point of the ray
+    // Transform of the Actor
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Ray Perception")
-    FVector Origin;
-
-    // The direction of the ray
-    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Ray Perception")
-    FQuat Rotation;
+    FTransform Transform;
 
     // The length of the ray
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Ray Perception")
     float RayLength;
 
-    // The length of the ray
-    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Ray Perception")
-    int32 NumRays;
-
-    // The axis
-    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Raycast")
-    EForwardAxis ForwardAxis;
+    /// List of angles (in degrees) used to define the rays.
+    /// 90 degrees is considered "forward" relative to the game object.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ray Perception")
+    TArray<float> Angles;
 
     // Ignore character
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Raycast")
     AActor* IgnoredActor;
 
+    /// Whether to draw debug lines
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ray Perception")
+    bool bDrawDebugLines;
 
-    // Constructor
-    FRayInput()
-        : Origin(FVector::ZeroVector)
-        , Rotation(FQuat::Identity)
-        , RayLength(1000.0f)
-        , NumRays(10)
-        , ForwardAxis(EForwardAxis::X)
-        , IgnoredActor(nullptr)
-    {
+    /// The axis relative to which rays will be cast (e.g., X, Y, Z)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ray Perception")
+    ERayAxis RayAxis;
+
+    /// Starting height offset of ray from center of actor
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ray Perception")
+    float StartOffset;
+
+    /// Yaw offset to compensate for initial rotation of the mesh
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ray Perception")
+    float YawOffset;
+
+    // Get the number of observations
+    int32 OutputSize() {
+        return Angles.Num() * 2;
     }
 
 };
@@ -71,7 +70,7 @@ class DRL_API URaySensor : public UObject, public IISensor, public IBuiltInSenso
 
 public:
 
-    void Initialize(FString Name, FRayInput& RayInput);
+    void Initialize(FString Name, UWorld* World, FRayInput& RayInput);
 
     // IISensor
 
@@ -91,10 +90,13 @@ private:
     FVector GetForwardVector() const;
     float GetActorHash(AActor* Actor);
     float HashToFloat(const FString& HashString);
+    void SetNumObservations(int32 NumberObservations);
+    FVector CalculateDirectionForAxis(float RadAngle, ERayAxis RayAxis);
 
     FObservationSpec _ObservationSpec;
     TArray<float> _Observations;
     FString _Name;
     TArray<FHitResult> _HitResults;
     FRayInput _RayInput;
+    UWorld* _World;
 };

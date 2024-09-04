@@ -24,13 +24,25 @@ public:
 
     // The length of the ray
     UPROPERTY(EditAnywhere, Category = "Ray Sensor")
-    int32 NumRays;
+    float RaysPerDirection;
 
-    // The axis
-    UPROPERTY(EditAnywhere, Category="Ray Sensor")
-    EForwardAxis ForwardAxis;
+    // The length of the ray
+    UPROPERTY(EditAnywhere, Category = "Ray Sensor")
+    float MaxRayDegrees;
 
+    /// Starting height offset of ray from center of actor
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ray Perception")
+    float StartOffset;
+
+    /// The axis relative to which rays will be cast (e.g., X, Y, Z)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ray Perception")
+    ERayAxis RayAxis;
+
+    /// Yaw offset to compensate for initial rotation of the mesh
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ray Perception")
+    float YawOffset;
 
 private:
 	FRayInput GetRayInput();
+    TArray<float> GetRayAngles();
 };

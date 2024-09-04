@@ -86,7 +86,7 @@ public:
     // Check if the segment is empty
     bool IsEmpty() const
     {
-        return Length == 0;
+        return Array == nullptr || Array->Num() == 0;
     }
 
     // Equality operator

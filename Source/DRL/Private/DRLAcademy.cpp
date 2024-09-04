@@ -17,7 +17,6 @@ bool UDRLAcademy::IsTickable() const {
 }
 
 void UDRLAcademy::Tick(float DeltaTime) {
-    UE_LOG(LogTemp, Log, TEXT("Agent Tick - DeltaTime: %f"), DeltaTime);
     EnvironmentStep();
 }
 

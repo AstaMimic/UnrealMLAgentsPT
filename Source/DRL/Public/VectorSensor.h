@@ -26,13 +26,28 @@ public:
     virtual EBuiltInSensorType GetBuiltInSensorType() const override;
 
     // Compatibility methods with Agent observation
-    void AddObservation(float Observation);
-    void AddObservation(int32 Observation);
-    void AddObservation(FVector Observation);
-    void AddObservation(FVector2D Observation);
-    void AddObservation(const TArray<float>& Observation);
-    void AddObservation(FQuat Observation);
-    void AddObservation(bool Observation);
+	UFUNCTION(BlueprintCallable, Category = "Observations")
+	void AddFloatObservation(float Observation);
+
+	UFUNCTION(BlueprintCallable, Category = "Observations")
+	void AddIntObservation(int32 Observation);
+
+	UFUNCTION(BlueprintCallable, Category = "Observations")
+	void AddVectorObservation(FVector Observation);
+
+	UFUNCTION(BlueprintCallable, Category = "Observations")
+	void AddVector2DObservation(FVector2D Observation);
+
+	UFUNCTION(BlueprintCallable, Category = "Observations")
+	void AddFloatArrayObservation(const TArray<float>& Observation);
+
+	UFUNCTION(BlueprintCallable, Category = "Observations")
+	void AddQuatObservation(FQuat Observation);
+
+	UFUNCTION(BlueprintCallable, Category = "Observations")
+	void AddBoolObservation(bool Observation);
+
+	UFUNCTION(BlueprintCallable, Category = "Observations")
     void AddOneHotObservation(int32 Observation, int32 Range);
 
 private:

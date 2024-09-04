@@ -10,6 +10,7 @@
 #include "mlagents_envs/communicator_objects/unreal_to_external.grpc.pb.h"
 #include "mlagents_envs/communicator_objects/unreal_rl_output.pb.h"
 #include "mlagents_envs/communicator_objects/unreal_message.pb.h"
+#include "mlagents_envs/communicator_objects/unreal_rl_input.pb.h"
 #include "RpcCommunicator.generated.h"
 
 /**
@@ -52,7 +53,7 @@ private:
     bool SendAndReceiveMessage(const communicator_objects::UnrealMessageProto& Request, communicator_objects::UnrealMessageProto& Response);
     void CacheActionSpec(const FString& Name, FActionSpec ActionSpec);
     void SendBatchedMessageHelper();
-    communicator_objects::UnrealInputProto* Exchange(const communicator_objects::UnrealOutputProto* UnrealOutput);
+    communicator_objects::UnrealInputProto Exchange(const communicator_objects::UnrealOutputProto* UnrealOutput);
     communicator_objects::UnrealRLInitializationOutputProto* GetTempUnrealRlInitializationOutput();
     void UpdateSentActionSpec(const communicator_objects::UnrealRLInitializationOutputProto* Output);
     void SendCommandEvent(communicator_objects::CommandProto Command);

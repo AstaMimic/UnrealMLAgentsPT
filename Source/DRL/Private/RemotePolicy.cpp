@@ -8,7 +8,7 @@ void URemotePolicy::Initialize(UActuatorManager* InActuatorManager, const FActio
     Communicator = UDRLAcademy::GetInstance()->RpcCommunicator;
     if (Communicator)
     {
-        Communicator->SubscribeBrain(FullyQualifiedBehaviorName, ActionSpec);
+        Communicator->SubscribeBrain(FullyQualifiedBehaviorName, InActionSpec);
     }
     ActionSpec = InActionSpec;
 }
@@ -28,7 +28,7 @@ const FActionBuffers& URemotePolicy::DecideAction()
     {
         Communicator->DecideBatch();
         const FActionBuffers Actions = Communicator->GetActions(FullyQualifiedBehaviorName, AgentId);
-        LastActionBuffer = Actions.IsEmpty() ? Actions : FActionBuffers::Empty;
+        LastActionBuffer = Actions.IsEmpty() ? FActionBuffers::Empty : Actions;
     }
     return LastActionBuffer;
 }

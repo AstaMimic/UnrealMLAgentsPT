@@ -4,6 +4,7 @@
 #include "Agent.h"
 #include "DRLAcademy.h"
 #include "ISensor.h"
+#include "VectorSensor.h"
 #include "SensorComponent.h"
 #include "EpisodeIdCounter.h"
 #include "ActuatorComponent.h"
@@ -187,6 +188,13 @@ void UAgent::InitializeSensors()
         Sensors.Append(CreatedSensors);
     }
 
+    FBrainParameters param = PolicyFactory->BrainParameters;
+    if (param.VectorObservationSize > 0) {
+        CollectObservationsSensor = NewObject<UVectorSensor>(this);
+        CollectObservationsSensor->Initialize(param.VectorObservationSize);
+        Sensors.Add(CollectObservationsSensor);
+    }
+
     USensorUtils::SortSensors(Sensors);
 }
 
@@ -203,7 +211,9 @@ void UAgent::CleanupSensors() {
 void UAgent::UpdateSensors() {
     for (int32 i = 0; i < Sensors.Num(); i++)
     {
-        Sensors[i]->Update();
+        if (!bStopUpdateObservation) {
+			Sensors[i]->Update();
+        }
     }
 }
 
@@ -297,8 +307,6 @@ void UAgent::EpisodeInterrupted() {
 void UAgent::EndEpisodeAndReset(EDoneReason Reason) {
     NotifyAgentDone(Reason);
     AgentReset();
-    // TODO: Implement recursion checker
-    OnEpisodeBegin();
 }
 
 void UAgent::RequestDecision() {

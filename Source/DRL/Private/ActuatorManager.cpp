@@ -226,7 +226,8 @@ void UActuatorManager::ExecuteActions()
         FActionSegment<float> ContinuousActions = FActionSegment<float>::Empty;
         if (NumberContinuousActions > 0)
         {
-            ContinuousActions = FActionSegment<float>(StoredActions.ContinuousActions.Array,
+            ContinuousActions = FActionSegment<float>(
+                StoredActions.ContinuousActions.Array,
                 ContinuousStart,
                 NumberContinuousActions);
         }
@@ -234,7 +235,8 @@ void UActuatorManager::ExecuteActions()
         FActionSegment<int32> DiscreteActions = FActionSegment<int32>::Empty;
         if (NumberDiscreteActions > 0)
         {
-            DiscreteActions = FActionSegment<int32>(StoredActions.DiscreteActions.Array,
+            DiscreteActions = FActionSegment<int32>(
+                StoredActions.DiscreteActions.Array,
                 DiscreteStart,
                 NumberDiscreteActions);
         }
