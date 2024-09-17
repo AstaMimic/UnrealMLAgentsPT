@@ -2,6 +2,8 @@
 
 
 #include "DRLAcademy.h"
+#include "Editor/EditorEngine.h"
+#include "Editor.h"
 #include "GenericPlatform/GenericPlatformMisc.h"
 
 UDRLAcademy* UDRLAcademy::Instance = nullptr;
@@ -9,6 +11,9 @@ UDRLAcademy* UDRLAcademy::Instance = nullptr;
 UDRLAcademy::UDRLAcademy() {
     FCoreDelegates::OnExit.AddUObject(this, &UDRLAcademy::Dispose);
     StepRecursionChecker->Initialize("EnvironmentStep");
+#if WITH_EDITOR
+    FEditorDelegates::EndPIE.AddUObject(this, &UDRLAcademy::Dispose);
+#endif
 }
 
 // Make the Academy Tick
@@ -157,13 +162,27 @@ void UDRLAcademy::OnResetCommand() {
 }
 
 void UDRLAcademy::Dispose() {
-    OnDecideAction.Clear();
-    OnDestroyAction.Clear();
-    OnAgentPreStep.Clear();
-    OnAgentSendState.Clear();
-    OnAgentAct.Clear();
-    OnAgentForceReset.Clear();
-    OnEnvironmentReset.Clear();
+    Dispose(false);
+}
+
+void UDRLAcademy::Dispose(bool bIsSimulating) {
+
+    // Signal to listeners that the academy is being destroyed now
+    if (OnDestroyAction.IsBound()) {
+        OnDestroyAction.Broadcast();
+    }
+
+    if (RpcCommunicator != nullptr) {
+        RpcCommunicator->Dispose();
+        RpcCommunicator = nullptr;
+    }
+
+	// Clear out the actions so we're not keeping references to any old objects
+	ResetActions();
+
+    // Reset the Lazy instance
+    bInitialized = false;
+    Instance = nullptr;
 }
 
 void UDRLAcademy::ForcedFullReset() {
@@ -183,7 +202,13 @@ void UDRLAcademy::EnvironmentReset() {
 }
 
 void UDRLAcademy::ResetActions() {
-    
+    OnDecideAction.Clear();
+    OnDestroyAction.Clear();
+    OnAgentPreStep.Clear();
+    OnAgentSendState.Clear();
+    OnAgentAct.Clear();
+    OnAgentForceReset.Clear();
+    OnEnvironmentReset.Clear(); 
 }
 
 bool UDRLAcademy::IsCommunicatorOn() {

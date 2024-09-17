@@ -86,7 +86,7 @@ bool URpcCommunicator::EstablishConnection(int32 Port)
     return Channel != nullptr && Stub != nullptr;
 }
 
-bool URpcCommunicator::SendAndReceiveMessage(const communicator_objects::UnrealMessageProto & Request, communicator_objects::UnrealMessageProto& Response)
+bool URpcCommunicator::SendAndReceiveMessage(const communicator_objects::UnrealMessageProto& Request, communicator_objects::UnrealMessageProto& Response)
 {
     grpc::ClientContext Context;
     grpc::Status Status = Stub->Exchange(&Context, Request, &Response);
@@ -539,4 +539,20 @@ communicator_objects::AgentInfoProto URpcCommunicator::ToAgentInfoProto(const FA
 		}
 	}
 	return AgentInfoProto;
+}
+
+void URpcCommunicator::Dispose() {
+    if (!bIsOpen) {
+        return;
+    }
+    try {
+        // Assuming Stub is initialized and WrapMessage returns a valid object
+        communicator_objects::UnrealMessageProto Response;
+		grpc::ClientContext Context;
+		grpc::Status Status = Stub->Exchange(&Context, WrapMessage(nullptr, 400), &Response);
+        bIsOpen = false;
+    }
+    catch (...) {
+        // Catch all exceptions    
+    }
 }

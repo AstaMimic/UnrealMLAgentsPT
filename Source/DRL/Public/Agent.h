@@ -87,6 +87,9 @@ public:
     // Read an FActionBuffers and return Discrete actions
     UFUNCTION(BlueprintCallable, Category = "AgentObservation")
     int32 GetDiscreteActions(const FActionBuffers& Actions, int32 Index);
+  
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AgentInit")
+    void OnEpisodeBegin();
 
     virtual void Heuristic(FActionBuffers& ActionsOut) override;
 
@@ -100,7 +103,6 @@ private:
     friend class UBehaviorParameters;
 
     void LazyInitialize();
-    void OnEpisodeBegin();
     void InitializeActuators();
     void InitializeSensors();
     void ResetData();

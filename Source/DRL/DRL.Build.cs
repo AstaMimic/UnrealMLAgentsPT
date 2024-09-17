@@ -24,6 +24,7 @@ public class DRL: ModuleRules
 				"Json",
 				"CoreUObject",
 				"Engine",
+				"UnrealEd"
 			}
 		);
 

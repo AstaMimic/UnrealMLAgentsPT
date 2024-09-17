@@ -130,10 +130,6 @@ void UAgent::ReloadPolicy() {
     Brain = TScriptInterface<IIPolicy>(PolicyFactory->GeneratePolicy(ActuatorManager->GetCombinedActionSpec(), ActuatorManager));
 }
 
-void UAgent::OnEpisodeBegin()
-{
-    // Initialization logic for actuators
-}
 
 void UAgent::InitializeActuators()
 {
@@ -408,5 +404,6 @@ void UAgent::GetAllChildComponents(TArray<T*>& OutChildComponents)
 void UAgent::Heuristic(FActionBuffers& ActionsOut) {}
 void UAgent::CollectObservations_Implementation(UVectorSensor* Sensor) {}
 void UAgent::Initialize_Implementation() {}
+void UAgent::OnEpisodeBegin_Implementation() {}
 void UAgent::OnActionReceived_Implementation(const FActionBuffers& Actions) {}
 void UAgent::WriteDiscreteActionMask_Implementation(const TScriptInterface<IDiscreteActionMask>& ActionMask) {}

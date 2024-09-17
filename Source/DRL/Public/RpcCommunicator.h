@@ -36,6 +36,9 @@ public:
     // Unreal Engine lifecycle methods
     virtual void PostInitProperties() override;
 
+    // Close the communicator gracefully on both sides of the communication.
+    void Dispose();
+
 private:
     bool bIsOpen;
 

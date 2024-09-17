@@ -43,6 +43,7 @@ public:
 
 	static UDRLAcademy* GetInstance();
 
+	void Dispose(bool bIsSimulating);
 	void Dispose();
 	void EnvironmentStep();
 	bool IsCommunicatorOn();
