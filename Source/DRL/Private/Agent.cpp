@@ -106,8 +106,6 @@ void UAgent::NotifyAgentDone(EDoneReason DoneReason) {
         Brain->RequestDecision(Info, Sensors);
     }
 
-    // TODO: DemonstrationWriters necessary ?
-
     ResetSensors();
 
     if (DoneReason != EDoneReason::Disabled) {
@@ -348,6 +346,7 @@ void UAgent::AgentStep()
     }
     if ((StepCount >= MaxStep) && (MaxStep > 0)) {
         NotifyAgentDone(EDoneReason::MaxStepReached);
+        AgentReset();
     }
 }
 

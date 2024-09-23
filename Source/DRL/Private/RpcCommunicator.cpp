@@ -67,6 +67,7 @@ bool URpcCommunicator::Initialize(const FCommunicatorInitParameters& InitParamet
     }
 
     // UpdateEnvironmentWithInput(Input.rlinitializationinput()); // Implement this if needed
+    SendCommandEvent(Input.rl_input().command());
     InitParametersOut.Seed = InitializationInput.rl_initialization_input().seed();
     InitParametersOut.NumAreas = InitializationInput.rl_initialization_input().num_areas();
     InitParametersOut.PythonLibraryVersion = UTF8_TO_TCHAR(InitializationInput.rl_initialization_input().package_version().c_str());
@@ -274,14 +275,14 @@ void URpcCommunicator::SendBatchedMessageHelper()
 	communicator_objects::UnrealOutputProto Message;
     Message.mutable_rl_output()->CopyFrom(*CurrentUnrealRlOutput);
 
-	communicator_objects::UnrealRLInitializationOutputProto* tempUnityRlInitializationOutput = GetTempUnrealRlInitializationOutput();
+    TSharedPtr<communicator_objects::UnrealRLInitializationOutputProto> tempUnityRlInitializationOutput = GetTempUnrealRlInitializationOutput();
 	if (tempUnityRlInitializationOutput != nullptr)
 	{
-		Message.set_allocated_rl_initialization_output(tempUnityRlInitializationOutput);
+        *Message.mutable_rl_initialization_output() = *tempUnityRlInitializationOutput.Get();
 	}
 
 	communicator_objects::UnrealInputProto Input = Exchange(&Message);
-	UpdateSentActionSpec(tempUnityRlInitializationOutput);
+	UpdateSentActionSpec(tempUnityRlInitializationOutput.Get());
 
 	for (auto& Elem : CurrentUnrealRlOutput->agentinfos())
 	{
@@ -296,7 +297,7 @@ void URpcCommunicator::SendBatchedMessageHelper()
 
     // Get the RlInput field
     const communicator_objects::UnrealRLInputProto& RlInput = Input.rl_input();
- 
+
     // Check if AgentActions is present and not empty
     if (RlInput.agent_actions().empty())
     {
@@ -319,7 +320,7 @@ void URpcCommunicator::SendBatchedMessageHelper()
 		}
 
 		const auto& agentActions = ToAgentActionList(brainName.second);
-        int numAgents = OrderedAgentsRequestingDecisions.Find(brainName.first.c_str())->Num();
+        int numAgents = OrderedAgentsRequestingDecisions.Find(Key)->Num();
 		for (int i = 0; i < numAgents; ++i)
 		{
 			const auto& agentAction = agentActions[i];
@@ -404,8 +405,8 @@ communicator_objects::UnrealInputProto URpcCommunicator::Exchange(const communic
 }
 
 
-communicator_objects::UnrealRLInitializationOutputProto* URpcCommunicator::GetTempUnrealRlInitializationOutput() {
-    communicator_objects::UnrealRLInitializationOutputProto* Output = nullptr;
+TSharedPtr<communicator_objects::UnrealRLInitializationOutputProto> URpcCommunicator::GetTempUnrealRlInitializationOutput() {
+    TSharedPtr<communicator_objects::UnrealRLInitializationOutputProto> Output = nullptr;
     for (const auto& Elem : UnsentBrainKeys) {
 
         FString BehaviorName = Elem.Key;
@@ -414,14 +415,13 @@ communicator_objects::UnrealRLInitializationOutputProto* URpcCommunicator::GetTe
         if (CurrentUnrealRlOutput->agentinfos().contains(TCHAR_TO_UTF8(*BehaviorName))) {
 
             if (CurrentUnrealRlOutput->agentinfos().at(TCHAR_TO_UTF8(*BehaviorName)).value_size() > 0) {
-                if (Output == nullptr) {
-                    Output = new communicator_objects::UnrealRLInitializationOutputProto();
+                if (!Output.IsValid()) { // TUniquePtr uses IsValid() to check for nullptr
+                    Output = MakeShared<communicator_objects::UnrealRLInitializationOutputProto>();
                 }
                 Output->mutable_brain_parameters()->Add(ToBrainParametersProto(ActionSpec, BehaviorName, true));
             }
         }
     }
-
     return Output;
 }
 
@@ -470,24 +470,23 @@ void URpcCommunicator::UpdateSentActionSpec(const communicator_objects::UnrealRL
 void URpcCommunicator::SendCommandEvent(communicator_objects::CommandProto Command) {
     switch (Command)
     {
-    case communicator_objects::RESET: {
-		for (auto& Elem : OrderedAgentsRequestingDecisions)
-		{
-			Elem.Value.Empty();  // Clears the TArray
+		case communicator_objects::RESET: {
+			for (auto& Elem : OrderedAgentsRequestingDecisions)
+			{
+				Elem.Value.Empty();  // Clears the TArray
+			}
+			if (ResetCommandReceived.IsBound())
+			{
+				ResetCommandReceived.Broadcast();
+			}
+            return;
 		}
-
-		// Assuming ResetCommandReceived is a delegate
-		if (ResetCommandReceived.IsBound())
-		{
-			ResetCommandReceived.Broadcast();
+		case communicator_objects::QUIT: {
+			NotifyQuitAndShutDownChannel();
+			return;
 		}
-    }
-    case communicator_objects::QUIT: {
-        NotifyQuitAndShutDownChannel();
-        return;
-    }
-    default:
-        return;
+		default:
+            return;
     }
 }
 
@@ -553,6 +552,6 @@ void URpcCommunicator::Dispose() {
         bIsOpen = false;
     }
     catch (...) {
-        // Catch all exceptions    
+        // Catch all exceptions
     }
 }

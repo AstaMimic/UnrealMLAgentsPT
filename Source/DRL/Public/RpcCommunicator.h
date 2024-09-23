@@ -57,7 +57,7 @@ private:
     void CacheActionSpec(const FString& Name, FActionSpec ActionSpec);
     void SendBatchedMessageHelper();
     communicator_objects::UnrealInputProto Exchange(const communicator_objects::UnrealOutputProto* UnrealOutput);
-    communicator_objects::UnrealRLInitializationOutputProto* GetTempUnrealRlInitializationOutput();
+    TSharedPtr<communicator_objects::UnrealRLInitializationOutputProto> GetTempUnrealRlInitializationOutput();
     void UpdateSentActionSpec(const communicator_objects::UnrealRLInitializationOutputProto* Output);
     void SendCommandEvent(communicator_objects::CommandProto Command);
 

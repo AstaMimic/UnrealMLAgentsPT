@@ -46,6 +46,10 @@ void UDecisionRequester::OnAcademyPreStep(int AcademyStepCount)
 
 void UDecisionRequester::MakeRequests(int AcademyStepCount)
 {
+    if (bStopRequestDecision) {
+        return;
+    }
+
     if (ShouldRequestDecision(AcademyStepCount))
     {
         Agent->RequestDecision();
@@ -59,10 +63,10 @@ void UDecisionRequester::MakeRequests(int AcademyStepCount)
 
 bool UDecisionRequester::ShouldRequestDecision(int AcademyStepCount) const
 {
-    return (AcademyStepCount % DecisionPeriod == DecisionStep) && !bStopRequestDecision;
+    return (AcademyStepCount % DecisionPeriod == DecisionStep);
 }
 
 bool UDecisionRequester::ShouldRequestAction() const
 {
-    return bTakeActionsBetweenDecisions && !bStopRequestDecision;
+    return bTakeActionsBetweenDecisions;
 }
