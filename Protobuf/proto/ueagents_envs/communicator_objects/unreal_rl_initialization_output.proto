@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+import "ueagents_envs/communicator_objects/brain_parameters.proto";
+
+package communicator_objects;
+
+// The request message containing the academy's parameters.
+message UnrealRLInitializationOutputProto {
+    string name = 1;
+
+    // Communication protocol version that the responding side (typically the C# environment) is using.
+    string communication_version = 2;
+
+    string log_path = 3;
+
+    repeated BrainParametersProto brain_parameters = 4;
+
+    // Package/library version that the responding side (typically the C# environment) is using.
+    string package_version = 5;
+}

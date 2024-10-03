@@ -5,7 +5,7 @@
 #include "HeuristicPolicy.h"
 #include "RemotePolicy.h"
 #include "Agent.h"
-#include "DRLAcademy.h"
+#include "Academy.h"
 
 // Sets default values for this component's properties
 UBehaviorParameters::UBehaviorParameters()
@@ -47,7 +47,7 @@ TScriptInterface<IIPolicy> UBehaviorParameters::GeneratePolicy(const FActionSpec
 		case EBehaviorType::HeuristicOnly:
 			return InitializeHeuristicPolicy(ActionSpec, ActuatorManager);
 		case EBehaviorType::Default:
-			if (UDRLAcademy::GetInstance()->IsCommunicatorOn())
+			if (UAcademy::GetInstance()->IsCommunicatorOn())
 			{
 				URemotePolicy* RemotePolicy = NewObject<URemotePolicy>();
 				RemotePolicy->Initialize(ActuatorManager, ActionSpec, GetFullyQualifiedBehaviorName());
@@ -62,7 +62,7 @@ TScriptInterface<IIPolicy> UBehaviorParameters::GeneratePolicy(const FActionSpec
     }
 }
 
-UHeuristicPolicy* UBehaviorParameters::InitializeHeuristicPolicy(const FActionSpec& ActionSpec, UActuatorManager* ActuatorManager) {	
+UHeuristicPolicy* UBehaviorParameters::InitializeHeuristicPolicy(const FActionSpec& ActionSpec, UActuatorManager* ActuatorManager) {
 		UHeuristicPolicy* HeuristicPolicy = NewObject<UHeuristicPolicy>();
 		HeuristicPolicy->Initialize(ActuatorManager, ActionSpec);
 		return HeuristicPolicy;

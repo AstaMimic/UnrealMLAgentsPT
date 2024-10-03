@@ -284,10 +284,6 @@ void URpcCommunicator::SendBatchedMessageHelper()
 	communicator_objects::UnrealInputProto Input = Exchange(&Message);
 	UpdateSentActionSpec(tempUnityRlInitializationOutput.Get());
 
-	for (auto& Elem : CurrentUnrealRlOutput->agentinfos())
-	{
-        Elem.second.value().empty();
-	}
     // Iterate through the agentInfos map
     for (auto& agentInfoPair : *CurrentUnrealRlOutput->mutable_agentinfos())
     {

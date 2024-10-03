@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "ueagents_envs/communicator_objects/unreal_output.proto";
+import "ueagents_envs/communicator_objects/unreal_input.proto";
+import "ueagents_envs/communicator_objects/header.proto";
+
+package communicator_objects;
+
+message UnrealMessageProto {
+    HeaderProto header = 1;
+    UnrealOutputProto unreal_output = 2;
+    UnrealInputProto unreal_input = 3;
+}

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "ueagents_envs/communicator_objects/unreal_message.proto";
+
+package communicator_objects;
+
+service UnrealToExternalProto {
+    // Sends the academy parameters
+    rpc Exchange(UnrealMessageProto) returns (UnrealMessageProto) {}
+}

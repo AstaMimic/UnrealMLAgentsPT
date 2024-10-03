@@ -7,10 +7,10 @@
 #include "CommunicatorInterface.h"
 #include "ObservationWriter.h"
 #include "google/protobuf/repeated_field.h"
-#include "mlagents_envs/communicator_objects/unreal_to_external.grpc.pb.h"
-#include "mlagents_envs/communicator_objects/unreal_rl_output.pb.h"
-#include "mlagents_envs/communicator_objects/unreal_message.pb.h"
-#include "mlagents_envs/communicator_objects/unreal_rl_input.pb.h"
+#include "ueagents_envs/communicator_objects/unreal_to_external.grpc.pb.h"
+#include "ueagents_envs/communicator_objects/unreal_rl_output.pb.h"
+#include "ueagents_envs/communicator_objects/unreal_message.pb.h"
+#include "ueagents_envs/communicator_objects/unreal_rl_input.pb.h"
 #include "RpcCommunicator.generated.h"
 
 /**

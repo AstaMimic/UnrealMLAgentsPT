@@ -1,11 +1,11 @@
 #include "RemotePolicy.h"
-#include "DRLAcademy.h"
+#include "Academy.h"
 
 
 void URemotePolicy::Initialize(UActuatorManager* InActuatorManager, const FActionSpec& InActionSpec, const FString& InFullyQualifiedBehaviorName)
 {
     FullyQualifiedBehaviorName = InFullyQualifiedBehaviorName;
-    Communicator = UDRLAcademy::GetInstance()->RpcCommunicator;
+    Communicator = UAcademy::GetInstance()->RpcCommunicator;
     if (Communicator)
     {
         Communicator->SubscribeBrain(FullyQualifiedBehaviorName, InActionSpec);

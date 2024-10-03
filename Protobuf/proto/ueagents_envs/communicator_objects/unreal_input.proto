@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "ueagents_envs/communicator_objects/unreal_rl_input.proto";
+import "ueagents_envs/communicator_objects/unreal_rl_initialization_input.proto";
+
+package communicator_objects;
+
+message UnrealInputProto {
+    UnrealRLInputProto rl_input = 1;
+    UnrealRLInitializationInputProto rl_initialization_input = 2;
+}
+

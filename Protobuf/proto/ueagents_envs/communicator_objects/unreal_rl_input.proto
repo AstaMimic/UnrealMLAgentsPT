@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "ueagents_envs/communicator_objects/agent_action.proto";
+import "ueagents_envs/communicator_objects/command.proto";
+
+package communicator_objects;
+
+message UnrealRLInputProto {
+    message ListAgentActionProto {
+            repeated AgentActionProto value = 1;
+        }
+    map<string, ListAgentActionProto> agent_actions = 1;
+    CommandProto command = 2;
+    bytes side_channel = 3;
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "ueagents_envs/communicator_objects/agent_info.proto";
+
+package communicator_objects;
+
+message UnrealRLOutputProto {
+    message ListAgentInfoProto {
+        repeated AgentInfoProto value = 1;
+    }
+    map<string, ListAgentInfoProto> agentInfos = 1;
+}

@@ -1,54 +1,54 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "DRLAcademy.h"
+#include "Academy.h"
 #include "Editor/EditorEngine.h"
 #include "Editor.h"
 #include "GenericPlatform/GenericPlatformMisc.h"
 
-UDRLAcademy* UDRLAcademy::Instance = nullptr;
+UAcademy* UAcademy::Instance = nullptr;
 
-UDRLAcademy::UDRLAcademy() {
-    FCoreDelegates::OnExit.AddUObject(this, &UDRLAcademy::Dispose);
+UAcademy::UAcademy() {
+    FCoreDelegates::OnExit.AddUObject(this, &UAcademy::Dispose);
     StepRecursionChecker->Initialize("EnvironmentStep");
 #if WITH_EDITOR
-    FEditorDelegates::EndPIE.AddUObject(this, &UDRLAcademy::Dispose);
+    FEditorDelegates::EndPIE.AddUObject(this, &UAcademy::Dispose);
 #endif
 }
 
 // Make the Academy Tick
-bool UDRLAcademy::IsTickable() const {
+bool UAcademy::IsTickable() const {
     return true;
 }
 
-void UDRLAcademy::Tick(float DeltaTime) {
+void UAcademy::Tick(float DeltaTime) {
     EnvironmentStep();
 }
 
-TStatId UDRLAcademy::GetStatId() const
+TStatId UAcademy::GetStatId() const
 {
     RETURN_QUICK_DECLARE_CYCLE_STAT(ThisClassName, STATGROUP_Tickables);
 }
 
-UDRLAcademy* UDRLAcademy::GetInstance()
+UAcademy* UAcademy::GetInstance()
 {
     if (!Instance)
     {
-        Instance = NewObject<UDRLAcademy>();
-        Instance->AddToRoot(); 
+        Instance = NewObject<UAcademy>();
+        Instance->AddToRoot();
         Instance->LazyInitialize();
     }
     return Instance;
 }
 
-void UDRLAcademy::LazyInitialize() {
+void UAcademy::LazyInitialize() {
     if (!bInitialized) {
         InitializeEnvironment();
         bInitialized = true;
     }
 }
 
-void UDRLAcademy::ParseCommandLineArgs() {
+void UAcademy::ParseCommandLineArgs() {
 
     FString PortString;
     if (FParse::Value(FCommandLine::Get(), TEXT("mlAgentPort="), PortString))
@@ -62,7 +62,7 @@ void UDRLAcademy::ParseCommandLineArgs() {
     }
 }
 
-void UDRLAcademy::InitializeEnvironment() {
+void UAcademy::InitializeEnvironment() {
     UE_LOG(LogTemp, Log, TEXT("Initialize Environement"));
 
     bEnableStepping = true;
@@ -99,12 +99,12 @@ void UDRLAcademy::InitializeEnvironment() {
         {
             UE_LOG(LogTemp, Error, TEXT("Unexpected exception when trying to initialize communication: %s\nWill perform inference instead."), UTF8_TO_TCHAR(Ex.what()));
             RpcCommunicator = nullptr;
-        }     
+        }
     }
 
     if (RpcCommunicator != nullptr) {
-        RpcCommunicator->OnQuitCommandReceived().AddDynamic(this, &UDRLAcademy::OnQuitCommandReceived);
-        RpcCommunicator->OnResetCommandReceived().AddDynamic(this, &UDRLAcademy::OnResetCommand);
+        RpcCommunicator->OnQuitCommandReceived().AddDynamic(this, &UAcademy::OnQuitCommandReceived);
+        RpcCommunicator->OnResetCommandReceived().AddDynamic(this, &UAcademy::OnResetCommand);
     }
 
 	// If a communicator is enabled/provided, then we assume we are in
@@ -114,7 +114,7 @@ void UDRLAcademy::InitializeEnvironment() {
 	ResetActions();
 }
 
-void UDRLAcademy::EnvironmentStep() {
+void UAcademy::EnvironmentStep() {
 
     // TODO: Recursion check
 
@@ -153,19 +153,19 @@ void UDRLAcademy::EnvironmentStep() {
 
 }
 
-void UDRLAcademy::OnQuitCommandReceived() {
+void UAcademy::OnQuitCommandReceived() {
     FGenericPlatformMisc::RequestExit(false);
 }
 
-void UDRLAcademy::OnResetCommand() {
+void UAcademy::OnResetCommand() {
     ForcedFullReset();
 }
 
-void UDRLAcademy::Dispose() {
+void UAcademy::Dispose() {
     Dispose(false);
 }
 
-void UDRLAcademy::Dispose(bool bIsSimulating) {
+void UAcademy::Dispose(bool bIsSimulating) {
 
     // Signal to listeners that the academy is being destroyed now
     if (OnDestroyAction.IsBound()) {
@@ -185,7 +185,7 @@ void UDRLAcademy::Dispose(bool bIsSimulating) {
     Instance = nullptr;
 }
 
-void UDRLAcademy::ForcedFullReset() {
+void UAcademy::ForcedFullReset() {
     EnvironmentReset();
     if (OnAgentForceReset.IsBound()) {
         OnAgentForceReset.Broadcast();
@@ -193,7 +193,7 @@ void UDRLAcademy::ForcedFullReset() {
     bHadFirstReset = true;
 }
 
-void UDRLAcademy::EnvironmentReset() {
+void UAcademy::EnvironmentReset() {
     StepCount = 0;
     EpisodeCount++;
     if (OnEnvironmentReset.IsBound()) {
@@ -201,16 +201,16 @@ void UDRLAcademy::EnvironmentReset() {
     }
 }
 
-void UDRLAcademy::ResetActions() {
+void UAcademy::ResetActions() {
     OnDecideAction.Clear();
     OnDestroyAction.Clear();
     OnAgentPreStep.Clear();
     OnAgentSendState.Clear();
     OnAgentAct.Clear();
     OnAgentForceReset.Clear();
-    OnEnvironmentReset.Clear(); 
+    OnEnvironmentReset.Clear();
 }
 
-bool UDRLAcademy::IsCommunicatorOn() {
+bool UAcademy::IsCommunicatorOn() {
     return RpcCommunicator != nullptr;
 }

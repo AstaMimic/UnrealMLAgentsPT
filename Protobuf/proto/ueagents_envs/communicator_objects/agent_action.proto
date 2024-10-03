@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package communicator_objects;
+
+message AgentActionProto {
+    float value = 1;
+    repeated float continuous_actions = 2;
+    repeated int32 discrete_actions = 3;
+}

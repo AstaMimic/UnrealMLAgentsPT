@@ -1,6 +1,6 @@
 #include "DecisionRequester.h"
 #include "Agent.h"
-#include "DRLAcademy.h"
+#include "Academy.h"
 
 UDecisionRequester::UDecisionRequester()
 {
@@ -16,14 +16,14 @@ void UDecisionRequester::BeginPlay()
     Agent = GetOwner()->GetComponentByClass<UAgent>();
     check(Agent); // Ensure the Agent component is attached
 
-    UDRLAcademy::GetInstance()->OnAgentPreStep.AddDynamic(this, &UDecisionRequester::OnAcademyPreStep);
+    UAcademy::GetInstance()->OnAgentPreStep.AddDynamic(this, &UDecisionRequester::OnAcademyPreStep);
 }
 
 void UDecisionRequester::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-    if (UDRLAcademy::GetInstance()->bIsInitialized)
+    if (UAcademy::GetInstance()->bIsInitialized)
     {
-        UDRLAcademy::GetInstance()->OnAgentPreStep.RemoveDynamic(this, &UDecisionRequester::OnAcademyPreStep);
+        UAcademy::GetInstance()->OnAgentPreStep.RemoveDynamic(this, &UDecisionRequester::OnAcademyPreStep);
     }
 
     Super::EndPlay(EndPlayReason);
@@ -31,9 +31,9 @@ void UDecisionRequester::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void UDecisionRequester::OnComponentDestroyed(bool bDestroyingHierarchy)
 {
-    if (UDRLAcademy::GetInstance()->bIsInitialized)
+    if (UAcademy::GetInstance()->bIsInitialized)
     {
-        UDRLAcademy::GetInstance()->OnAgentPreStep.RemoveDynamic(this, &UDecisionRequester::OnAcademyPreStep);
+        UAcademy::GetInstance()->OnAgentPreStep.RemoveDynamic(this, &UDecisionRequester::OnAcademyPreStep);
     }
 
     Super::OnComponentDestroyed(bDestroyingHierarchy);

@@ -2,7 +2,7 @@
 
 
 #include "Agent.h"
-#include "DRLAcademy.h"
+#include "Academy.h"
 #include "ISensor.h"
 #include "VectorSensor.h"
 #include "SensorComponent.h"
@@ -47,7 +47,7 @@ void UAgent::LazyInitialize()
     Info = FAgentInfo();
     Sensors = TArray<TScriptInterface<IISensor>>();
 
-    UDRLAcademy* Academy = UDRLAcademy::GetInstance();
+    UAcademy* Academy = UAcademy::GetInstance();
     Academy->OnAgentIncrementStep.AddDynamic(this, &UAgent::AgentIncrementStep);
     Academy->OnAgentSendState.AddDynamic(this, &UAgent::SendInfo);
     Academy->OnDecideAction.AddDynamic(this, &UAgent::DecideAction);
@@ -103,6 +103,7 @@ void UAgent::NotifyAgentDone(EDoneReason DoneReason) {
 	// Request the last decision with no callbacks
 	// We request a decision so Python knows the Agent is done immediately
     if (Brain) {
+        UE_LOG(LogTemp, Log, TEXT("Request from NotifyAgentDone"));
         Brain->RequestDecision(Info, Sensors);
     }
 
@@ -261,6 +262,7 @@ void UAgent::SendInfoToBrain() {
     Info.EpisodeId = EpisodeId;
     Info.GroupId = GroupId;
 
+    UE_LOG(LogTemp, Log, TEXT("Request from SendInfoToBrain"));
     Brain->RequestDecision(Info, Sensors);
 
 }
@@ -360,6 +362,7 @@ void UAgent::DecideAction()
     FActionBuffers Actions;
     if (Brain)
     {
+        UE_LOG(LogTemp, Log, TEXT("Request from DecideAction"));
         Actions = Brain->DecideAction();
     }
     else
