@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "BehaviorParameters.h"
 #include "HeuristicPolicy.h"
 #include "RemotePolicy.h"
@@ -13,7 +12,6 @@ UBehaviorParameters::UBehaviorParameters()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-
 // Called when the game starts
 void UBehaviorParameters::BeginPlay()
 {
@@ -25,7 +23,7 @@ void UBehaviorParameters::UpdateAgentPolicy()
 	UAgent* Agent = Cast<UAgent>(GetOwner()->GetComponentByClass(UAgent::StaticClass()));
 	if (Agent == nullptr)
 	{
-       return;
+		return;
 	}
 	Agent->ReloadPolicy();
 	OnPolicyUpdated.Broadcast(IsInHeuristicMode());
@@ -33,17 +31,17 @@ void UBehaviorParameters::UpdateAgentPolicy()
 
 bool UBehaviorParameters::IsInHeuristicMode()
 {
-    if (BehaviorType == EBehaviorType::HeuristicOnly)
-    {
-        return true;
-    }
-    return false;
+	if (BehaviorType == EBehaviorType::HeuristicOnly)
+	{
+		return true;
+	}
+	return false;
 }
 
 TScriptInterface<IIPolicy> UBehaviorParameters::GeneratePolicy(const FActionSpec& ActionSpec, UActuatorManager* ActuatorManager)
 {
-    switch (BehaviorType)
-    {
+	switch (BehaviorType)
+	{
 		case EBehaviorType::HeuristicOnly:
 			return InitializeHeuristicPolicy(ActionSpec, ActuatorManager);
 		case EBehaviorType::Default:
@@ -59,16 +57,18 @@ TScriptInterface<IIPolicy> UBehaviorParameters::GeneratePolicy(const FActionSpec
 			}
 		default:
 			return InitializeHeuristicPolicy(ActionSpec, ActuatorManager);
-    }
+	}
 }
 
-UHeuristicPolicy* UBehaviorParameters::InitializeHeuristicPolicy(const FActionSpec& ActionSpec, UActuatorManager* ActuatorManager) {
-		UHeuristicPolicy* HeuristicPolicy = NewObject<UHeuristicPolicy>();
-		HeuristicPolicy->Initialize(ActuatorManager, ActionSpec);
-		return HeuristicPolicy;
+UHeuristicPolicy* UBehaviorParameters::InitializeHeuristicPolicy(const FActionSpec& ActionSpec, UActuatorManager* ActuatorManager)
+{
+	UHeuristicPolicy* HeuristicPolicy = NewObject<UHeuristicPolicy>();
+	HeuristicPolicy->Initialize(ActuatorManager, ActionSpec);
+	return HeuristicPolicy;
 }
 
-FString UBehaviorParameters::GetFullyQualifiedBehaviorName() {
+FString UBehaviorParameters::GetFullyQualifiedBehaviorName()
+{
 	FString QualifiedName = BehaviorName + "?team=" + FString::FromInt(TeamId);
 	return QualifiedName;
 }

@@ -4,69 +4,70 @@
 
 UDecisionRequester::UDecisionRequester()
 {
-    PrimaryComponentTick.bCanEverTick = false; // Disable tick as we hook into Academy's step event
+	PrimaryComponentTick.bCanEverTick = false; // Disable tick as we hook into Academy's step event
 }
 
 void UDecisionRequester::BeginPlay()
 {
-    Super::BeginPlay();
+	Super::BeginPlay();
 
-    check(DecisionStep < DecisionPeriod);
+	check(DecisionStep < DecisionPeriod);
 
-    Agent = GetOwner()->GetComponentByClass<UAgent>();
-    check(Agent); // Ensure the Agent component is attached
+	Agent = GetOwner()->GetComponentByClass<UAgent>();
+	check(Agent); // Ensure the Agent component is attached
 
-    UAcademy::GetInstance()->OnAgentPreStep.AddDynamic(this, &UDecisionRequester::OnAcademyPreStep);
+	UAcademy::GetInstance()->OnAgentPreStep.AddDynamic(this, &UDecisionRequester::OnAcademyPreStep);
 }
 
 void UDecisionRequester::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-    if (UAcademy::GetInstance()->bIsInitialized)
-    {
-        UAcademy::GetInstance()->OnAgentPreStep.RemoveDynamic(this, &UDecisionRequester::OnAcademyPreStep);
-    }
+	if (UAcademy::GetInstance()->bIsInitialized)
+	{
+		UAcademy::GetInstance()->OnAgentPreStep.RemoveDynamic(this, &UDecisionRequester::OnAcademyPreStep);
+	}
 
-    Super::EndPlay(EndPlayReason);
+	Super::EndPlay(EndPlayReason);
 }
 
 void UDecisionRequester::OnComponentDestroyed(bool bDestroyingHierarchy)
 {
-    if (UAcademy::GetInstance()->bIsInitialized)
-    {
-        UAcademy::GetInstance()->OnAgentPreStep.RemoveDynamic(this, &UDecisionRequester::OnAcademyPreStep);
-    }
+	if (UAcademy::GetInstance()->bIsInitialized)
+	{
+		UAcademy::GetInstance()->OnAgentPreStep.RemoveDynamic(this, &UDecisionRequester::OnAcademyPreStep);
+	}
 
-    Super::OnComponentDestroyed(bDestroyingHierarchy);
+	Super::OnComponentDestroyed(bDestroyingHierarchy);
 }
 
 void UDecisionRequester::OnAcademyPreStep(int AcademyStepCount)
 {
-    MakeRequests(AcademyStepCount);
+	MakeRequests(AcademyStepCount);
 }
 
 void UDecisionRequester::MakeRequests(int AcademyStepCount)
 {
-    if (bStopRequestDecision) {
-        return;
-    }
+	if (bStopRequestDecision)
+	{
+		return;
+	}
 
-    if (ShouldRequestDecision(AcademyStepCount))
-    {
-        Agent->RequestDecision();
-    }
+	if (ShouldRequestDecision(AcademyStepCount))
+	{
+		Agent->RequestDecision();
+	}
 
-    if (ShouldRequestAction())
-    {
-        Agent->RequestAction();
-    }
+	if (ShouldRequestAction())
+	{
+		Agent->RequestAction();
+	}
 }
 
 bool UDecisionRequester::ShouldRequestDecision(int AcademyStepCount) const
 {
-    return (AcademyStepCount % DecisionPeriod == DecisionStep);
+	return (AcademyStepCount % DecisionPeriod == DecisionStep);
 }
 
 bool UDecisionRequester::ShouldRequestAction() const
 {
-    return bTakeActionsBetweenDecisions;
+	return bTakeActionsBetweenDecisions;
 }

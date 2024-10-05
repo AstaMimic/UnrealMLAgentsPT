@@ -6,18 +6,18 @@
 UCLASS()
 class DRL_API URecursionChecker : public UObject
 {
-    GENERATED_BODY()
+	GENERATED_BODY()
 
 private:
-    bool bIsRunning;
-    FString MethodName;
+	bool	bIsRunning;
+	FString MethodName;
 
 public:
-    void Initialize(FString InMethodName);
+	void Initialize(FString InMethodName);
 
-    // Starts the recursion check
-    bool Start();
+	// Starts the recursion check
+	bool Start();
 
-    // Resets the flag
-    void Dispose();
+	// Resets the flag
+	void Dispose();
 };

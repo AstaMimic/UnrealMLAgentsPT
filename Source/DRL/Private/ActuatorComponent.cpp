@@ -2,17 +2,17 @@
 
 UActuatorComponent::UActuatorComponent()
 {
-    PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 TArray<TScriptInterface<IActuator>> UActuatorComponent::CreateActuators_Implementation()
 {
-    // This should be implemented in the derived classes.
-    return TArray<TScriptInterface<IActuator>>();
+	// This should be implemented in the derived classes.
+	return TArray<TScriptInterface<IActuator>>();
 }
 
 FActionSpec UActuatorComponent::GetActionSpec_Implementation() const
 {
-    // This should be implemented in the derived classes.
-    return FActionSpec();
+	// This should be implemented in the derived classes.
+	return FActionSpec();
 }

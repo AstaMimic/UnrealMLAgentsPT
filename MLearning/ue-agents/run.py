@@ -104,7 +104,7 @@ config = (
             "episode_horizon": args.horizon,
         },
     )
-    .framework("tf")
+    .framework("torch")
     # For running in editor, force to use just one Worker (we only have
     # one Unity running)!
     .env_runners(
