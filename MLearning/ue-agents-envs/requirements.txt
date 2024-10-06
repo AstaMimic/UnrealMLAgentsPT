@@ -1,0 +1,5 @@
+gymnasium==0.28.1
+numpy<1.24.0,>=1.23.5
+
+# Install protobuf and grpcio
+-r ../Protobuf/requirements.txt

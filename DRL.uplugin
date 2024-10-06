@@ -19,11 +19,6 @@
 			"name": "DRL",
 			"type": "Runtime",
 			"loadingphase": "Default"
-		},
-		{
-			"name": "Communicator",
-			"type": "Runtime",
-			"loadingphase": "PreDefault"
 		}
 	]
 }

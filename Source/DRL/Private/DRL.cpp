@@ -2,5 +2,4 @@
 
 #include "DRL.h"
 
-	
 IMPLEMENT_MODULE(FDefaultGameModuleImpl, DRL)

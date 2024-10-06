@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "ueagents_envs/communicator_objects/agent_info.proto";
+import "ueagents_envs/communicator_objects/agent_action.proto";
+
+package communicator_objects;
+
+message AgentInfoActionPairProto {
+    AgentInfoProto agent_info = 1;
+    AgentActionProto action_info = 2;
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+import "ueagents_envs/communicator_objects/observation.proto";
+
+package communicator_objects;
+
+message AgentInfoProto {
+    float reward = 1;
+    bool done = 2;
+    bool max_step_reached = 3;
+    int32 id = 4;
+    repeated bool action_mask = 5;
+    repeated ObservationProto observations = 6;
+    int32 group_id = 7;
+    float group_reward = 8;
+}
