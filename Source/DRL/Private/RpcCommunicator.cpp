@@ -178,9 +178,15 @@ bool URpcCommunicator::CheckCommunicationVersionAreCompatible(const FString& Unr
 
 void URpcCommunicator::NotifyQuitAndShutDownChannel()
 {
-	Channel.reset();
-	Stub.reset();
 	QuitCommandReceived.Broadcast();
+	try
+	{	
+		Channel.reset();
+	}
+	catch (...)
+	{
+		// Catch all exceptions
+	}
 }
 
 FQuitCommandHandler& URpcCommunicator::OnQuitCommandReceived()

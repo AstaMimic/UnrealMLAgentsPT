@@ -101,9 +101,6 @@ public:
 	 */
 	virtual TStatId GetStatId() const override;
 
-	/// Whether the Academy has been initialized.
-	bool bIsInitialized = false;
-
 	/// Total number of steps taken in the simulation since the Academy started.
 	int32 TotalStepCount;
 
@@ -153,6 +150,15 @@ public:
 	 * This method processes a single simulation step, updating the environment and triggering agent actions.
 	 */
 	void EnvironmentStep();
+
+	/**
+	 * @brief Whether the Academy has been initialized
+	 *
+	 * This method return True if the Academy has been well initialized.
+	 */
+	static bool IsInitialized() {
+		return Instance != nullptr;
+	}
 
 	/**
 	 * @brief Checks if the communicator is currently active.

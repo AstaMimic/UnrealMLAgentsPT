@@ -21,7 +21,7 @@ void UDecisionRequester::BeginPlay()
 
 void UDecisionRequester::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	if (UAcademy::GetInstance()->bIsInitialized)
+	if (UAcademy::IsInitialized())
 	{
 		UAcademy::GetInstance()->OnAgentPreStep.RemoveDynamic(this, &UDecisionRequester::OnAcademyPreStep);
 	}
@@ -31,7 +31,7 @@ void UDecisionRequester::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void UDecisionRequester::OnComponentDestroyed(bool bDestroyingHierarchy)
 {
-	if (UAcademy::GetInstance()->bIsInitialized)
+	if (UAcademy::IsInitialized())
 	{
 		UAcademy::GetInstance()->OnAgentPreStep.RemoveDynamic(this, &UDecisionRequester::OnAcademyPreStep);
 	}
