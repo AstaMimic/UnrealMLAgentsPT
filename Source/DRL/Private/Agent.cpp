@@ -102,7 +102,6 @@ void UAgent::NotifyAgentDone(EDoneReason DoneReason)
 	// We request a decision so Python knows the Agent is done immediately
 	if (Brain)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Request from NotifyAgentDone"));
 		Brain->RequestDecision(Info, Sensors);
 	}
 
@@ -269,7 +268,6 @@ void UAgent::SendInfoToBrain()
 	Info.EpisodeId = EpisodeId;
 	Info.GroupId = GroupId;
 
-	UE_LOG(LogTemp, Log, TEXT("Request from SendInfoToBrain"));
 	Brain->RequestDecision(Info, Sensors);
 }
 
@@ -382,7 +380,6 @@ void UAgent::DecideAction()
 	FActionBuffers Actions;
 	if (Brain)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Request from DecideAction"));
 		Actions = Brain->DecideAction();
 	}
 	else
