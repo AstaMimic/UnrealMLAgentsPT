@@ -2,7 +2,7 @@
 # Then un-comment and replace [DIRECTORY] with location of files.
 # For example, on macOS, you might have something like:
 # COMPILER=Grpc.Tools.1.14.1/tools/macosx_x64
-COMPILER=Grpc.Tools.1.14.1/tools/windows_x64
+COMPILER=../Source/ThirdParty/protobuf/bin
 
 SRC_DIR=proto/ueagents_envs/communicator_objects
 DST_DIR_C=../Source/DRL/Grpc
@@ -24,7 +24,7 @@ $COMPILER/protoc.exe --proto_path=proto --python_out=$DST_DIR_P $SRC_DIR/*.proto
 
 GRPC=unreal_to_external.proto
 
-$COMPILER/protoc.exe --proto_path=proto --cpp_out=$DST_DIR_C --grpc_out=$DST_DIR_C $SRC_DIR/$GRPC --plugin=protoc-gen-grpc=$COMPILER/grpc_cpp_plugin.exe
+$COMPILER/protoc.exe --proto_path=proto --cpp_out=$DST_DIR_C --grpc_out=$DST_DIR_C $SRC_DIR/$GRPC --plugin=protoc-gen-grpc=$COMPILER/../../grpc/bin/grpc_cpp_plugin.exe
 python -m grpc_tools.protoc --proto_path=proto --python_out=$DST_DIR_P --grpc_python_out=$DST_DIR_P $SRC_DIR/$GRPC
 
 
@@ -44,3 +44,4 @@ touch $DST_DIR_P/$PYTHON_PACKAGE/__init__.py
 # Add disable warning C4800 introduced by gRPC
 sed -i '/^\s\+_impl_\.is_training_.*/i \ \ \ \ \ \ \ \ \ \ #pragma warning(disable: 4800)' $DST_DIR_C/$PYTHON_PACKAGE/brain_parameters.pb.cc
 sed -i '/^\s\+_impl_\.done_.*/i \ \ \ \ \ \ \ \ \ \ #pragma warning(disable: 4800)' $DST_DIR_C/$PYTHON_PACKAGE/agent_info.pb.cc
+sed -i '/^\s\+_impl_\.extrinsic_reward_enabled_.*/i \ \ \ \ \ \ \ \ \ \ #pragma warning(disable: 4800)' $DST_DIR_C/$PYTHON_PACKAGE/training_analytics.pb.cc

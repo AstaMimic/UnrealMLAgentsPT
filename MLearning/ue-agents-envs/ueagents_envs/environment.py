@@ -39,6 +39,9 @@ from ueagents_envs.communicator_objects.unreal_rl_initialization_input_pb2 impor
 )
 from ueagents_envs.communicator_objects.unreal_input_pb2 import UnrealInputProto
 from ueagents_envs.communicator import RpcCommunicator
+from ueagents_envs.side_channel.side_channel import SideChannel
+from ueagents_envs.side_channel import DefaultTrainingAnalyticsSideChannel
+from ueagents_envs.side_channel.side_channel_manager import SideChannelManager
 
 logger = get_logger(__name__)
 
@@ -74,6 +77,7 @@ class UnrealEnvironment(BaseEnv):
         no_graphics_monitor: bool = False,
         timeout_wait: int = 60,
         additional_args: Optional[List[str]] = None,
+        side_channels: Optional[List[SideChannel]] = None,
         log_folder: Optional[str] = None,
         num_areas: int = 1,
     ):
@@ -109,6 +113,17 @@ class UnrealEnvironment(BaseEnv):
         self._timeout_wait: int = timeout_wait
         self._communicator = self._get_communicator(worker_id, base_port, timeout_wait)
         self._worker_id = worker_id
+        if side_channels is None:
+            side_channels = []
+        default_training_side_channel: Optional[
+            DefaultTrainingAnalyticsSideChannel
+        ] = None
+        if DefaultTrainingAnalyticsSideChannel.CHANNEL_ID not in [
+            _.channel_id for _ in side_channels
+        ]:
+            default_training_side_channel = DefaultTrainingAnalyticsSideChannel()
+            side_channels.append(default_training_side_channel)
+        self._side_channel_manager = SideChannelManager(side_channels)
         self._log_folder = log_folder
 
         # If the environment name is None, a new environment will not be launched
@@ -160,6 +175,8 @@ class UnrealEnvironment(BaseEnv):
         self._env_actions: Dict[str, ActionTuple] = {}
         self._is_first_message = True
         self._update_behavior_specs(aca_output)
+        if default_training_side_channel is not None:
+            default_training_side_channel.environment_initialized()
 
     @staticmethod
     def _raise_version_exception(unreal_com_ver: str) -> None:
@@ -236,6 +253,7 @@ class UnrealEnvironment(BaseEnv):
                     DecisionSteps.empty(self._env_specs[brain_name]),
                     TerminalSteps.empty(self._env_specs[brain_name]),
                 )
+        self._side_channel_manager.process_side_channel_message(output.side_channel)
 
     def reset(self) -> None:
         if self._loaded:
@@ -386,11 +404,17 @@ class UnrealEnvironment(BaseEnv):
                     action.discrete_actions.extend(vector_action[b].discrete[i])
                 rl_in.agent_actions[b].value.extend([action])
                 rl_in.command = STEP
+        rl_in.side_channel = bytes(
+            self._side_channel_manager.generate_side_channel_messages()
+        )
         return self._wrap_unreal_input(rl_in)
 
     def _generate_reset_input(self) -> UnrealInputProto:
         rl_in = UnrealRLInputProto()
         rl_in.command = RESET
+        rl_in.side_channel = bytes(
+            self._side_channel_manager.generate_side_channel_messages()
+        )
         return self._wrap_unreal_input(rl_in)
 
     def _send_academy_parameters(

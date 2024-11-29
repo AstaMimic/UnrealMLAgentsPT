@@ -9,4 +9,5 @@ message UnrealRLOutputProto {
         repeated AgentInfoProto value = 1;
     }
     map<string, ListAgentInfoProto> agentInfos = 1;
+    bytes side_channel = 2;
 }

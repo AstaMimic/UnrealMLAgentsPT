@@ -4,7 +4,8 @@ from ueagents_envs.base_env import (
     BehaviorSpec,
     DecisionSteps,
     TerminalSteps,
-    DimensionProperty
+    DimensionProperty,
+    ObservationType
 )
 from ueagents_envs.communicator_objects.agent_info_pb2 import AgentInfoProto
 from ueagents_envs.communicator_objects.brain_parameters_pb2 import BrainParametersProto
@@ -30,6 +31,7 @@ def behavior_spec_from_proto(
             ObservationSpec(
                 name=obs.name,
                 shape=tuple(obs.shape),
+                observation_type=ObservationType(ObservationType.DEFAULT),
                 dimension_property=tuple(
                     DimensionProperty(dim) for dim in obs.dimension_properties
                 )

@@ -2,4 +2,6 @@ gymnasium==0.28.1
 numpy<1.24.0,>=1.23.5
 
 # Install protobuf and grpcio
--r ../Protobuf/requirements.txt
+grpcio==1.66.2
+protobuf==3.20.3
+grpcio-tools==1.46

@@ -51,6 +51,10 @@ template <typename>
 PROTOBUF_CONSTEXPR UnrealRLOutputProto::UnrealRLOutputProto(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.agentinfos_)*/{}
+  , /*decltype(_impl_.side_channel_)*/ {
+    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
+  }
+
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct UnrealRLOutputProtoDefaultTypeInternal {
   PROTOBUF_CONSTEXPR UnrealRLOutputProtoDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
@@ -100,6 +104,7 @@ const ::uint32_t TableStruct_ueagents_5fenvs_2fcommunicator_5fobjects_2funreal_5
     ~0u,  // no _split_
     ~0u,  // no sizeof(Split)
     PROTOBUF_FIELD_OFFSET(::communicator_objects::UnrealRLOutputProto, _impl_.agentinfos_),
+    PROTOBUF_FIELD_OFFSET(::communicator_objects::UnrealRLOutputProto, _impl_.side_channel_),
 };
 
 static const ::_pbi::MigrationSchema
@@ -118,14 +123,15 @@ const char descriptor_table_protodef_ueagents_5fenvs_2fcommunicator_5fobjects_2f
     "\n9ueagents_envs/communicator_objects/unr"
     "eal_rl_output.proto\022\024communicator_object"
     "s\0323ueagents_envs/communicator_objects/ag"
-    "ent_info.proto\"\240\002\n\023UnrealRLOutputProto\022M"
+    "ent_info.proto\"\266\002\n\023UnrealRLOutputProto\022M"
     "\n\nagentInfos\030\001 \003(\01329.communicator_object"
-    "s.UnrealRLOutputProto.AgentInfosEntry\032I\n"
-    "\022ListAgentInfoProto\0223\n\005value\030\001 \003(\0132$.com"
-    "municator_objects.AgentInfoProto\032o\n\017Agen"
-    "tInfosEntry\022\013\n\003key\030\001 \001(\t\022K\n\005value\030\002 \001(\0132"
-    "<.communicator_objects.UnrealRLOutputPro"
-    "to.ListAgentInfoProto:\0028\001b\006proto3"
+    "s.UnrealRLOutputProto.AgentInfosEntry\022\024\n"
+    "\014side_channel\030\002 \001(\014\032I\n\022ListAgentInfoProt"
+    "o\0223\n\005value\030\001 \003(\0132$.communicator_objects."
+    "AgentInfoProto\032o\n\017AgentInfosEntry\022\013\n\003key"
+    "\030\001 \001(\t\022K\n\005value\030\002 \001(\0132<.communicator_obj"
+    "ects.UnrealRLOutputProto.ListAgentInfoPr"
+    "oto:\0028\001b\006proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_ueagents_5fenvs_2fcommunicator_5fobjects_2funreal_5frl_5foutput_2eproto_deps[1] =
     {
@@ -135,7 +141,7 @@ static ::absl::once_flag descriptor_table_ueagents_5fenvs_2fcommunicator_5fobjec
 const ::_pbi::DescriptorTable descriptor_table_ueagents_5fenvs_2fcommunicator_5fobjects_2funreal_5frl_5foutput_2eproto = {
     false,
     false,
-    433,
+    455,
     descriptor_table_protodef_ueagents_5fenvs_2fcommunicator_5fobjects_2funreal_5frl_5foutput_2eproto,
     "ueagents_envs/communicator_objects/unreal_rl_output.proto",
     &descriptor_table_ueagents_5fenvs_2fcommunicator_5fobjects_2funreal_5frl_5foutput_2eproto_once,
@@ -382,10 +388,19 @@ UnrealRLOutputProto::UnrealRLOutputProto(const UnrealRLOutputProto& from)
   UnrealRLOutputProto* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       /*decltype(_impl_.agentinfos_)*/{}
+    , decltype(_impl_.side_channel_) {}
+
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   _this->_impl_.agentinfos_.MergeFrom(from._impl_.agentinfos_);
+  _impl_.side_channel_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.side_channel_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_side_channel().empty()) {
+    _this->_impl_.side_channel_.Set(from._internal_side_channel(), _this->GetArenaForAllocation());
+  }
   // @@protoc_insertion_point(copy_constructor:communicator_objects.UnrealRLOutputProto)
 }
 
@@ -393,8 +408,14 @@ inline void UnrealRLOutputProto::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
       /*decltype(_impl_.agentinfos_)*/{::_pbi::ArenaInitialized(), arena}
+    , decltype(_impl_.side_channel_) {}
+
     , /*decltype(_impl_._cached_size_)*/{}
   };
+  _impl_.side_channel_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.side_channel_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 UnrealRLOutputProto::~UnrealRLOutputProto() {
@@ -409,6 +430,7 @@ UnrealRLOutputProto::~UnrealRLOutputProto() {
 inline void UnrealRLOutputProto::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.agentinfos_.~MapField();
+  _impl_.side_channel_.Destroy();
 }
 
 void UnrealRLOutputProto::SetCachedSize(int size) const {
@@ -422,6 +444,7 @@ void UnrealRLOutputProto::Clear() {
   (void) cached_has_bits;
 
   _impl_.agentinfos_.Clear();
+  _impl_.side_channel_.ClearToEmpty();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -441,6 +464,16 @@ const char* UnrealRLOutputProto::_InternalParse(const char* ptr, ::_pbi::ParseCo
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else {
+          goto handle_unusual;
+        }
+        continue;
+      // bytes side_channel = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_side_channel();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
         } else {
           goto handle_unusual;
         }
@@ -499,6 +532,12 @@ failure:
     }
   }
 
+  // bytes side_channel = 2;
+  if (!this->_internal_side_channel().empty()) {
+    const std::string& _s = this->_internal_side_channel();
+    target = stream->WriteBytesMaybeAliased(2, _s, target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -524,6 +563,12 @@ failure:
     total_size += UnrealRLOutputProto_AgentInfosEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
   }
 
+  // bytes side_channel = 2;
+  if (!this->_internal_side_channel().empty()) {
+    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+                                    this->_internal_side_channel());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -543,6 +588,9 @@ void UnrealRLOutputProto::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, co
   (void) cached_has_bits;
 
   _this->_impl_.agentinfos_.MergeFrom(from._impl_.agentinfos_);
+  if (!from._internal_side_channel().empty()) {
+    _this->_internal_set_side_channel(from._internal_side_channel());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -559,8 +607,12 @@ bool UnrealRLOutputProto::IsInitialized() const {
 
 void UnrealRLOutputProto::InternalSwap(UnrealRLOutputProto* other) {
   using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.agentinfos_.InternalSwap(&other->_impl_.agentinfos_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.side_channel_, lhs_arena,
+                                       &other->_impl_.side_channel_, rhs_arena);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata UnrealRLOutputProto::GetMetadata() const {

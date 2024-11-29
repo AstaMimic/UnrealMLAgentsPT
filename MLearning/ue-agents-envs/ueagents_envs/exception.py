@@ -32,6 +32,11 @@ class UnrealEnvironmentException(UnrealException):
     """
 
 
+class UnrealCommunicationException(UnrealException):
+    """
+    Related to errors with the communicator.
+    """
+
 class UnrealCommunicatorStoppedException(UnrealException):
     """
     Raised when communicator has stopped gracefully.
@@ -47,4 +52,9 @@ class UnrealActionException(UnrealException):
 class UnrealObservationException(UnrealException):
     """
     Related to errors with receiving observations.
+    """
+
+class UnrealPolicyException(UnrealException):
+    """
+    Related to errors with the Trainer.
     """

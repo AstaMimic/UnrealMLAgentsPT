@@ -403,6 +403,7 @@ class UnrealRLOutputProto final :
 
   enum : int {
     kAgentInfosFieldNumber = 1,
+    kSideChannelFieldNumber = 2,
   };
   // map<string, .communicator_objects.UnrealRLOutputProto.ListAgentInfoProto> agentInfos = 1;
   int agentinfos_size() const;
@@ -421,6 +422,26 @@ class UnrealRLOutputProto final :
       agentinfos() const;
   ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::communicator_objects::UnrealRLOutputProto_ListAgentInfoProto >*
       mutable_agentinfos();
+  // bytes side_channel = 2;
+  void clear_side_channel() ;
+  const std::string& side_channel() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_side_channel(Arg_&& arg, Args_... args);
+  std::string* mutable_side_channel();
+  PROTOBUF_NODISCARD std::string* release_side_channel();
+  void set_allocated_side_channel(std::string* ptr);
+
+  private:
+  const std::string& _internal_side_channel() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_side_channel(
+      const std::string& value);
+  std::string* _internal_mutable_side_channel();
+
+  public:
   // @@protoc_insertion_point(class_scope:communicator_objects.UnrealRLOutputProto)
  private:
   class _Internal;
@@ -434,6 +455,7 @@ class UnrealRLOutputProto final :
         std::string, ::communicator_objects::UnrealRLOutputProto_ListAgentInfoProto,
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_MESSAGE> agentinfos_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr side_channel_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -534,6 +556,53 @@ inline ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::communicator_objects::Unreal
 UnrealRLOutputProto::mutable_agentinfos() {
   // @@protoc_insertion_point(field_mutable_map:communicator_objects.UnrealRLOutputProto.agentInfos)
   return _internal_mutable_agentinfos();
+}
+
+// bytes side_channel = 2;
+inline void UnrealRLOutputProto::clear_side_channel() {
+  _impl_.side_channel_.ClearToEmpty();
+}
+inline const std::string& UnrealRLOutputProto::side_channel() const {
+  // @@protoc_insertion_point(field_get:communicator_objects.UnrealRLOutputProto.side_channel)
+  return _internal_side_channel();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void UnrealRLOutputProto::set_side_channel(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.side_channel_.SetBytes(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:communicator_objects.UnrealRLOutputProto.side_channel)
+}
+inline std::string* UnrealRLOutputProto::mutable_side_channel() {
+  std::string* _s = _internal_mutable_side_channel();
+  // @@protoc_insertion_point(field_mutable:communicator_objects.UnrealRLOutputProto.side_channel)
+  return _s;
+}
+inline const std::string& UnrealRLOutputProto::_internal_side_channel() const {
+  return _impl_.side_channel_.Get();
+}
+inline void UnrealRLOutputProto::_internal_set_side_channel(const std::string& value) {
+  ;
+
+
+  _impl_.side_channel_.Set(value, GetArenaForAllocation());
+}
+inline std::string* UnrealRLOutputProto::_internal_mutable_side_channel() {
+  ;
+  return _impl_.side_channel_.Mutable( GetArenaForAllocation());
+}
+inline std::string* UnrealRLOutputProto::release_side_channel() {
+  // @@protoc_insertion_point(field_release:communicator_objects.UnrealRLOutputProto.side_channel)
+  return _impl_.side_channel_.Release();
+}
+inline void UnrealRLOutputProto::set_allocated_side_channel(std::string* value) {
+  _impl_.side_channel_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.side_channel_.IsDefault()) {
+          _impl_.side_channel_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:communicator_objects.UnrealRLOutputProto.side_channel)
 }
 
 #ifdef __GNUC__
