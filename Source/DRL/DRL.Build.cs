@@ -20,8 +20,6 @@ public class DRL: ModuleRules
 				"Slate",
 				"SlateCore",
 				"Core",
-				"UMG",
-				"Json",
 				"CoreUObject",
 				"Engine",
 				"UnrealEd"
@@ -34,7 +32,7 @@ public class DRL: ModuleRules
 		PublicIncludePaths.AddRange(
 			new string[] {
 				Path.Combine(ModuleDirectory, "Grpc/"),
-				Path.Combine(ModuleDirectory, "Private"),
+				Path.Combine(ModuleDirectory, "Public"),
 				Path.Combine(ThirdPartyRoot(), "protobuf/include"),
 				Path.Combine(ThirdPartyRoot(), "grpc/include"),
 				Path.Combine(ThirdPartyRoot(), "re2/include"),
