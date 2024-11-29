@@ -223,3 +223,8 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# --------------------------------- Learning --------------------------------- #
+
+# Remove the results directory when learning
+results/
