@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # GRPC-TOOLS required. Install with `nuget install Grpc.Tools`.
 # Then un-comment and replace [DIRECTORY] with location of files.
 # For example, on macOS, you might have something like:
@@ -5,7 +7,7 @@
 COMPILER=../Source/ThirdParty/protobuf/bin
 
 SRC_DIR=proto/ueagents_envs/communicator_objects
-DST_DIR_C=../Source/DRL/Grpc
+DST_DIR_C=../Source/UnrealMLAgents/Grpc
 DST_DIR_P=../MLearning/ue-agents-envs
 PYTHON_PACKAGE=ueagents_envs/communicator_objects
 
