@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CoreMinimal.h" // Add this line
+
 class EpisodeIdCounter
 {
 public:

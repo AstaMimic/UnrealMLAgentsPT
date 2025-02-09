@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InplaceArray.h"
+#include "UnrealMLAgents/InplaceArray.h"
 #include "UnrealMLAgents/DimensionProperty.h"
 #include "UnrealMLAgents/Sensors/ObservationType.h"
 #include "ObservationSpec.generated.h"

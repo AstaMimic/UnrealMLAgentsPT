@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "GameFramework/Actor.h"
 #include "UnrealMLAgents/Policies/BehaviorParameters.h"
 #include "UnrealMLAgents/Sensors/ISensor.h"
 #include "UnrealMLAgents/Grpc/CommunicatorObjects/AgentInfo.h"
