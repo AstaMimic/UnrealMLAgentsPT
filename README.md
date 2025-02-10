@@ -1,5 +1,8 @@
 # Unreal ML Agents Plugin
 
+[![Python 3.10.11](https://img.shields.io/badge/python-3.10.11-blue.svg)](https://github.com/AlanLaboratory/UnrealMLAgents)
+[![Documentation Status](https://readthedocs.org/projects/unrealmlagents/badge/?version=latest)](https://unrealmlagents.readthedocs.io/en/latest/intro/index.html)
+
 The **Unreal ML Agents Plugin** is inspired by and built upon the [Unity ML-Agents Toolkit](https://github.com/Unity-Technologies/ml-agents).
 The primary goal of this project is to bring Unity's powerful reinforcement learning framework to **Unreal Engine**, allowing developers
 to train intelligent agents using state-of-the-art machine learning algorithms.
