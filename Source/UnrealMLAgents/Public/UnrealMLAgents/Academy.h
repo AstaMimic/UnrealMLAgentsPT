@@ -225,10 +225,10 @@ private:
 	UAcademy();
 
 	/// API version of the Academy.
-	const FString ApiVersion = "0.1.0";
+	const FString ApiVersion = "1.0.0";
 
 	/// Package version of the Academy.
-	const FString PackageVersion = "1.0.0.dev0";
+	const FString PackageVersion = "1.0.0";
 
 	/// The command line port for communicating with external systems.
 	int32 Port = 5004;

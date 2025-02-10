@@ -53,8 +53,8 @@ class UnrealEnvironment(BaseEnv):
     # functionality will work as long the major versions match.
     # This should be changed whenever a change is made to the communication protocol.
     # Revision history:
-    #  * 0.1.0 - initial version
-    API_VERSION = "0.1.0"
+    #  * 1.0.0 - initial version
+    API_VERSION = "1.0.0"
 
     # Default port that the editor listens on. If an environment executable
     # isn't specified, this port will be used.
@@ -83,8 +83,8 @@ class UnrealEnvironment(BaseEnv):
     ):
         """
         Starts a new unity environment and establishes a connection with the environment.
-        Notice: Currently communication between Unreal and Python takes place over an open socket without authentication.
-        Ensure that the network where training takes place is secure.
+        Notice: Currently communication between Unreal and Python takes place over an open socket without
+        authentication. Ensure that the network where training takes place is secure.
 
         :string file_name: Name of Unreal environment binary. :int base_port: Baseline port number to connect to Unreal
         environment over. worker_id increments over this. If no environment is specified (i.e. file_name is None),

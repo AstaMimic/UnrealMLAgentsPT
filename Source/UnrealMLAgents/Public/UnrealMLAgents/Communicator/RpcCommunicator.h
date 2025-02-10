@@ -148,12 +148,12 @@ private:
 	/**
 	 * @brief Verifies that the communication versions of Unreal and Python are compatible.
 	 *
-	 * @param unityCommunicationVersion The communication version of Unreal Engine.
+	 * @param unrealCommunicationVersion The communication version of Unreal Engine.
 	 * @param pythonApiVersion The communication version of the Python server.
 	 * @return True if the versions are compatible, false otherwise.
 	 */
 	static bool CheckCommunicationVersionAreCompatible(
-		const FString& unityCommunicationVersion, const FString& pythonApiVersion);
+		const FString& unrealCommunicationVersion, const FString& pythonApiVersion);
 
 	/**
 	 * @brief Establishes the communication channel with the external system using the specified port.

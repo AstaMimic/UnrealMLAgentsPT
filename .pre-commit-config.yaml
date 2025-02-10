@@ -24,7 +24,7 @@ repos:
     files: "ue-agents-envs/.*"
     # Exclude protobuf files and don't follow them when imported
     exclude: ".*_pb2.py"
-    args: [--ignore-missing-imports, --disallow-incomplete-defs, --no-strict-optional]
+    args: [--ignore-missing-imports, --disallow-incomplete-defs, --no-strict-optional, --follow-imports, skip]
     additional_dependencies: [types-PyYAML, types-attrs, types-protobuf, types-setuptools, types-filelock]
 
 - repo: https://github.com/PyCQA/flake8
