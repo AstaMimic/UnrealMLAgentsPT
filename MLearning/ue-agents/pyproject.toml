@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools==65.5.0", "wheel==0.45.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ueagents"
+description = "Unreal Machine Learning Agents based on Unity ML Agents"
+readme = "README.md"
+authors = [
+    { name = "Stephane Capponi" }
+]
+license = { text = "Apache Software License" }
+requires-python = ">=3.10.1,<=3.10.12"
+dependencies = [
+    "h5py>=2.9.0",
+    "tensorboard>=2.14",
+    "torch==2.4.1",
+    "ueagents_envs==1.0.0",
+    "six>=1.16",
+    "cattrs>=1.1.0,<1.7; python_version>='3.8'",
+    "attrs>=19.3.0",
+    "huggingface_hub>=0.14",
+    "onnx==1.15.0",
+    "pypiwin32==223; platform_system == 'Windows'"
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/AlanLaboratory/UnrealMLAgents"
+
+[project.scripts]
+ue-agents-learn = "ueagents.trainers.learn:main"
+ue-agents-run-experiment = "ueagents.trainers.run_experiment:main"
+ue-agents-push-to-hf = "ueagents.utils.push_to_hf:main"
+ue-agents-load-from-hf = "ueagents.utils.load_from_hf:main"
+
+[project.entry-points."ueagents.stats_writer"]
+default = "ueagents.plugins.stats_writer:get_default_stats_writers"
+
+[project.entry-points."ueagents.trainer_type"]
+default = "ueagents.plugins.trainer_type:get_default_trainer_types"
+
+[tool.setuptools]
+packages = ["ueagents"]
+
+[tool.setuptools.exclude-package-data]
+ueagents = ["*.tests", "*.tests.*", "tests.*", "tests"]
+
+[tool.setuptools.package-data]
+"ueagents" = ["LICENSE*", "LICEN[CS]E*"]
+
+[tool.setuptools.dynamic]
+version = { attr = "ueagents.trainers.__version__" }

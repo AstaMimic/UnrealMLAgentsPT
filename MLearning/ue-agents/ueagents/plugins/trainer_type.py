@@ -2,7 +2,7 @@ import importlib.metadata as importlib_metadata  # pylint: disable=E0611
 from typing import Dict, Tuple, Any
 
 from ueagents import plugins as mla_plugins
-from ueagents.plugins import ML_AGENTS_TRAINER_TYPE
+from ueagents.plugins import UE_AGENTS_TRAINER_TYPE
 from ueagents.trainers.poca.optimizer_torch import POCASettings
 from ueagents.trainers.poca.trainer import POCATrainer
 from ueagents.trainers.ppo.optimizer_torch import PPOSettings
@@ -43,15 +43,15 @@ def register_trainer_plugins() -> Tuple[Dict[str, Any], Dict[str, Any]]:
     Registers all Trainer plugins (including the default one),
     and evaluates them, and returns the list of all the Trainer implementations.
     """
-    if ML_AGENTS_TRAINER_TYPE not in importlib_metadata.entry_points():
+    if UE_AGENTS_TRAINER_TYPE not in importlib_metadata.entry_points():
         logger.warning(
-            f"Unable to find any entry points for {ML_AGENTS_TRAINER_TYPE}, even the default ones. "
+            f"Unable to find any entry points for {UE_AGENTS_TRAINER_TYPE}, even the default ones. "
             "Uninstalling and reinstalling ml-agents via pip should resolve. "
             "Using default plugins for now."
         )
         return get_default_trainer_types()
 
-    entry_points = importlib_metadata.entry_points()[ML_AGENTS_TRAINER_TYPE]
+    entry_points = importlib_metadata.entry_points()[UE_AGENTS_TRAINER_TYPE]
 
     for entry_point in entry_points:
 
