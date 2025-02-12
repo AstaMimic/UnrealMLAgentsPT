@@ -1,3 +1,5 @@
+// Copyright © 2025 Stephane Capponi and individual contributors. All Rights Reserved.
+
 #include "UnrealMLAgents/Agent.h"
 #include "UnrealMLAgents/Academy.h"
 #include "UnrealMLAgents/Sensors/ISensor.h"

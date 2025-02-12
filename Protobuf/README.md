@@ -15,3 +15,10 @@ Whenever you change the fields of a message, you must follow the steps below to 
 
 1. Open a terminal. **Note:** If you're using Anaconda, don't forget to activate the ml-agents environment first.
 2. Run the protobuf generation script from the terminal by navigating to `$UNREAL_ROOT/Protobuf` and entering `make.sh`
+
+## Third Party
+
+- grpc (1.57)
+- protobuf (4.23.4)
+- abseil (2023-08-02)
+- re2 (2022-04-01)

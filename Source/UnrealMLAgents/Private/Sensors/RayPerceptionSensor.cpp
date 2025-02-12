@@ -1,3 +1,5 @@
+// Copyright © 2025 Stephane Capponi and individual contributors. All Rights Reserved.
+
 #include "UnrealMLAgents/Sensors/RayPerceptionSensor.h"
 #include "Engine/World.h"
 #include "CollisionQueryParams.h"

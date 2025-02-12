@@ -1,3 +1,5 @@
+// Copyright © 2025 Stephane Capponi and individual contributors. All Rights Reserved.
+
 using UnrealBuildTool;
 using System;
 using System.IO;
@@ -6,7 +8,7 @@ using System.Reflection;
 
 public class UnrealMLAgents : ModuleRules
 {
-	private static MLAgentsPlatform MLAgentsPlatformInstance;
+	private static UnrealMLAgentsPlatform.MLAgentsPlatform MLAgentsPlatformInstance;
 
 	public UnrealMLAgents(ReadOnlyTargetRules Target) : base(Target)
 	{
@@ -40,15 +42,17 @@ public class UnrealMLAgents : ModuleRules
 		PublicDefinitions.Add("NOMINMAX");
 	}
 
-	private MLAgentsPlatform GetMLAgentsPlatformInstance(ReadOnlyTargetRules Target)
+	private UnrealMLAgentsPlatform.MLAgentsPlatform GetMLAgentsPlatformInstance(ReadOnlyTargetRules Target)
 	{
-		var MLAgentsPlatformType = System.Type.GetType("MLAgentsPlatform_" + Target.Platform.ToString());
+		var MLAgentsPlatformType =
+			System.Type.GetType("UnrealMLAgentsPlatform.MLAgentsPlatform_" + Target.Platform.ToString());
 		if (MLAgentsPlatformType == null)
 		{
 			throw new BuildException("UnrealMLAgents does not support platform " + Target.Platform.ToString());
 		}
 
-		var PlatformInstance = Activator.CreateInstance(MLAgentsPlatformType) as MLAgentsPlatform;
+		var PlatformInstance =
+			Activator.CreateInstance(MLAgentsPlatformType) as UnrealMLAgentsPlatform.MLAgentsPlatform;
 		if (PlatformInstance == null)
 		{
 			throw new BuildException("UnrealMLAgents could not instantiate platform " + Target.Platform.ToString());
@@ -103,7 +107,7 @@ public class UnrealMLAgents : ModuleRules
 			foreach (var arch in MLAgentsPlatformInstance.Architectures())
 			{
 				string libPrefixName = MLAgentsPlatformInstance.LibraryPrefixName;
-				if (MLAgentsPlatformInstance is MLAgentsPlatform_Win64 && lib == "protobuf")
+				if (MLAgentsPlatformInstance is UnrealMLAgentsPlatform.MLAgentsPlatform_Win64 && lib == "protobuf")
 				{
 					libPrefixName = "lib"; //'libprotobuf.lib'
 				}
@@ -140,102 +144,107 @@ public class UnrealMLAgents : ModuleRules
 	}
 }
 
-public abstract class MLAgentsPlatform
+namespace UnrealMLAgentsPlatform
 {
-	public virtual string ConfigurationDir(UnrealTargetConfiguration Configuration)
+	internal abstract class MLAgentsPlatform
 	{
-		if (Configuration == UnrealTargetConfiguration.Debug || Configuration == UnrealTargetConfiguration.DebugGame)
+		public virtual string ConfigurationDir(UnrealTargetConfiguration Configuration)
 		{
-			return "Debug/";
+			if (Configuration == UnrealTargetConfiguration.Debug
+				|| Configuration == UnrealTargetConfiguration.DebugGame)
+			{
+				return "Debug/";
+			}
+			else
+			{
+				return "Release/";
+			}
 		}
-		else
-		{
-			return "Release/";
-		}
+		public abstract string LibrariesPath { get; }
+		public abstract List<string> Architectures();
+		public abstract string		 LibraryPrefixName { get; }
+		public abstract string		 LibraryPostfixName { get; }
 	}
-	public abstract string LibrariesPath { get; }
-	public abstract List<string> Architectures();
-	public abstract string		 LibraryPrefixName { get; }
-	public abstract string		 LibraryPostfixName { get; }
-}
 
-public class MLAgentsPlatform_Win64 : MLAgentsPlatform
-{
-	public override string ConfigurationDir(UnrealTargetConfiguration Configuration)
+	internal class MLAgentsPlatform_Win64 : MLAgentsPlatform
 	{
-		if (Configuration == UnrealTargetConfiguration.Debug || Configuration == UnrealTargetConfiguration.DebugGame)
+		public override string ConfigurationDir(UnrealTargetConfiguration Configuration)
 		{
-			return "RelWithDebInfo/";
+			if (Configuration == UnrealTargetConfiguration.Debug
+				|| Configuration == UnrealTargetConfiguration.DebugGame)
+			{
+				return "RelWithDebInfo/";
+			}
+			else
+			{
+				return "Release/";
+			}
 		}
-		else
+		public override string LibrariesPath
 		{
-			return "Release/";
+			get {
+				return "win64/";
+			}
+		}
+		public override List<string> Architectures() { return new List<string> { "" }; }
+		public override				 string LibraryPrefixName
+		{
+			get {
+				return "";
+			}
+		}
+		public override string LibraryPostfixName
+		{
+			get {
+				return ".lib";
+			}
 		}
 	}
-	public override string LibrariesPath
-	{
-		get {
-			return "win64/";
-		}
-	}
-	public override List<string> Architectures() { return new List<string> { "" }; }
-	public override				 string LibraryPrefixName
-	{
-		get {
-			return "";
-		}
-	}
-	public override string LibraryPostfixName
-	{
-		get {
-			return ".lib";
-		}
-	}
-}
 
-public class MLAgentsPlatform_Linux : MLAgentsPlatform
-{
-	public override string LibrariesPath
+	internal class MLAgentsPlatform_Linux : MLAgentsPlatform
 	{
-		get {
-			return "linux/";
+		public override string LibrariesPath
+		{
+			get {
+				return "linux/";
+			}
+		}
+		public override List<string> Architectures() { return new List<string> { "" }; }
+		public override				 string LibraryPrefixName
+		{
+			get {
+				return "lib";
+			}
+		}
+		public override string LibraryPostfixName
+		{
+			get {
+				return ".a";
+			}
 		}
 	}
-	public override List<string> Architectures() { return new List<string> { "" }; }
-	public override				 string LibraryPrefixName
-	{
-		get {
-			return "lib";
-		}
-	}
-	public override string LibraryPostfixName
-	{
-		get {
-			return ".a";
-		}
-	}
-}
 
-public class MLAgentsPlatform_Mac : MLAgentsPlatform
-{
-	public override string ConfigurationDir(UnrealTargetConfiguration Configuration) { return ""; }
-	public override		   string LibrariesPath
+	internal class MLAgentsPlatform_Mac : MLAgentsPlatform
 	{
-		get {
-			return "mac/";
+		public override string ConfigurationDir(UnrealTargetConfiguration Configuration) { return ""; }
+		public override		   string LibrariesPath
+		{
+			get {
+				return "mac/";
+			}
 		}
-	}
-	public override List<string> Architectures() { return new List<string> { "" }; }
-	public override				 string LibraryPrefixName
-	{
-		get {
-			return "lib";
+		public override List<string> Architectures() { return new List<string> { "" }; }
+		public override				 string LibraryPrefixName
+		{
+			get {
+				return "lib";
+			}
 		}
-	}
-	public override string LibraryPostfixName
-	{
-		get {
-			return ".a";
+		public override string LibraryPostfixName
+		{
+			get {
+				return ".a";
+			}
 		}
 	}
 }
