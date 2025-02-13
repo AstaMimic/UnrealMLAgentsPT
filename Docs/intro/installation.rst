@@ -29,27 +29,22 @@ Prerequisites
 
         pip install torch~=2.4.1 --index-url https://download.pytorch.org/whl/cu124
 
-   .. note::
-
-      On Windows, you may also need Microsoft's Visual C++ Redistributable if you don't have it already. See the
-      PyTorch installation guide for more installation options and versions.
-
 For those who wants to develop in C++, please follow the very good documentation from Unreal Engine.
 You need to install and configure one of the following IDEs:
 
-   - `Setting Up Visual Studio <https://dev.epicgames.com/documentation/en-us/unreal-engine/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine>`_
-   - `Setting Up VS Code <https://dev.epicgames.com/documentation/en-us/unreal-engine/setting-up-visual-studio-code-for-unreal-engine>`_
+- `Setting Up Visual Studio <https://dev.epicgames.com/documentation/en-us/unreal-engine/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine>`_
+- `Setting Up VS Code <https://dev.epicgames.com/documentation/en-us/unreal-engine/setting-up-visual-studio-code-for-unreal-engine>`_
 
 .. note::
 
    In case you are interested by other aspects of Unreal Engine, you can find more information
    in the `Development Setup <https://dev.epicgames.com/documentation/en-us/unreal-engine/setting-up-your-development-environment-for-cplusplus-in-unreal-engine>`_
 
-.. important::
+.. attention::
 
-   You can either install the plugin from the FAB Marketplace or clone the repository to access the full source code.
-   If you choose the second option, you will need to build the plugin from source.
-   Instructions are in the GitHub advanced installation section.
+   The **UnrealMLAgents** and **UnrealMLAgentsExamples** are currently in the process of
+   being listed on the FAB Marketplace. Until they become available, installation
+   can only be done through the **GitHub (Advanced)** method.
 
 .. tab-set::
 
@@ -100,7 +95,7 @@ are not familiar with virtual environments, you can find more information in the
 
 .. note::
 
-   If you have already installed pytorch at the beginning, you shoudld already have a virtual environment.
+   If you have already installed pytorch at the beginning, you should already have a virtual environment.
 
 .. tab-set::
 
@@ -124,7 +119,7 @@ are not familiar with virtual environments, you can find more information in the
          with conflicting versions, consider using a virtual environment. For detailed steps, refer to the
          :doc:`Virtual Environment Guide </intro/python-environment>`.
 
-   .. tab-item:: GitHub (advanced)
+   .. tab-item:: PyPI (advanced)
 
       For this section, you first need to clone the repository to access the full source code.
       See above for more information on cloning the repository.
