@@ -10,6 +10,9 @@
 #include "GenericPlatform/GenericPlatformMisc.h"
 #include "Misc/CoreDelegates.h"
 #include "Misc/CommandLine.h"
+#include "Engine/Engine.h"
+#include "SimCadenceController/SimCadenceEngineSubsystem.h"
+#include "SimCadenceController/SimCadencePhysicsBridge.h"
 
 UAcademy* UAcademy::Instance = nullptr;
 
@@ -25,12 +28,15 @@ UAcademy::UAcademy()
 // Make the Academy Tick
 bool UAcademy::IsTickable() const
 {
-	return true;
+	return !bUsePhysicsStep;
 }
 
 void UAcademy::Tick(float DeltaTime)
 {
-	EnvironmentStep();
+	if (!bUsePhysicsStep)
+	{
+		EnvironmentStep();
+	}
 }
 
 TStatId UAcademy::GetStatId() const
@@ -55,6 +61,27 @@ void UAcademy::LazyInitialize()
 	{
 		InitializeEnvironment();
 		bInitialized = true;
+
+		if (GEngine)
+		{
+			for (const FWorldContext& Ctx : GEngine->GetWorldContexts())
+			{
+				if (Ctx.WorldType == EWorldType::PIE || Ctx.WorldType == EWorldType::Game)
+				{
+					UWorld* UseWorld = Ctx.World();
+					if (USimCadenceEngineSubsystem* Sub = GEngine->GetEngineSubsystem<USimCadenceEngineSubsystem>())
+					{
+						if (ASimCadencePhysicsBridge* Bridge = Sub->GetOrSpawnPhysicsBridge(UseWorld))
+						{
+							Bridge->OnFixedStep.AddDynamic(this, &UAcademy::HandleFixedStep);
+							bUsePhysicsStep = true;
+							BoundBridge = Bridge;
+						}
+					}
+					break;
+				}
+			}
+		}
 	}
 }
 
@@ -173,6 +200,11 @@ void UAcademy::EnvironmentStep()
 	}
 }
 
+void UAcademy::HandleFixedStep(float FixedDt)
+{
+	EnvironmentStep();
+}
+
 void UAcademy::OnQuitCommandReceived()
 {
 	FGenericPlatformMisc::RequestExit(false);
@@ -190,6 +222,13 @@ void UAcademy::Dispose()
 
 void UAcademy::Dispose(bool bIsSimulating)
 {
+
+	if (BoundBridge.IsValid())
+	{
+		BoundBridge->OnFixedStep.RemoveDynamic(this, &UAcademy::HandleFixedStep);
+		BoundBridge.Reset();
+	}
+	bUsePhysicsStep = false;
 
 	// Signal to listeners that the academy is being destroyed now
 	if (OnDestroyAction.IsBound())
