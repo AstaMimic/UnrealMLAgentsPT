@@ -11,6 +11,8 @@
 #include "Tickable.h"
 #include "Academy.generated.h"
 
+class ASimCadencePhysicsBridge;
+
 // Define the delegate types
 /**
  * @brief Delegate triggered when the action decision-making process is initiated.
@@ -256,6 +258,18 @@ private:
 	/// Communicator used for interacting with remote agents or policies.
 	UPROPERTY()
 	URpcCommunicator* RpcCommunicator;
+
+	/// Whether stepping is driven by the physics fixed step.
+	bool bUsePhysicsStep = false;
+
+	/// Bridge providing fixed-step callbacks.
+	TWeakObjectPtr<ASimCadencePhysicsBridge> BoundBridge;
+
+	/**
+	 * @brief Handles physics fixed step events.
+	 */
+	UFUNCTION()
+	void HandleFixedStep(float FixedDt);
 
 	/**
 	 * @brief Lazily initializes the Academy.
