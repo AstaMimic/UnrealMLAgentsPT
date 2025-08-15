@@ -1,8 +1,7 @@
 #pragma once
 
-#include "CoreMinimal.h"
-
-#if WITH_SIMCADENCE_TRAINING_ENGINE
+#if WITH_EDITOR && UE_EDITOR
+	#include "CoreMinimal.h"
 	#include "Editor/EditorEngine.h"
 	#include "TrainingEditorEngine.generated.h"
 
@@ -14,4 +13,4 @@ class SIMCADENCECONTROLLER_API UTrainingEditorEngine : public UEditorEngine
 protected:
 	virtual void RedrawViewports(bool bShouldPresent) override;
 };
-#endif // WITH_SIMCADENCE_TRAINING_ENGINE
+#endif // WITH_EDITOR && UE_EDITOR
