@@ -11,9 +11,8 @@
 #include "Misc/CoreDelegates.h"
 #include "Misc/CommandLine.h"
 #include "Engine/Engine.h"
-#include "SimCadenceController/SimCadenceEngineSubsystem.h"
-#include "SimCadenceController/SimCadencePhysicsBridge.h"
-
+#include "SimCadenceEngineSubsystem.h"
+#include "SimCadencePhysicsBridge.h"
 
 UAcademy* UAcademy::Instance = nullptr;
 

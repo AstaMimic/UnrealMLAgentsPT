@@ -1,5 +1,6 @@
-#if WITH_EDITOR
-	#include "TrainingEditorEngine.h"
+#include "TrainingEditorEngine.h"
+
+#if WITH_SIMCADENCE_TRAINING_ENGINE
 	#include "SimCadenceEngineSubsystem.h"
 	#include "Engine/Engine.h"
 
@@ -12,4 +13,4 @@ void UTrainingEditorEngine::RedrawViewports(bool bShouldPresent)
 	}
 	Super::RedrawViewports(bPresent);
 }
-#endif // WITH_EDITOR
+#endif // WITH_SIMCADENCE_TRAINING_ENGINE
