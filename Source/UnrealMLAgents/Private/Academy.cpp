@@ -102,7 +102,7 @@ void UAcademy::ParseCommandLineArgs()
 
 void UAcademy::InitializeEnvironment()
 {
-	UE_LOG(LogTemp, Log, TEXT("Initialize Environement"));
+	UE_LOG(LogTemp, Log, TEXT("Initialize Environment"));
 
 	bEnableStepping = true;
 	ParseCommandLineArgs();
