@@ -11,9 +11,8 @@
 #include "Misc/CoreDelegates.h"
 #include "Misc/CommandLine.h"
 #include "Engine/Engine.h"
-#include "SimCadenceController/SimCadenceEngineSubsystem.h"
-#include "SimCadenceController/SimCadencePhysicsBridge.h"
-
+#include "SimCadenceEngineSubsystem.h"
+#include "SimCadencePhysicsBridge.h"
 
 UAcademy* UAcademy::Instance = nullptr;
 
@@ -103,7 +102,7 @@ void UAcademy::ParseCommandLineArgs()
 
 void UAcademy::InitializeEnvironment()
 {
-	UE_LOG(LogTemp, Log, TEXT("Initialize Environement"));
+	UE_LOG(LogTemp, Log, TEXT("Initialize Environment"));
 
 	bEnableStepping = true;
 	ParseCommandLineArgs();
