@@ -16,7 +16,8 @@ public class UnrealMLAgents : ModuleRules
 		MLAgentsPlatformInstance = GetMLAgentsPlatformInstance(Target);
 		bEnableExceptions = true;
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore", "Core", "CoreUObject", "Engine" });
+		PrivateDependencyModuleNames.AddRange(
+			new string[] { "Slate", "SlateCore", "Core", "CoreUObject", "Engine", "SimCadenceController" });
 
 		if (Target.bBuildEditor)
 		{
