@@ -12,4 +12,5 @@ void UTrainingEditorEngine::RedrawViewports(bool bShouldPresent)
 	}
 	Super::RedrawViewports(bPresent);
 }
+
 #endif // WITH_SIMCADENCE_TRAINING_ENGINE

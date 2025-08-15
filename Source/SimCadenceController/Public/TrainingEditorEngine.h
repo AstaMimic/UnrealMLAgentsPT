@@ -13,4 +13,5 @@ class SIMCADENCECONTROLLER_API UTrainingEditorEngine : public UEditorEngine
 protected:
 	virtual void RedrawViewports(bool bShouldPresent) override;
 };
+
 #endif // WITH_SIMCADENCE_TRAINING_ENGINE
