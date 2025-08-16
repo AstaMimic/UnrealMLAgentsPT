@@ -1,43 +1,29 @@
+// SimCadenceEngineSubsystem.h
 #pragma once
+
 #include "CoreMinimal.h"
 #include "Subsystems/EngineSubsystem.h"
+#include "Engine/World.h"
 #include "SimCadenceEngineSubsystem.generated.h"
 
-class USimFixedCustomTimeStep;
 class ASimCadencePhysicsBridge;
 
 UCLASS()
 class SIMCADENCERUNTIME_API USimCadenceEngineSubsystem : public UEngineSubsystem
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
+
 public:
-	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
-	UFUNCTION(BlueprintCallable, Category = "SimCadence")
-	void		 ReapplyFromSettings();
-	virtual void Deinitialize() override;
-
-	bool ShouldSubmitFrame();
-
-	UFUNCTION(BlueprintCallable, Category = "SimCadence")
-	ASimCadencePhysicsBridge* GetOrSpawnPhysicsBridge(UWorld* World);
+    virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+    virtual void Deinitialize() override;
 
 private:
-	void ApplyRealtimeMode();
-	void ApplyFromSettings();
-	void ApplyTrainingMode(bool bHeadless);
-	void InstallCustomTimeStep();
-	void RemoveCustomTimeStep();
-	void ConfigurePhysicsSubstepping();
-	void OnWorldInit(UWorld* World, const UWorld::InitializationValues IVS);
-	void OnWorldDestroyed(UWorld* World, bool bSessionEnded, bool bCleanupResources);
+    UFUNCTION()
+    void OnWorldInit(UWorld* World, const UWorld::InitializationValues IVS);
 
-private:
-	TWeakObjectPtr<USimFixedCustomTimeStep> CustomTS;
-	double									LastPresentedTime = 0.0;
-	double									PresentInterval = 0.0;
+    void ApplyFromSettings(UWorld* World);
+    ASimCadencePhysicsBridge* GetOrSpawnPhysicsBridge(UWorld* World);
 
-	FDelegateHandle WorldInitHandle;
-	FDelegateHandle WorldCleanupHandle;
-
-	TMap<TWeakObjectPtr<UWorld>, TWeakObjectPtr<ASimCadencePhysicsBridge>> Bridges;
+    FDelegateHandle WorldInitHandle;
 };
+
