@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
 #if WITH_SIMCADENCE_TRAINING_ENGINE
 #include "Editor/EditorEngine.h"
 #define UTrainingEditorEngineBase UEditorEngine
