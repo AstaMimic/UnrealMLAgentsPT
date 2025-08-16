@@ -4,7 +4,7 @@
 #include "SimFixedCustomTimeStep.generated.h"
 
 UCLASS()
-class SIMCADENCECONTROLLER_API USimFixedCustomTimeStep : public UEngineCustomTimeStep
+class SIMCADENCERUNTIME_API USimFixedCustomTimeStep : public UEngineCustomTimeStep
 {
 	GENERATED_BODY()
 public:

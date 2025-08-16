@@ -17,11 +17,11 @@ public class UnrealMLAgents : ModuleRules
 		bEnableExceptions = true;
 
 		PrivateDependencyModuleNames.AddRange(
-			new string[] { "Slate", "SlateCore", "Core", "CoreUObject", "Engine", "SimCadenceController" });
+			new string[] { "Slate", "SlateCore", "Core", "CoreUObject", "Engine", "SimCadenceRuntime" });
 
 		if (Target.bBuildEditor)
 		{
-			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd" });
+			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "SimCadenceEditor" });
 		}
 
 		AddEngineThirdPartyPrivateStaticDependencies(Target, "OpenSSL");

@@ -15,3 +15,4 @@ void USimCadenceSettings::PostEditChangeProperty(FPropertyChangedEvent& Property
 	}
 }
 #endif
+
