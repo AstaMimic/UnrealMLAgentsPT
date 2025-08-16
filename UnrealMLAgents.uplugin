@@ -25,9 +25,9 @@
                         ]
                 },
                 {
-                        "name": "SimCadenceController",
-                        "type": "Runtime",
-                        "loadingphase": "Default"
+                        "Name": "SimCadenceController",
+                        "Type": "Editor",
+                        "LoadingPhase": "PostEngineInit"
                 }
         ]
 }
