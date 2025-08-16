@@ -7,7 +7,7 @@
 class IEngineLoop;
 
 UCLASS(Config = Engine, Transient)
-class SIMCADENCECONTROLLER_API UTrainingEditorEngine : public UUnrealEdEngine
+class SIMCADENCEEDITOR_API UTrainingEditorEngine : public UUnrealEdEngine
 {
 	GENERATED_BODY()
 

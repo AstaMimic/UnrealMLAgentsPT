@@ -1,33 +1,30 @@
 {
-	"FileVersion": 3,
-	"Version": 100,
-	"VersionName": "1.0.0",
-	"FriendlyName": "UnrealMLAgents",
-	"Description": "A plugin for Unreal Engine enabling Deep Reinforcement Learning, inspired by Unity ML-Agents.",
-	"Category": "Machine Learning",
-	"CreatedBy": "AlanLaboratory, Stephane Capponi",
-	"CreatedByURL": "https://github.com/AlanLaboratory/UnrealMLAgents",
-	"DocsURL": "https://unrealmlagents.readthedocs.io/en/latest/",
-	"FabURL": "com.epicgames.launcher://ue/Fab/product/0207991a-a838-4b27-94f6-76ee166a0146/",
-	"MarketplaceURL": "",
-	"SupportURL": "discord.gg/XNNJFfgw6M",
-	"CanContainContent": true,
-	"IsBetaVersion": false,
-	"IsExperimentalVersion": false,
-	"Installed": false,
-        "Modules": [
-                {
-                        "name": "UnrealMLAgents",
-                        "type": "Runtime",
-                        "loadingphase": "Default",
-                        "PlatformAllowList": [
-                                "Win64"
-                        ]
-                },
-                {
-                        "Name": "SimCadenceController",
-                        "Type": "Editor",
-                        "LoadingPhase": "PostEngineInit"
-                }
-        ]
+    "FileVersion": 3,
+    "Version": 100,
+    "VersionName": "1.0.0",
+    "FriendlyName": "UnrealMLAgents",
+    "Description": "A plugin for Unreal Engine enabling Deep Reinforcement Learning, inspired by Unity ML-Agents.",
+    "Category": "Machine Learning",
+    "CreatedBy": "AlanLaboratory, Stephane Capponi",
+    "CreatedByURL": "https://github.com/AlanLaboratory/UnrealMLAgents",
+    "DocsURL": "https://unrealmlagents.readthedocs.io/en/latest/",
+    "FabURL": "com.epicgames.launcher://ue/Fab/product/0207991a-a838-4b27-94f6-76ee166a0146/",
+    "MarketplaceURL": "",
+    "SupportURL": "discord.gg/XNNJFfgw6M",
+    "CanContainContent": true,
+    "IsBetaVersion": false,
+    "IsExperimentalVersion": false,
+    "Installed": false,
+    "Modules": [
+        {
+            "Name": "UnrealMLAgents",
+            "Type": "Runtime",
+            "LoadingPhase": "Default",
+            "PlatformAllowList": [
+                "Win64"
+            ]
+        },
+        { "Name": "SimCadenceRuntime", "Type": "Runtime", "LoadingPhase": "Default" },
+        { "Name": "SimCadenceEditor", "Type": "Editor", "LoadingPhase": "PostEngineInit" }
+    ]
 }

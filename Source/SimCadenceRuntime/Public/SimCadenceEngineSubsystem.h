@@ -7,7 +7,7 @@ class USimFixedCustomTimeStep;
 class ASimCadencePhysicsBridge;
 
 UCLASS()
-class SIMCADENCECONTROLLER_API USimCadenceEngineSubsystem : public UEngineSubsystem
+class SIMCADENCERUNTIME_API USimCadenceEngineSubsystem : public UEngineSubsystem
 {
 	GENERATED_BODY()
 public:

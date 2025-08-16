@@ -4,7 +4,7 @@
 #include "TrainingGameEngine.generated.h"
 
 UCLASS(config = Engine)
-class SIMCADENCECONTROLLER_API UTrainingGameEngine : public UGameEngine
+class SIMCADENCERUNTIME_API UTrainingGameEngine : public UGameEngine
 {
 	GENERATED_BODY()
 protected:
