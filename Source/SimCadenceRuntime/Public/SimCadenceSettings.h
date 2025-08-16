@@ -17,11 +17,20 @@ class SIMCADENCERUNTIME_API USimCadenceSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(EditAnywhere, Config, Category = "General", meta = (ClampMin = "1.0"))
-	float FixedHz = 60.f;
+        UPROPERTY(EditAnywhere, Config, Category = "General", meta = (ClampMin = "1.0"))
+        float FixedHz = 60.f;
 
-	UPROPERTY(EditAnywhere, Config, Category = "General")
-	ESimCadenceMode Mode = ESimCadenceMode::Realtime;
+        UPROPERTY(EditAnywhere, Config, Category = "General")
+        ESimCadenceMode Mode = ESimCadenceMode::Realtime;
+
+        UPROPERTY(EditAnywhere, Config, Category = "General")
+        bool bUseFixedTimestep = false;
+
+        UPROPERTY(EditAnywhere, Config, Category = "General")
+        bool bInstallCustomTimeStep = false;
+
+        UPROPERTY(EditAnywhere, Config, Category = "General", meta = (ClampMin = "0.0001"))
+        float FixedDeltaTimeSeconds = 1.f / 60.f;
 
 	// Realtime
 	UPROPERTY(EditAnywhere, Config, Category = "Realtime")

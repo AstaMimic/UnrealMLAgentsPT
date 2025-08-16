@@ -1,216 +1,69 @@
 #include "SimCadenceEngineSubsystem.h"
-#include "SimCadenceSettings.h"
-#include "SimFixedCustomTimeStep.h"
-#include "Engine/Engine.h"
-#include "Engine/GameEngine.h"
-#include "Engine/World.h"
-#include "HAL/IConsoleManager.h"
-#include "PhysicsEngine/PhysicsSettings.h"
-#include "SimCadencePhysicsBridge.h"
 
-static void SetCVarIfPresent(const TCHAR* Name, int32 Value)
-{
-	if (IConsoleVariable* Var = IConsoleManager::Get().FindConsoleVariable(Name))
-	{
-		Var->Set(Value, ECVF_SetByCode);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Verbose, TEXT("[SimCadence] CVar '%s' not found at init; skipping."), Name);
-	}
-}
+#include "Engine/World.h"            // FWorldDelegates, FWorldInitializationValues
+#include "Engine/Engine.h"
+#include "Misc/App.h"                // FApp::SetUseFixedTimeStep, FApp::SetFixedDeltaTime
+#include "SimCadenceSettings.h"      // settings object
+#include "SimFixedCustomTimeStep.h"  // custom timestep
+#include "SimCadencePhysicsBridge.h" // bridge actor
 
 void USimCadenceEngineSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
-	ApplyFromSettings();
-	const USimCadenceSettings* S = USimCadenceSettings::Get();
+    Super::Initialize(Collection);
 
-	WorldInitHandle =
-		FWorldDelegates::OnPostWorldInitialization.AddUObject(this, &USimCadenceEngineSubsystem::OnWorldInit);
-	WorldCleanupHandle =
-		FWorldDelegates::OnWorldCleanup.AddUObject(this, &USimCadenceEngineSubsystem::OnWorldDestroyed);
-
-	switch (S->Mode)
-	{
-		case ESimCadenceMode::Realtime:
-			ApplyRealtimeMode();
-			break;
-		case ESimCadenceMode::TrainingRendered:
-			ApplyTrainingMode(false);
-			break;
-		case ESimCadenceMode::TrainingHeadless:
-			ApplyTrainingMode(true);
-			break;
-	}
-}
-
-void USimCadenceEngineSubsystem::ApplyFromSettings()
-{
-	const USimCadenceSettings* S = USimCadenceSettings::Get();
-	switch (S->Mode)
-	{
-		case ESimCadenceMode::Realtime:
-			ApplyRealtimeMode();
-			break;
-		case ESimCadenceMode::TrainingRendered:
-			ApplyTrainingMode(false);
-			break;
-		case ESimCadenceMode::TrainingHeadless:
-			ApplyTrainingMode(true);
-			break;
-	}
-}
-
-void USimCadenceEngineSubsystem::ReapplyFromSettings()
-{
-	ApplyFromSettings();
+    WorldInitHandle = FWorldDelegates::OnPostWorldInitialization.AddUObject(
+        this, &USimCadenceEngineSubsystem::OnWorldInit);
 }
 
 void USimCadenceEngineSubsystem::Deinitialize()
 {
-	if (WorldInitHandle.IsValid())
-	{
-		FWorldDelegates::OnPostWorldInitialization.Remove(WorldInitHandle);
-	}
-	if (WorldCleanupHandle.IsValid())
-	{
-		FWorldDelegates::OnWorldCleanup.Remove(WorldCleanupHandle);
-	}
-	RemoveCustomTimeStep();
+    FWorldDelegates::OnPostWorldInitialization.Remove(WorldInitHandle);
+    Super::Deinitialize();
 }
 
-bool USimCadenceEngineSubsystem::ShouldSubmitFrame()
+void USimCadenceEngineSubsystem::OnWorldInit(UWorld* World, const FWorldInitializationValues IVS)
 {
-	const USimCadenceSettings* S = USimCadenceSettings::Get();
-	const double			   Now = FPlatformTime::Seconds();
+    if (!World)
+    {
+        return;
+    }
 
-	if (S->Mode == ESimCadenceMode::TrainingHeadless)
-	{
-		return false;
-	}
-
-	if (PresentInterval <= 0.0)
-	{
-		return true;
-	}
-
-	if (Now - LastPresentedTime >= PresentInterval)
-	{
-		LastPresentedTime = Now;
-		return true;
-	}
-	return false;
+    ApplyFromSettings(World);
+    GetOrSpawnPhysicsBridge(World);
 }
 
-void USimCadenceEngineSubsystem::ApplyRealtimeMode()
+void USimCadenceEngineSubsystem::ApplyFromSettings(UWorld* World)
 {
-	const USimCadenceSettings* S = USimCadenceSettings::Get();
+    const USimCadenceSettings* Settings = GetDefault<USimCadenceSettings>();
+    if (!Settings)
+    {
+        return;
+    }
 
-	RemoveCustomTimeStep();
+    FApp::SetUseFixedTimeStep(Settings->bUseFixedTimestep);
+    FApp::SetFixedDeltaTime(Settings->FixedDeltaTimeSeconds);
 
-	if (S->bUncapRealtimeRendering)
-	{
-		SetCVarIfPresent(TEXT("r.VSync"), 0);
-		SetCVarIfPresent(TEXT("t.MaxFPS"), 0);
-	}
-
-	ConfigurePhysicsSubstepping();
-
-	PresentInterval = 0.0;
-}
-
-void USimCadenceEngineSubsystem::ApplyTrainingMode(bool bHeadless)
-{
-	const USimCadenceSettings* S = USimCadenceSettings::Get();
-
-	InstallCustomTimeStep();
-
-	if (bHeadless)
-	{
-		PresentInterval = -1.0;
-	}
-	else
-	{
-		if (S->bUncapInTraining)
-		{
-			PresentInterval = 0.0;
-		}
-		else
-		{
-			PresentInterval = 1.0 / FMath::Max(1.f, S->TrainingRenderCapHz);
-		}
-	}
-
-	SetCVarIfPresent(TEXT("r.VSync"), 0);
-	SetCVarIfPresent(TEXT("t.MaxFPS"), 0);
-
-	if (S->bDisableAudioInTraining)
-	{
-		SetCVarIfPresent(TEXT("au.RenderAudio"), 0);
-	}
-}
-
-void USimCadenceEngineSubsystem::InstallCustomTimeStep()
-{
-	if (GEngine && !CustomTS.IsValid())
-	{
-		USimFixedCustomTimeStep* NewTS = NewObject<USimFixedCustomTimeStep>(GEngine);
-		GEngine->SetCustomTimeStep(NewTS);
-		CustomTS = NewTS;
-	}
-}
-
-void USimCadenceEngineSubsystem::RemoveCustomTimeStep()
-{
-	if (GEngine)
-	{
-		GEngine->SetCustomTimeStep(nullptr);
-	}
-	CustomTS.Reset();
-	FApp::SetUseFixedTimeStep(false);
-}
-
-void USimCadenceEngineSubsystem::ConfigurePhysicsSubstepping()
-{
-	const USimCadenceSettings* S = USimCadenceSettings::Get();
-	if (UPhysicsSettings* PS = UPhysicsSettings::Get())
-	{
-		if (S->bEnablePhysicsSubstepping)
-		{
-			PS->bSubstepping = true;
-			PS->MaxSubstepDeltaTime = 1.0f / FMath::Max(1.f, S->FixedHz);
-			PS->MaxSubsteps = 8;
-		}
-	}
-}
-
-void USimCadenceEngineSubsystem::OnWorldInit(UWorld* World, const UWorld::InitializationValues IVS)
-{
-	if (!World || World->IsPreviewWorld())
-		return;
-	ApplyFromSettings();
-	GetOrSpawnPhysicsBridge(World);
-}
-
-void USimCadenceEngineSubsystem::OnWorldDestroyed(UWorld* World, bool bSessionEnded, bool bCleanupResources)
-{
-	Bridges.Remove(World);
+    if (GEngine && Settings->bInstallCustomTimeStep)
+    {
+        if (!GEngine->GetCustomTimeStep() ||
+            !GEngine->GetCustomTimeStep()->IsA(USimFixedCustomTimeStep::StaticClass()))
+        {
+            USimFixedCustomTimeStep* TimeStep = NewObject<USimFixedCustomTimeStep>(GetTransientPackage());
+            GEngine->SetCustomTimeStep(TimeStep);
+        }
+    }
 }
 
 ASimCadencePhysicsBridge* USimCadenceEngineSubsystem::GetOrSpawnPhysicsBridge(UWorld* World)
 {
-	if (!World)
-		return nullptr;
-	if (TWeakObjectPtr<ASimCadencePhysicsBridge>* Found = Bridges.Find(World))
-	{
-		return Found->Get();
-	}
+    if (!World)
+    {
+        return nullptr;
+    }
 
-	FActorSpawnParameters SP;
-	SP.ObjectFlags = RF_Transient;
-	SP.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	ASimCadencePhysicsBridge* Bridge =
-		World->SpawnActor<ASimCadencePhysicsBridge>(ASimCadencePhysicsBridge::StaticClass());
-	Bridges.Add(World, Bridge);
-	return Bridge;
+    FActorSpawnParameters SP;
+    SP.ObjectFlags = RF_Transient;
+    SP.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+    return World->SpawnActor<ASimCadencePhysicsBridge>(ASimCadencePhysicsBridge::StaticClass(), SP);
 }
+
