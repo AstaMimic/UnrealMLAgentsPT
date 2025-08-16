@@ -13,7 +13,7 @@ enum class ESimCadenceMode : uint8
 };
 
 UCLASS(Config = Game, DefaultConfig, meta = (DisplayName = "Sim Cadence"))
-class SIMCADENCECONTROLLER_API USimCadenceSettings : public UDeveloperSettings
+class SIMCADENCERUNTIME_API USimCadenceSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
 public:
