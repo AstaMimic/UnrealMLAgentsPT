@@ -14,7 +14,7 @@ public class SimCadenceController : ModuleRules
 
 		if (Target.bBuildEditor)
 		{
-			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "Settings" });
+			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "Settings", "EditorFramework" });
 			PublicDefinitions.Add("WITH_SIMCADENCE_TRAINING_ENGINE=1");
 		}
 		else
