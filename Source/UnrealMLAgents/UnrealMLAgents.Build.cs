@@ -19,16 +19,16 @@ public class UnrealMLAgents : ModuleRules
                 PublicDependencyModuleNames.AddRange(
                         new string[] { "Core", "CoreUObject", "Engine", "SimCadenceRuntime" });
 
-                PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
+                PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore", "Projects" });
 
                 if (Target.bBuildEditor)
                 {
-                        PrivateDependencyModuleNames.Add("SimCadenceEditor");
-                        PublicDefinitions.Add("WITH_SIMCADENCE_EDITOR=1");
+                        PrivateDependencyModuleNames.Add("UnrealEd");
+                        PublicDefinitions.Add("WITH_UNREALED=1");
                 }
                 else
                 {
-                        PublicDefinitions.Add("WITH_SIMCADENCE_EDITOR=0");
+                        PublicDefinitions.Add("WITH_UNREALED=0");
                 }
 
 		AddEngineThirdPartyPrivateStaticDependencies(Target, "OpenSSL");
