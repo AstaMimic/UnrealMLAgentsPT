@@ -4,19 +4,16 @@
 
 #if WITH_SIMCADENCE_TRAINING_ENGINE
 	#include "Editor/EditorEngine.h"
+using FTrainingEditorEngineSuper = UEditorEngine;
 #else
 	#include "Engine/Engine.h"
+using FTrainingEditorEngineSuper = UEngine;
 #endif
 
 #include "TrainingEditorEngine.generated.h"
 
 UCLASS(config = Engine)
-class SIMCADENCECONTROLLER_API UTrainingEditorEngine
-#if WITH_SIMCADENCE_TRAINING_ENGINE
-	: public UEditorEngine
-#else
-	: public UEngine
-#endif
+class SIMCADENCECONTROLLER_API UTrainingEditorEngine : public FTrainingEditorEngineSuper
 {
 	GENERATED_BODY()
 
