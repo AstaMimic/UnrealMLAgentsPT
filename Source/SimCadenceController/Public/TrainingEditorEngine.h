@@ -3,10 +3,10 @@
 #include "CoreMinimal.h"
 #if WITH_SIMCADENCE_TRAINING_ENGINE
 #include "Editor/EditorEngine.h"
-#define UTrainingEditorEngineBase UEditorEngine
+using UTrainingEditorEngineBase = UEditorEngine;
 #else
 #include "Engine/Engine.h"
-#define UTrainingEditorEngineBase UEngine
+using UTrainingEditorEngineBase = UEngine;
 #endif
 
 #include "TrainingEditorEngine.generated.h"
@@ -21,6 +21,4 @@ protected:
     virtual void RedrawViewports(bool bShouldPresent) override;
 #endif
 };
-
-#undef UTrainingEditorEngineBase
 
