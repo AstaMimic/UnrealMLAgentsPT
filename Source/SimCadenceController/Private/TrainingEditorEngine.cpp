@@ -1,17 +1,23 @@
 #include "TrainingEditorEngine.h"
-
-#if WITH_SIMCADENCE_TRAINING_ENGINE
 #include "SimCadenceEngineSubsystem.h"
 #include "Engine/Engine.h"
 
-void UTrainingEditorEngine::RedrawViewports(bool bShouldPresent)
+void UTrainingEditorEngine::Init(IEngineLoop* InEngineLoop)
 {
-    bool bPresent = bShouldPresent;
-    if (USimCadenceEngineSubsystem* Sub = GEngine ? GEngine->GetEngineSubsystem<USimCadenceEngineSubsystem>() : nullptr)
-    {
-        bPresent = Sub->ShouldSubmitFrame();
-    }
-    Super::RedrawViewports(bPresent);
+	Super::Init(InEngineLoop);
 }
 
-#endif // WITH_SIMCADENCE_TRAINING_ENGINE
+void UTrainingEditorEngine::Tick(float DeltaSeconds, bool bIdleMode)
+{
+	Super::Tick(DeltaSeconds, bIdleMode);
+}
+
+void UTrainingEditorEngine::RedrawViewports(bool bShouldPresent)
+{
+	bool bPresent = bShouldPresent;
+	if (USimCadenceEngineSubsystem* Sub = GEngine ? GEngine->GetEngineSubsystem<USimCadenceEngineSubsystem>() : nullptr)
+	{
+		bPresent = Sub->ShouldSubmitFrame();
+	}
+	Super::RedrawViewports(bPresent);
+}

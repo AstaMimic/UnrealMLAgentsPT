@@ -1,28 +1,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-#if WITH_SIMCADENCE_TRAINING_ENGINE
-        #include "UnrealEd/UnrealEdEngine.h"
-        #if (ENGINE_MAJOR_VERSION >= 5)
-                #define TRAINING_EDITOR_ENGINE_SUPER UUnrealEdEngine
-        #else
-                #define TRAINING_EDITOR_ENGINE_SUPER UEditorEngine
-        #endif
-#else
-        #include "Engine/Engine.h"
-        #define TRAINING_EDITOR_ENGINE_SUPER UEngine
-#endif
-
+#include "Editor/UnrealEdEngine.h"
 #include "TrainingEditorEngine.generated.h"
 
-UCLASS(config = Engine)
-class SIMCADENCECONTROLLER_API UTrainingEditorEngine : public TRAINING_EDITOR_ENGINE_SUPER
+class IEngineLoop;
+
+UCLASS(Config = Engine, Transient)
+class SIMCADENCECONTROLLER_API UTrainingEditorEngine : public UUnrealEdEngine
 {
 	GENERATED_BODY()
 
-#if WITH_SIMCADENCE_TRAINING_ENGINE
+public:
+	virtual void Init(IEngineLoop* InEngineLoop) override;
+	virtual void Tick(float DeltaSeconds, bool bIdleMode) override;
+
 protected:
 	virtual void RedrawViewports(bool bShouldPresent) override;
-#endif
 };
