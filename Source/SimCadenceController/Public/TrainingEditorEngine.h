@@ -1,24 +1,26 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#if WITH_SIMCADENCE_TRAINING_ENGINE
-#include "Editor/EditorEngine.h"
-using UTrainingEditorEngineBase = UEditorEngine;
-#else
-#include "Engine/Engine.h"
-using UTrainingEditorEngineBase = UEngine;
-#endif
 
-#include "TrainingEditorEngine.generated.h"
+#if WITH_SIMCADENCE_TRAINING_ENGINE
+	#include "Editor/EditorEngine.h"
+	#include "TrainingEditorEngine.generated.h"
 
 UCLASS(config = Engine)
-class SIMCADENCECONTROLLER_API UTrainingEditorEngine : public UTrainingEditorEngineBase
+class SIMCADENCECONTROLLER_API UTrainingEditorEngine : public UEditorEngine
 {
-    GENERATED_BODY()
+	GENERATED_BODY()
 
 protected:
-#if WITH_SIMCADENCE_TRAINING_ENGINE
-    virtual void RedrawViewports(bool bShouldPresent) override;
-#endif
+	virtual void RedrawViewports(bool bShouldPresent) override;
 };
+#else
+	#include "Engine/Engine.h"
+	#include "TrainingEditorEngine.generated.h"
 
+UCLASS(config = Engine)
+class SIMCADENCECONTROLLER_API UTrainingEditorEngine : public UEngine
+{
+	GENERATED_BODY()
+};
+#endif
