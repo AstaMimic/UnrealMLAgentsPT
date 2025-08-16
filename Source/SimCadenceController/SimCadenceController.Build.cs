@@ -6,20 +6,13 @@ public class SimCadenceController : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(
-			new string[] { "Core", "CoreUObject", "Engine", "Projects", "DeveloperSettings" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "DeveloperSettings" });
 
-		PrivateDependencyModuleNames.AddRange(
-			new string[] { "Slate", "SlateCore", "InputCore", "RenderCore", "RHI", "PhysicsCore" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "Slate", "SlateCore", "Projects" });
 
-		if (Target.bBuildEditor)
+		if (!Target.bBuildEditor)
 		{
-			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "Settings", "EditorFramework" });
-			PublicDefinitions.Add("WITH_SIMCADENCE_TRAINING_ENGINE=1");
-		}
-		else
-		{
-			PublicDefinitions.Add("WITH_SIMCADENCE_TRAINING_ENGINE=0");
+			throw new BuildException("SimCadenceController must be built with the editor.");
 		}
 	}
 }
