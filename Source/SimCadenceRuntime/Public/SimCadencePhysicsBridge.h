@@ -6,7 +6,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FFixedStepEvent, float, FixedDeltaTime);
 
 UCLASS(NotBlueprintable, Transient)
-class SIMCADENCECONTROLLER_API ASimCadencePhysicsBridge : public AActor
+class SIMCADENCERUNTIME_API ASimCadencePhysicsBridge : public AActor
 {
 	GENERATED_BODY()
 public:

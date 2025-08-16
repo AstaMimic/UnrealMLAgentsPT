@@ -3,8 +3,7 @@
 #include "UnrealMLAgents/Academy.h"
 
 #if WITH_EDITOR
-	#include "Editor/EditorEngine.h"
-	#include "Editor.h"
+#include "Editor/EditorEngine.h"
 #endif
 
 #include "GenericPlatform/GenericPlatformMisc.h"
@@ -222,7 +221,10 @@ void UAcademy::Dispose()
 
 void UAcademy::Dispose(bool bIsSimulating)
 {
-
+        FCoreDelegates::OnExit.RemoveAll(this);
+#if WITH_EDITOR
+        FEditorDelegates::EndPIE.RemoveAll(this);
+#endif
 	if (BoundBridge.IsValid())
 	{
 		BoundBridge->OnFixedStep.RemoveDynamic(this, &UAcademy::HandleFixedStep);
