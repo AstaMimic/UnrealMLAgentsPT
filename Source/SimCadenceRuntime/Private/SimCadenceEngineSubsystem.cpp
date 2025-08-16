@@ -1,11 +1,10 @@
 #include "SimCadenceEngineSubsystem.h"
-
-#include "Engine/World.h"            // FWorldDelegates, FWorldInitializationValues
+#include "Engine/World.h"
 #include "Engine/Engine.h"
-#include "Misc/App.h"                // FApp::SetUseFixedTimeStep, FApp::SetFixedDeltaTime
-#include "SimCadenceSettings.h"      // settings object
-#include "SimFixedCustomTimeStep.h"  // custom timestep
-#include "SimCadencePhysicsBridge.h" // bridge actor
+#include "Misc/App.h"
+#include "SimCadenceSettings.h"
+#include "SimFixedCustomTimeStep.h"
+#include "SimCadencePhysicsBridge.h"
 
 void USimCadenceEngineSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -21,7 +20,7 @@ void USimCadenceEngineSubsystem::Deinitialize()
     Super::Deinitialize();
 }
 
-void USimCadenceEngineSubsystem::OnWorldInit(UWorld* World, const FWorldInitializationValues IVS)
+void USimCadenceEngineSubsystem::OnWorldInit(UWorld* World, const UWorld::InitializationValues IVS)
 {
     if (!World)
     {
@@ -41,7 +40,6 @@ void USimCadenceEngineSubsystem::ApplyFromSettings(UWorld* World)
     }
 
     FApp::SetUseFixedTimeStep(Settings->bUseFixedTimestep);
-    FApp::SetFixedDeltaTime(Settings->FixedDeltaTimeSeconds);
 
     if (GEngine && Settings->bInstallCustomTimeStep)
     {

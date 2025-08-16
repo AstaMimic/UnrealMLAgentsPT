@@ -3,7 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/EngineSubsystem.h"
-#include "Engine/World.h" // UWorld, FWorldInitializationValues, FWorldDelegates
+#include "Engine/World.h"
 #include "SimCadenceEngineSubsystem.generated.h"
 
 class ASimCadencePhysicsBridge;
@@ -18,10 +18,8 @@ public:
     virtual void Deinitialize() override;
 
 private:
-    // Note: UHT cannot parse nested types in reflected signatures.
-    // Use the top-level alias FWorldInitializationValues and do not mark
-    // the function with UFUNCTION.
-    void OnWorldInit(UWorld* World, const FWorldInitializationValues IVS);
+    UFUNCTION()
+    void OnWorldInit(UWorld* World, const UWorld::InitializationValues IVS);
 
     void ApplyFromSettings(UWorld* World);
     ASimCadencePhysicsBridge* GetOrSpawnPhysicsBridge(UWorld* World);
