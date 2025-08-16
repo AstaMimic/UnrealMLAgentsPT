@@ -17,9 +17,9 @@
     "Installed": false,
     "Modules": [
         {
-            "name": "UnrealMLAgents",
-            "type": "Runtime",
-            "loadingphase": "Default",
+            "Name": "UnrealMLAgents",
+            "Type": "Runtime",
+            "LoadingPhase": "Default",
             "PlatformAllowList": [
                 "Win64"
             ]

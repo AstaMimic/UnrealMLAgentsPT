@@ -16,13 +16,20 @@ public class UnrealMLAgents : ModuleRules
 		MLAgentsPlatformInstance = GetMLAgentsPlatformInstance(Target);
 		bEnableExceptions = true;
 
-		PrivateDependencyModuleNames.AddRange(
-			new string[] { "Slate", "SlateCore", "Core", "CoreUObject", "Engine", "SimCadenceRuntime" });
+                PublicDependencyModuleNames.AddRange(
+                        new string[] { "Core", "CoreUObject", "Engine", "SimCadenceRuntime" });
 
-		if (Target.bBuildEditor)
-		{
-			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "SimCadenceEditor" });
-		}
+                PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
+
+                if (Target.bBuildEditor)
+                {
+                        PrivateDependencyModuleNames.Add("SimCadenceEditor");
+                        PublicDefinitions.Add("WITH_SIMCADENCE_EDITOR=1");
+                }
+                else
+                {
+                        PublicDefinitions.Add("WITH_SIMCADENCE_EDITOR=0");
+                }
 
 		AddEngineThirdPartyPrivateStaticDependencies(Target, "OpenSSL");
 		AddEngineThirdPartyPrivateStaticDependencies(Target, "zlib");
